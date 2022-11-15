@@ -1,8 +1,8 @@
 import abstract from "./abstract.js";
 
 export default class extends abstract {
-    constructor() {
-        super();
+    constructor(params) {
+        super(params);
         this.setTitle("Posts");
     }
 

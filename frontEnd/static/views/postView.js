@@ -3,17 +3,18 @@ import abstract from "./abstract.js";
 export default class extends abstract {
     constructor(params) {
         super(params);
-        this.setTitle("Main Page");
+        this.setTitle("Viewing Posts");
     }
 
     async getHtml() {
+        console.log(this.params.id)
         return  `
-            <h1> Main Page </h1>
+            <h1> View Posts </h1>
 
-            <p> This is our Main Page </p>
+            <p> Post one </p>
 
             <p> 
-            <a href="/Posts" data-link>View Recent Posts</a>
+            <a href="/" data-link>Go To Main Page</a>
             </p>
 
         `;
