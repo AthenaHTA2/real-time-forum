@@ -5,7 +5,7 @@ body {
     --chat-width:200px;
     margin: 0 0 0 var(--nav-width);
     margin: 0 0 0 var(--chat-width);
-    font-family: 'Quicksand', sans-serif;
+    font-family: cursive;
     font-size: 18px;
 }
 
@@ -15,8 +15,8 @@ body {
     left: 0;
     width: var(--nav-width);
     height: 100vh;
-    background-image: url("/css/img/giphy.gif");
-    background-size: 400%;
+    background-image: url("/css/img/side.jpg");
+    background-position: center;
     font-family: cursive;
     font-size: 2rem;
 }
@@ -50,8 +50,8 @@ a {
     right:0cm;
     width: var(--chat-width);
     height: 100vh;
-    background-image: url("/css/img/giphy.gif");
-    background-size: 400%;
+    background-image: url("/css/img/side.jpg");
+    background-position: center;
     font-family: cursive;
     font-size: 2rem;
 }
@@ -70,10 +70,11 @@ a {
 }
 
 #Header {
-    margin-left: 10cm;
+    margin-left: 6.7cm;
     color: whitesmoke;
     font-size: 3rem;
     font-family:cursive;
+    margin-bottom: 0.3cm;
 }
 
 .modal {
@@ -87,13 +88,17 @@ a {
 }
 
 .modal-content {
-   background-image:url("/css/img/giphy.gif");
-   background-repeat: none;
+    border-radius: 25px;
+    box-shadow: 2px 2px 2px 2px white;
+    margin-left: 1.5cm;
+    margin-right: 7cm;
+   background-image:url("/css/img/canvas.png");
    background-size: 100%;
-   color: blueviolet;
-   font-size: 2rem;
+   color: white;
+   font-size: 1.5rem;
    font-weight: bold;
    font-family: cursive;
+   margin-bottom: 2.5cm;
 }
 
 .close:hover,
@@ -118,20 +123,22 @@ a {
 }
 
 h1 {
-
-    font-size: 2rem;
-    color: blueviolet;
+    padding-left: .5cm;
+    font-size: 3rem;
+    color: white;
     font-family: cursive;
 }
 
 .posts{
-    background-image: url('/css/img/giphy.gif');
-    background-size: 50%;
+    border-radius: 25px;
+    background-image: url('/css/img/canvas.png');
+    background-size: 100%;
     padding-top: .75cm;
     padding-left: 1cm;
     padding-right: 1cm;
     margin-left: 5cm;
     margin-right: 5cm;
+    margin-bottom: 2cm;
     color:whitesmoke;
     font-size: 1.5rem;
     font-family:cursive;
@@ -139,18 +146,19 @@ h1 {
     width: 90vh;
     display: flex;
     flex-direction: column;
+    box-shadow: 2px 2px 2px 2px white;
 }
 
 .container {
     margin-right: 7cm;
-    padding-left: 5cm;
-    padding-right: 5cm;
+    padding-left: 10cm;
+    padding-right: 2cm;
     padding-bottom: 2cm;
     display: flex;
     flex-direction: column;
 }
 
 .imgcontainer {
- padding-left: 10cm;
+ padding-left: 9.7cm;
 }
 
