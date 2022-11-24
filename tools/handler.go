@@ -1,4 +1,4 @@
-package rtforum
+package tools
 
 import (
 	"html/template"

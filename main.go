@@ -5,10 +5,17 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
+	"rtforum/database"
+	"rtforum/sqldb"
 	rtforum "rtforum/tools"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
+
+	sqldb.ConnectDB()
+	database.CreateDB()
 
 	fs := http.FileServer(http.Dir("css/"))
 	http.Handle("/css/",

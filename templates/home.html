@@ -14,7 +14,7 @@
 
     <nav class="nav">
         <a id ="homePage" href = "/" class="nav__link" data-link>HomePage</a>
-        <a id ="login" href = "/Login" class="nav__link" data-link>Login</a>
+        <a id ="Login" href = "/Login" class="nav__link" data-link>Login</a>
         <a id ="post" href = "/Posts" class="nav__link" data-link>Posts</a>
         <a id="profile" href = "/Profile" class="nav__link" data-link>Profile</a>    
     </nav>
@@ -36,7 +36,7 @@
     </div>
 
 
-    <div id="Login"> 
+    <div id="Login" class="modal"> 
        
        <form class="modal-content animate" action="/Login">
        <div class="imgcontainer">
@@ -68,7 +68,7 @@
 
     </div>
 
-    <div id="registration">     
+    <div id="registration" class="modal">     
        
        <form class="modal-content animate" action="/register">
        <div class="imgcontainer">
@@ -115,22 +115,40 @@
 </body>
 
 <script>
-    var modal = document.getElementById('Login')
+    // let modal = document.getElementsByClassName("modal");
 
-    window.onclick = function(event) {
-        if(event.target == modal) {
-            modal.style.display = "visible";
-        }
-        if(event.target != modal) {
-            modal.style.display ="hidden"
-        }
-    }
+    // // When the user clicks anywhere outside of the modal, close it
+    // window.onclick = function (event) {
+    // for (let i = 0; i < modal.length; i++) {    
+    //     if (event.target == modal[i]) {
+    //         modal[i].style.display = "none";
+    //         }
+    //     }
+    // };
+        // if (modal[i].id === "my-chat-modal") {
+        //     chatContainer.innerHTML = "";
+        //     chatBody.removeEventListener(
+        //     "scroll",
+        //     Throttler(displaySurplusMessages, 2000)
+        //     );
+        // }
 
-    var modalReg = document.getElementById('registration')
+    // var modal = document.getElementById('Login')
 
-    window.onclick = function(event) {
-        if(event.target == modalReg)
-        modalReg.style.display = "none";
-    }
+    // window.onclick = function(event) {
+    //     if(event.target == modal) {
+    //         modal.style.display = "visible";
+    //     }
+    //     if(event.target != modal) {
+    //         modal.style.display ="hidden"
+    //     }
+    // }
+
+    // var modalReg = document.getElementById('registration')
+
+    // window.onclick = function(event) {
+    //     if(event.target == modalReg)
+    //     modalReg.style.display = "none";
+    // }
 </script>
 </html>
