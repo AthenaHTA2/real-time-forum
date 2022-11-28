@@ -53,5 +53,5 @@ func (h *Hub) Run() {
 Gary Burd <gary@beagledreams.com>
 Google LLC (https://opensource.google.com/)
 Joachim Bauch <mail@joachim-bauch.de>
-from: https://github.com/gorilla/websocket
+from: https://github.com/gorilla/websocket/chat
 */

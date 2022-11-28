@@ -26,6 +26,9 @@ func main() {
 	http.Handle("/css/",
 		http.StripPrefix("/css/", fs))
 	http.HandleFunc("/", tools.HomePage)
+	//serveWs function is a HTTP handler that upgrades the HTTP connection
+	//to the WebSocket protocol, creates a Client type, registers the Client 
+	//with the hub and schedules the Client to be unregistered
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		chat.ServeWs(hub, w, r)
 	})

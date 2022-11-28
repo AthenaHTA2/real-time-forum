@@ -1,4 +1,3 @@
-
 package chat
 
 import (
@@ -45,12 +44,13 @@ type Client struct {
 	Send chan []byte
 }
 
-// readPump pumps messages from the websocket connection to the hub.
+//msgToHub go routine reads messages from the webSocket connection
+//and sends them to the hub
 //
-// The application runs readPump in a per-connection goroutine. The application
+// The application runs msgToHub in a per-connection goroutine. The application
 // ensures that there is at most one reader on a connection by executing all
 // reads from this goroutine.
-func (c *Client) ReadPump() {
+func (c *Client) msgToHub() {
 	defer func() {
 		c.Hub.Unregister <- c
 		c.Conn.Close()
@@ -71,12 +71,12 @@ func (c *Client) ReadPump() {
 	}
 }
 
-// writePump pumps messages from the hub to the websocket connection.
+// A goroutine running msgFromHub is started for each connection.
 //
-// A goroutine running writePump is started for each connection. The
-// application ensures that there is at most one writer to a connection by
-// executing all writes from this goroutine.
-func (c *Client) WritePump() {
+//msgFromHub go routine reads messages from client's 'send' channel
+//and writes them to the websocket connection.
+
+func (c *Client) msgFromHub() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
@@ -129,13 +129,16 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
-	go client.WritePump()
-	go client.ReadPump()
+	go client.msgFromHub()
+	go client.msgToHub()
 }
 
-/*Code authors: 
+/*Code authors:
 Gary Burd <gary@beagledreams.com>
 Google LLC (https://opensource.google.com/)
 Joachim Bauch <mail@joachim-bauch.de>
-from: https://github.com/gorilla/websocket
+from: https://github.com/gorilla/websocket/chat
+
+msgFromHub == writePump
+msgToHub == readPump
 */
