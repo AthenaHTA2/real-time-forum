@@ -34,14 +34,10 @@ body {
     color: black;
 }
 
-#app {
-    margin: 2em;
-    line-height: 1.5;
-    font-weight: 500;
-}
+
 
 a {
-    color: #009579;
+    color:white;
 }
 
 .chat {
@@ -79,12 +75,13 @@ a {
 
 .modal {
     display: none;
-    position: fixed;
+    margin-left: 1.5cm;
+    margin-right: 9cm;
+    position: flex;
     z-index: 1;
     overflow: none;
-    background-color: aqua;
-    background-color:blue;
     padding-top: 60px;
+
 }
 
 .modal-content {
@@ -101,6 +98,7 @@ a {
    margin-bottom: 2.5cm;
 }
 
+
 .close:hover,
 .close:focus {
     color:red;
@@ -108,8 +106,8 @@ a {
 }
 
 .animate {
-    -webkit-animation: animatezoom 0.6s;
-    animation: animatezoom 0.6s;
+    -webkit-animation: animate 1s;
+    animation: animatezoom 1s;
 }
 
 @-webkit-keyframes animatezoom{
@@ -162,3 +160,12 @@ h1 {
  padding-left: 9.7cm;
 }
 
+#loginModal{
+    height: 100%;
+    width: 100%;
+}
+
+#regModal {
+    height: 100%;
+    width: 100%;
+}

@@ -12,6 +12,7 @@ func CreateDB() {
 				"lastName" TEXT NOT NULL UNIQUE,				
 				"nickName" TEXT NOT NULL UNIQUE,
 				"age" INTEGER NOT NULL,
+				"gender" TEXT NOT NULL,
 				"email" TEXT NOT NULL UNIQUE, 
 				"passwordhash" BLOB NOT NULL
 				);`)

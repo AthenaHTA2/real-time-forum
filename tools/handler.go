@@ -6,6 +6,12 @@ import (
 )
 
 func HomePage(w http.ResponseWriter, r *http.Request) {
+
+	if r.URL.Path != "/" {
+		http.Error(w, "404 Page Not Found", 404)
+		return
+	}
+
 	templ, err := template.ParseFiles("templates/home.html")
 
 	err = templ.Execute(w, "")
@@ -16,3 +22,4 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+

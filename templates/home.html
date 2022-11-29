@@ -14,9 +14,9 @@
 
     <nav class="nav">
         <a id ="homePage" href = "/" class="nav__link" data-link>HomePage</a>
-        <a id ="Login" href = "/Login" class="nav__link" data-link>Login</a>
-        <a id ="post" href = "/Posts" class="nav__link" data-link>Posts</a>
-        <a id="profile" href = "/Profile" class="nav__link" data-link>Profile</a>    
+        <a id ="login" onClick='openLogin()'>Login</a>
+        <a id ="post" href = "/posts" class="nav__link" data-link>Posts</a>
+        <a id="profile" href = "/profile" class="nav__link" data-link>Profile</a>    
     </nav>
 
     <nav class="chat">
@@ -24,7 +24,7 @@
      
     </nav>
 
-    <div class ="posts">
+    <div id="postBlock"class ="posts" >
         <label for="PostTitle">Post Title:</label>
         <textarea name="postTitle" type="text" rows="1" cols="60" id="PostTitle" name="Title" placeholder="Enter Title..."></textarea>
         <label for="Post Content"> Content:  </label>
@@ -36,15 +36,15 @@
     </div>
 
 
-    <div id="Login" class="modal"> 
+    <div id="loginModal" class="modal"> 
        
-       <form class="modal-content animate" action="/Login">
+       <form class="modal-content animate" action="/login.go">
        <div class="imgcontainer">
         <img src="/css/img/user-group-man-woman.png" height="300px" width="300px" alt="Avatar" class="avatar">
        </div> 
       
 
-       <div class="container">
+       <div class="container" >
         <h1>🅛🅞🅖🅘🅝</h1>
 
         <label for="userName"><b>UserName</b></label>
@@ -58,17 +58,17 @@
             <input type="checkbox" checked="checked" name="remember"> Remember Me
         </label>
 
-        <button type="button" onclick="document.getElementById('Login').style.display='none'" class="cancelbtn">Cancel</button>
+        <button id="cancelbtn" type="button" onclick="document.getElementById('loginModal').style.display='none'; closeBtn()" class="cancelbtn">Cancel</button>
         <span class="psw">New User Please👇 </span>
 
-        <button type="button" onclick="document.getElementById('Registration').style.display='none'" class="registration">Register</button>
+        <button type="button" onclick="openReg(); " class="registration">Register</button>
 
        </div>
        </form>
 
     </div>
 
-    <div id="registration" class="modal">     
+    <div id="regModal" class="modal">     
        
        <form class="modal-content animate" action="/register">
        <div class="imgcontainer">
@@ -104,7 +104,8 @@
 
         <button type="submit">Register</button>
 
-        <button type="button" onclick="document.getElementById('registration').style.display='none'" class="cancelbtn">Cancel</button>
+        <button id="cancelbtn" type="button" onclick="document.getElementById('regModal').style.display='none'; closeBtn()" class="cancelbtn">Cancel</button>
+    
 
         
 
@@ -114,41 +115,32 @@
 
 </body>
 
+<!-- this script runs login modal -->
 <script>
-    // let modal = document.getElementsByClassName("modal");
+    function openLogin() {
+        closePost()
+        document.getElementById('loginModal').style.display = "block";
 
-    // // When the user clicks anywhere outside of the modal, close it
-    // window.onclick = function (event) {
-    // for (let i = 0; i < modal.length; i++) {    
-    //     if (event.target == modal[i]) {
-    //         modal[i].style.display = "none";
-    //         }
-    //     }
-    // };
-        // if (modal[i].id === "my-chat-modal") {
-        //     chatContainer.innerHTML = "";
-        //     chatBody.removeEventListener(
-        //     "scroll",
-        //     Throttler(displaySurplusMessages, 2000)
-        //     );
-        // }
+    }
+    
 
-    // var modal = document.getElementById('Login')
+    function openReg() {
+        closePost()
+        document.getElementById('loginModal').style.display ="none";
+        document.getElementById('regModal').style.display = "block";
+    }
 
-    // window.onclick = function(event) {
-    //     if(event.target == modal) {
-    //         modal.style.display = "visible";
-    //     }
-    //     if(event.target != modal) {
-    //         modal.style.display ="hidden"
-    //     }
-    // }
+    function closeBtn() {
+        document.getElementById('postBlock').style.display = 'flex';
+    }
 
-    // var modalReg = document.getElementById('registration')
+    function closePost() {
+        document.getElementById('postBlock').style.display = "none";
+    }
 
-    // window.onclick = function(event) {
-    //     if(event.target == modalReg)
-    //     modalReg.style.display = "none";
+    // function openPost() {
+
+    //     document.getElementById('postBlock').style.display = 'block';
     // }
 </script>
 </html>
