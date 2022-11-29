@@ -99,12 +99,6 @@ a {
 }
 
 
-.close:hover,
-.close:focus {
-    color:red;
-    cursor: pointer;
-}
-
 .animate {
     -webkit-animation: animate 1s;
     animation: animatezoom 1s;
@@ -170,7 +164,7 @@ h2 {
 .imgcontainer {
     margin-top: 0cm;
     margin-bottom: 0cm;
-    padding-left: 7.5cm;
+    padding-left: 7.8cm;
 }
 
 #loginModal{
@@ -206,3 +200,32 @@ h2 {
   color: rgb(15, 15, 120);
   font-weight: bolder;
 }
+
+
+.button1{
+    display: inline-block;
+    background-image: url('/css/img/canvas.png');
+    background-size: 105%;
+    background-repeat: no-repeat;
+    margin-top: .20cm;
+    margin-bottom: .20cm;
+    margin-left: .1cm;
+    border-radius: 25px;
+    box-shadow: 1px 1px 1px 1px white;
+    border-color: white;
+    color: whitesmoke;
+    font-size: 1rem;
+    font-family:cursive;
+    font-weight: bolder;
+    width: 45%;
+
+}
+
+
+.button1:hover{
+  background-image: none;
+  background-color: rgb(136, 200, 176);
+  color: rgb(15, 15, 120);
+  font-weight: bolder;
+}
+
