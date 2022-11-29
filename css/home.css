@@ -70,7 +70,7 @@ a {
     color: whitesmoke;
     font-size: 3rem;
     font-family:cursive;
-    margin-bottom: 0.3cm;
+    margin-bottom: 0.01cm;
 }
 
 .modal {
@@ -79,11 +79,12 @@ a {
     position: flex;
     z-index: 1;
     overflow: none;
-    padding-top: 60px;
+    padding-top: 10px;
 
 }
 
 .modal-content {
+    margin-top: .25cm;
     border-radius: 25px;
     box-shadow: 2px 2px 2px 2px white;
     margin-left: 1.5cm;
@@ -94,7 +95,7 @@ a {
    font-size: 1.5rem;
    font-weight: bold;
    font-family: cursive;
-   margin-bottom: 2.5cm;
+   margin-bottom: .25cm;
 }
 
 
@@ -120,6 +121,8 @@ a {
 }
 
 h1 {
+    margin-top: 0cm;
+    margin-bottom: 0cm;
     padding-right: 7cm;
     font-size: 3rem;
     color: white;
@@ -127,6 +130,8 @@ h1 {
 }
 
 h2 {
+    margin-top: 0cm;
+    margin-bottom: 0cm;
     padding-right: 10cm;
     font-size: 1.25em;
     color: white;
@@ -157,13 +162,15 @@ h2 {
     margin-right: 7cm;
     padding-left: 320px;
     padding-right: 2cm;
-    padding-bottom: 2cm;
+    padding-bottom: .01cm;
     display: flex;
     flex-direction: column;
 }
 
 .imgcontainer {
- padding-left: 7.5cm;
+    margin-top: 0cm;
+    margin-bottom: 0cm;
+    padding-left: 7.5cm;
 }
 
 #loginModal{
@@ -174,4 +181,28 @@ h2 {
 #regModal {
     height: 100%;
     width: 100%;
+}
+
+.button{
+    background-image: url('/css/img/canvas.png');
+    background-size: 105%;
+    background-repeat: no-repeat;
+    margin-top: .20cm;
+    margin-bottom: .20cm;
+    border-radius: 25px;
+    box-shadow: 1px 1px 1px 1px white;
+    border-color: white;
+    color: whitesmoke;
+    font-size: 1rem;
+    font-family:cursive;
+    font-weight: bolder;
+
+}
+
+
+.button:hover{
+  background-image: none;
+  background-color: rgb(136, 200, 176);
+  color: rgb(15, 15, 120);
+  font-weight: bolder;
 }

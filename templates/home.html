@@ -14,7 +14,7 @@
 
     <nav class="nav">
         <a id ="homePage" href = "/" class="nav__link" data-link>HomePage</a>
-        <a id ="login" onClick='openLogin()'>Login</a>
+        <a id ="login" onclick="openLogin() ;"class="nav__link" data-link>Login</a>
         <a id ="post" href = "/posts" class="nav__link" data-link>Posts</a>
         <a id="profile" href = "/profile" class="nav__link" data-link>Profile</a>    
     </nav>
@@ -31,7 +31,7 @@
         <textarea name="postinput" type="text" rows="4" cols="60" id="PostContent" name="Content" placeholder="Description..."></textarea>
         <label for="Post Cat">Catergory:</label>
         <input type="dropdown" id="PostCat" name="Category" placeholder="Choose Categories..">
-        <button type="submit">Create Post</button>
+        <button class="button" type="submit">Create Post</button>
     
     </div>
 
@@ -53,15 +53,15 @@
         <label for="psw"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="psw" required>
 
-        <button type="submit">Login</button>
+        <button class="button" type="submit">Login</button>
         <label>
             <input type="checkbox" checked="checked" name="remember"> Remember Me
         </label>
 
-        <button id="cancelbtn" type="button" onclick="document.getElementById('loginModal').style.display='none'; closeBtn()" class="cancelbtn">Cancel</button>
+        <button id="cancelbtn" type="button" onclick="document.getElementById('loginModal').style.display='none'; closeBtn()" class="button">Cancel</button>
         <span class="psw">New User Please👇 </span>
 
-        <button type="button" onclick="openReg(); " class="registration">Register</button>
+        <button type="button" onclick="openReg(); " class="button">Register</button>
 
        </div>
        </form>
@@ -102,9 +102,9 @@
         <label for="psw"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="psw" required>
 
-        <button type="submit">Register</button>
+        <button class="button" type="submit">Register</button>
 
-        <button id="cancelbtn" type="button" onclick="document.getElementById('regModal').style.display='none'; closeBtn()" class="cancelbtn">Cancel</button>
+        <button id="cancelbtn" type="button" onclick="document.getElementById('regModal').style.display='none'; closeBtn()" class="button">Cancel</button>
     
 
         
@@ -120,6 +120,8 @@
     function openLogin() {
         closePost()
         document.getElementById('loginModal').style.display = "block";
+        document.getElementById('regModal').style.display = "none";
+
 
     }
     
