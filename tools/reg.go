@@ -16,7 +16,7 @@ var db *sql.DB
 
 func Registration(w http.ResponseWriter, r *http.Request) {
 
-	if r.URL.Path != "/registered" {
+	if r.URL.Path != "/register" {
 		http.Error(w, "404 Page Not Found", 404)
 		return
 	}

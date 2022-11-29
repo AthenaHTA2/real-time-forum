@@ -76,7 +76,6 @@ a {
 .modal {
     display: none;
     margin-left: 1.5cm;
-    margin-right: 9cm;
     position: flex;
     z-index: 1;
     overflow: none;
@@ -88,7 +87,7 @@ a {
     border-radius: 25px;
     box-shadow: 2px 2px 2px 2px white;
     margin-left: 1.5cm;
-    margin-right: 7cm;
+    margin-right: 10cm;
    background-image:url("/css/img/canvas.png");
    background-size: 100%;
    color: white;
@@ -121,8 +120,15 @@ a {
 }
 
 h1 {
-    padding-left: .5cm;
+    padding-right: 7cm;
     font-size: 3rem;
+    color: white;
+    font-family: cursive;
+}
+
+h2 {
+    padding-right: 10cm;
+    font-size: 1.25em;
     color: white;
     font-family: cursive;
 }
@@ -149,7 +155,7 @@ h1 {
 
 .container {
     margin-right: 7cm;
-    padding-left: 10cm;
+    padding-left: 320px;
     padding-right: 2cm;
     padding-bottom: 2cm;
     display: flex;
@@ -157,7 +163,7 @@ h1 {
 }
 
 .imgcontainer {
- padding-left: 9.7cm;
+ padding-left: 7.5cm;
 }
 
 #loginModal{

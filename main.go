@@ -21,6 +21,8 @@ func main() {
 	http.Handle("/css/",
 		http.StripPrefix("/css/", fs))
 	http.HandleFunc("/", rtforum.HomePage)
+	// http.HandleFunc("/login", rtforum.Login)
+
 
 	exec.Command("xdg-open", "http://localhost:8080/").Start()
 
