@@ -26,7 +26,7 @@ type post struct {
 }
 
 type User struct {
-	Username  string	
+	UserID  int	
 	FirstName string	`json:"FirstName"`
 	LastName  string	`json:"LastName"`
 	NickName  string	`json:"NickName"`
