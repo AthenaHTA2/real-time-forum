@@ -49,6 +49,8 @@ registerBtn.onclick= (e)=>{
     PassWord: PassWord,
   }
     console.log({RegisterData})
+
+    
     
 //send user input in the 'Register' form to the 'RegData' struct in go
 // via the 'Register' handler function in go

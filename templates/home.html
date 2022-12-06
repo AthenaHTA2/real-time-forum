@@ -17,7 +17,7 @@
         <a id ="login" onclick="openLogin() ;"class="nav__link" data-link>Login</a>
         <a id ="post" href = "/posts" class="nav__link" data-link>Posts</a>
         <a id="profile" href = "/profile" class="nav__link" data-link>Profile</a>    
-        <a id="logout" href = "/logout" class="nav__link" style="display:none" data-link>LogOut</a>    
+        <a id="logout" href = "/" class="nav__link" style="display:none" data-link>LogOut</a>    
 
     </nav>
 
@@ -96,7 +96,7 @@
         <input id="Gender" type="text" placeholder="Enter Gender" name="Gender" required>
     
         <label for="Email"><b>Email</b></label>
-        <input id="Email" type="email" pattern=".+@globex\.com" size="30" placeholder="Enter Email Address" name="Email" required>
+        <input id="Email" type="email" pattern=".+@globex\.com" size="30" placeholder="Enter Email Address" name="Email" pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" required>
 
         <!-- <label for="userName"><b>UserName</b></label>
         <input type="text" placeholder="Enter Username" name="UserName" required> -->
