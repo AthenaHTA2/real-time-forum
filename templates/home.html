@@ -78,7 +78,7 @@
        </div> 
        
 
-       <div class="container"> 
+       <div class="container" id="form"> 
         <h2>🅡🅔🅖🅘🅢🅣🅔🅡</h2>
         <label for="FirstName"><b>First Name</b></label>
         <input id="FirstName" type="text" placeholder="Enter First Name" name="FirstName" required>
@@ -96,8 +96,8 @@
         <input id="Gender" type="text" placeholder="Enter Gender" name="Gender" required>
     
         <label for="Email"><b>Email</b></label>
-        <input id="Email" type="email" pattern=".+@globex\.com" size="30" placeholder="Enter Email Address" name="Email" pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" required>
-
+        <input id="Email" type="email" onkeydown="validation()" size="30" placeholder="Enter Email Address" name="Email" required>
+        <span id="text"></span>
         <!-- <label for="userName"><b>UserName</b></label>
         <input type="text" placeholder="Enter Username" name="UserName" required> -->
 
@@ -125,6 +125,13 @@
             You're are now Registered
         </h4>
     </div>
+
+    <div id="regRejected" style="display:none">
+        <h4>
+            Sorry Error with registration
+        </h4>
+    </div>
+
 </body>
 
 <!-- this script runs login modal -->
