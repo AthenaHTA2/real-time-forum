@@ -10,7 +10,7 @@ func CreateDB() {
 				"userID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
 				"firstName" TEXT NOT NULL,
 				"lastName" TEXT NOT NULL,				
-				"nickName" TEXT NOT NULL,
+				"nickName" TEXT NOT NULL UNIQUE,
 				"age" INTEGER NOT NULL,
 				"gender" TEXT NOT NULL,
 				"email" TEXT NOT NULL UNIQUE, 

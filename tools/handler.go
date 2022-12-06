@@ -9,6 +9,8 @@ import (
 	"log"
 	"net/http"
 	"rtforum/sqldb"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 var db *sql.DB
@@ -60,6 +62,15 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(bytes, &regData)
 
+	var hash []byte
+	password := regData.Password
+	// func GenerateFromPassword(password []byte, cost int) ([]byte, error)
+	hash, err4 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err4 != nil {
+		fmt.Println("bcrypt err4:", err4)
+		return
+	}
+
 	_, err = sqldb.DB.Exec(`INSERT INTO Users ( 
 		firstName,
 		lastName,
@@ -68,7 +79,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		gender,
 		email,
 		passwordhash
-		) VALUES(?,?,?,?,?,?,?)`, regData.FirstName, regData.LastName, regData.NickName, regData.Age, regData.Gender, regData.Email, regData.Password)
+		) VALUES(?,?,?,?,?,?,?)`, regData.FirstName, regData.LastName, regData.NickName, regData.Age, regData.Gender, regData.Email, hash)
 
 	if err != nil {
 		fmt.Println("Error inserting into 'Users' table: ", err)
@@ -79,8 +90,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	var (
 		userID, age                                                int
-		firstName, lastName, nickName, gender, email, passwordhash string
+		firstName, lastName, nickName, gender, email string
 	)
 
-	rows.Scan(&userID, &firstName, &lastName, &nickName, &age, &gender, &email, &passwordhash)
+	rows.Scan(&userID, &firstName, &lastName, &nickName, &age, &gender, &email, &hash)
 }
