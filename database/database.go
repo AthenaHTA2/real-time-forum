@@ -8,9 +8,9 @@ func CreateDB() {
 	// user table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Users" (
 				"userID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-				"firstName" TEXT NOT NULL UNIQUE,
-				"lastName" TEXT NOT NULL UNIQUE,				
-				"nickName" TEXT NOT NULL UNIQUE,
+				"firstName" TEXT NOT NULL,
+				"lastName" TEXT NOT NULL,				
+				"nickName" TEXT NOT NULL,
 				"age" INTEGER NOT NULL,
 				"gender" TEXT NOT NULL,
 				"email" TEXT NOT NULL UNIQUE, 

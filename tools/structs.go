@@ -5,7 +5,7 @@ import (
 )
 
 type comment struct {
-	CommentID      int
+	CommentID      int 
 	Author         string
 	PostID         int
 	Content        string
@@ -25,17 +25,22 @@ type post struct {
 	IPs         string
 }
 
-type user struct {
-	Username  string
-	FirstName string
-	LastName  string
-	NickName  string
-	Age       string
-	Gender    string
-	Email     string
+type User struct {
+	Username  string	
+	FirstName string	`json:"FirstName"`
+	LastName  string	`json:"LastName"`
+	NickName  string	`json:"NickName"`
+	Age       string	`json:"Age"`
+	Gender    string	`json:"Gender"`
+	Email     string	`json:"Email"`
 	Access    int // 0 means no access, not logged in
 	LoggedIn  bool
 	Posts     []post
 	Comments  []comment
-	Password  string
+	Password  string	`json:"PassWord"`
+}
+
+type LoginData struct {
+	UserName string		`json:"UserName"`
+	Password string 	`json:"PassWord"`
 }

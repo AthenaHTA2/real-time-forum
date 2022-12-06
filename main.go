@@ -17,11 +17,18 @@ func main() {
 	sqldb.ConnectDB()
 	database.CreateDB()
 
-	fs := http.FileServer(http.Dir("css/"))
+	cssFolder := http.FileServer(http.Dir("css/"))
 	http.Handle("/css/",
-		http.StripPrefix("/css/", fs))
+		http.StripPrefix("/css/", cssFolder))
+
+		jsFolder := http.FileServer(http.Dir("js/"))
+		http.Handle("/js/",
+			http.StripPrefix("/js/", jsFolder))
+
+			
 	http.HandleFunc("/", rtforum.HomePage)
 	// http.HandleFunc("/login", rtforum.Login)
+	http.HandleFunc("/register", rtforum.Register)
 
 
 	exec.Command("xdg-open", "http://localhost:8080/").Start()

@@ -1,6 +1,6 @@
 body {
     background-image: url("/css/img/canvas.png");
-    background-size: 110%;
+    background-size: 100%;
     --nav-width: 200px;
     --chat-width:200px;
     margin: 0 0 0 var(--nav-width);
@@ -229,3 +229,22 @@ h2 {
   font-weight: bolder;
 }
 
+
+#regConfirmed {
+    padding-left: 1.5cm;
+    align-items: center;
+    margin-top: .25cm;
+    border-radius: 25px;
+    box-shadow: 2px 2px 2px 2px white;
+    margin-left: 10cm;
+    margin-right: 10cm;
+   background-image:url("/css/img/canvas.png");
+   background-size: 100%;
+   color: white;
+   font-size: 1.5rem;
+   font-weight: bold;
+   font-family: cursive;
+   margin-bottom: .25cm;
+    height: 100%;
+    width: 25%;
+}
