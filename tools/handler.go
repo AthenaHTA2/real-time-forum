@@ -65,7 +65,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	var hash []byte
 	password := regData.Password
 	// func GenerateFromPassword(password []byte, cost int) ([]byte, error)
-	hash, err4 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	hash, err4 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost) 
+	
 	if err4 != nil {
 		fmt.Println("bcrypt err4:", err4)
 		return
