@@ -24,10 +24,15 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 
 	templ, err := template.ParseFiles("templates/home.html")
 
+	if err != nil {
+		http.Error(w, "Error with parsing home.html", http.StatusInternalServerError)
+		return
+	}
+
 	err = templ.Execute(w, "")
 
 	if err != nil {
-		http.Error(w, "Error with parsing home.html", http.StatusInternalServerError)
+		http.Error(w, "Error with writing home.html", http.StatusInternalServerError)
 		return
 	}
 
