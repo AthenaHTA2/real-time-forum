@@ -147,6 +147,7 @@
                 conn = new WebSocket("ws://" + document.location.host + "/ws");
                 conn.onclose = function (evt) {
                     var item = document.createElement("div");
+                    item.style.color="#b5e48c";
                     item.innerHTML = "<b>Connection closed.</b>";
                     appendLog(item);
                 };
@@ -154,6 +155,7 @@
                     var messages = evt.data.split('\n');
                     for (var i = 0; i < messages.length; i++) {
                         var item = document.createElement("div");
+                        item.style.color="#b5e48c";
                         item.innerText = messages[i];
                         appendLog(item);
                     }
