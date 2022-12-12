@@ -51,10 +51,8 @@ type LoginData struct {
 // each session contains the username of the user and the time at which it expires
 type Session struct {
 	UserID      int
-	username    string
 	sessionName string
 	sessionUUID string
-	expiry      time.Time
 }
 
 type Cookie struct {

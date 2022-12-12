@@ -232,7 +232,7 @@ func InsertSession(u *User, session *http.Cookie) *Session {
 // IsUserAuthenticated ...
 func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 	var cookieValue string
-	if err := sqldb.DB.QueryRow("SELECT sessionID FROM Session WHERE userID = ?", u.UserID).Scan(&cookieValue); err != nil {
+	if err := sqldb.DB.QueryRow("SELECT sessionID FROM Sessions WHERE userID = ?", u.UserID).Scan(&cookieValue); err != nil {
 		return nil
 	}
 	if err := DeleteSession(w, cookieValue); err != nil {
