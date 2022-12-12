@@ -47,7 +47,7 @@ func CreateDB() {
 				"userID" INTEGER NOT NULL,
 				"cookieName" TEXT NOT NULL,
 				"cookieValue" STRING NOT NULL PRIMARY KEY, 
-				FOREIGN KEY(userID)REFERENCES users(userID)
+				FOREIGN KEY(userID)REFERENCES Users(userID)
 				);`)
 	// // postlikedislike table
 	// sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "postlikedislike" (

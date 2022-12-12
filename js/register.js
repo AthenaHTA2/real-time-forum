@@ -1,29 +1,3 @@
-//This is our functions to open the links for our buttons
-function openLogin() {
-    closePost()
-    document.getElementById('loginModal').style.display = "block";
-    document.getElementById('regModal').style.display = "none";
-    document.getElementById('regConfirmed').style.display = 'none';
-
-  }
-  function openReg() {
-    closePost()
-    document.getElementById('loginModal').style.display ="none";
-    document.getElementById('regModal').style.display = "block";
-    document.getElementById('regConfirmed').style.display = 'none';
-
-  }
-  function closeBtn() {
-    document.getElementById('postBlock').style.display = 'flex';
-    document.getElementById('regConfirmed').style.display = 'none';
-
-  }
-  function closePost() {
-    document.getElementById('postBlock').style.display = "none";
-    document.getElementById('regConfirmed').style.display = 'none';
-
-  }
-
   function validation() {
     let form = document.getElementById('form')
     let email = document.getElementById('Email').value
@@ -110,38 +84,3 @@ registerBtn.onclick= (e)=>{
 
     }
 
-
-  
-    
- 
-//send user input in the 'Login' form to the 'LoginData' struct in go
-// via the 'LoginHandler' handler function in go
-// const LoginBtn=document.querySelector("#LoginBtn")
-// LoginBtn.onclick= (e)=>{
-//   //stop browser refreshing
-//   e.preventDefault();
-//   //console.log("event:", e)
-//   let UserName = document.querySelector("#UserName").value
-//   let LoginPw = document.querySelector("#LoginPw").value
-//   let LoginData = {
-//     UserName: UserName,
-//     LoginPw: LoginPw,
-//   }
-//   console.log({LoginData})
-//   //Sending Login form's data with the Fetch API
-//   //to the 'LoginData' struct in go
-//   let configLogin = {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Accept": "application/json",
-//     },
-//     body: JSON.stringify(LoginData)
-//   };
-  
-  // fetch("http://localhost:8080/login", configLogin)
-  //   .then(function(response) {
-  //     console.log('Success:', response)
-  //     return response.json();
-      
-  //   })

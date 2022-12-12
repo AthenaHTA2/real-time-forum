@@ -27,7 +27,7 @@ func main() {
 
 			
 	http.HandleFunc("/", rtforum.HomePage)
-	// http.HandleFunc("/login", rtforum.Login)
+	http.HandleFunc("/login", rtforum.Login)
 	http.HandleFunc("/register", rtforum.Register)
 
 

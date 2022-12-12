@@ -8,7 +8,7 @@ import (
 )
 
 func createUsersTable() {
-	stmt, err := db.Prepare("CREATE TABLE IF NOT EXISTS users (userID INTERGER NOT NULL PRIMARY KEY AUTOINCREMENT, firstName VARCHAR(30) NOT NULL, lastName VARCHAR(30) NOT NULL, nickName VARCHAR(30) NOT NULL, age INTERGER AUTOINCREMENT NOT NULL, gender VARCHAR(10) NOT NULL, email VARCHAR(50), password VARCHAR(100), access INTEGER, loggedIn BOOLEAN);")
+	stmt, err := db.Prepare("CREATE TABLE IF NOT EXISTS users (userID INTERGER NOT NULL PRIMARY KEY AUTOINCREMENT, firstName VARCHAR(30) NOT NULL, lastName VARCHAR(30) NOT NULL, nickName VARCHAR(30) NOT NULL, age INTERGER AUTOINCREMENT NOT NULL, gender VARCHAR(10) NOT NULL, email VARCHAR(50), passwordhash VARCHAR(100), access INTEGER, loggedIn BOOLEAN);")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -50,12 +50,12 @@
         <h1>🅛🅞🅖🅘🅝</h1>
 
         <label for="userName"><b>UserName</b></label>
-        <input type="text" placeholder="Enter Username" name="UserName" required>
+        <input type="text" id="LUserName" placeholder="Enter Username" name="UserName" required>
         
         <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
+        <input type="password" id="LPassW" placeholder="Enter Password" name="psw" required>
 
-        <button class="button" type="submit">Login</button>
+        <button class="button" id="loginBtn" type="submit">Login</button>
         <label>
             <input type="checkbox" checked="checked" name="remember"> Remember Me
         </label>
@@ -131,9 +131,17 @@
             Sorry Error with registration
         </h4>
     </div>
+    <div id="LoggedOn" style="display:none">
+        <h4>
+            You're are Logged in.
+        </h4>
+    </div>
 
 </body>
 
 <!-- this script runs login modal -->
 <script src="/js/register.js"></script>
+<script src="/js/login.js"></script>
+<script src="/js/buttons.js"></script>
+
 </html>
