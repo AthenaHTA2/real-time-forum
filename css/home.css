@@ -1,7 +1,6 @@
 body {
-    width: 100%;
     background-image: url("/css/img/canvas.png");
-    background-size: 100%;
+    background-size: 110%;
     --nav-width: 200px;
     --chat-width:200px;
     margin: 0 0 0 var(--nav-width);
@@ -75,11 +74,8 @@ a {
 }
 
 .modal {
-    width:2060px;
-    height: 1203.729px;
     display: none;
     margin-left: 1.5cm;
-    margin-right: 1.5cm;
     position: flex;
     z-index: 1;
     overflow: none;
@@ -88,13 +84,11 @@ a {
 }
 
 .modal-content {
-    width: 1400px;
-    height: 650px;
     margin-top: .25cm;
     border-radius: 25px;
     box-shadow: 2px 2px 2px 2px white;
-    margin-left: 5cm;
-    margin-right: 200px;
+    margin-left: 1.5cm;
+    margin-right: 10cm;
    background-image:url("/css/img/canvas.png");
    background-size: 100%;
    color: white;
@@ -158,11 +152,10 @@ h2 {
     box-shadow: 2px 2px 2px 2px white;
 }
 
-.container {  
-    width: 930px;
-    height: 75.591px;
-    margin-right: 600px;
-    margin-left: 200px;
+.container {
+    margin-right: 7cm;
+    padding-left: 320px;
+    padding-right: 2cm;
     padding-bottom: .01cm;
     display: flex;
     flex-direction: column;
@@ -175,15 +168,13 @@ h2 {
 }
 
 #loginModal{
-    height: 80%;
-    width: 80%;
-    width:2060px;
-    height: 603.729px;
+    height: 100%;
+    width: 100%;
 }
 
 #regModal {
-    height: 80%;
-    width: 80%;
+    height: 100%;
+    width: 100%;
 }
 
 .button{
@@ -278,7 +269,7 @@ h2 {
 }
 
 
-#form {
+/* #form {
     position: relative;
   }
   
@@ -333,4 +324,4 @@ h2 {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
-  }
+  } */

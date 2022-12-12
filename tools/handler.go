@@ -9,8 +9,6 @@ import (
 	"log"
 	"net/http"
 	"rtforum/sqldb"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 var db *sql.DB
@@ -24,15 +22,10 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 
 	templ, err := template.ParseFiles("templates/home.html")
 
-	if err != nil {
-		http.Error(w, "Error with parsing home.html", http.StatusInternalServerError)
-		return
-	}
-
 	err = templ.Execute(w, "")
 
 	if err != nil {
-		http.Error(w, "Error with writing home.html", http.StatusInternalServerError)
+		http.Error(w, "Error with parsing home.html", http.StatusInternalServerError)
 		return
 	}
 
@@ -67,16 +60,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(bytes, &regData)
 
-	var hash []byte
-	password := regData.Password
-	// func GenerateFromPassword(password []byte, cost int) ([]byte, error)
-	hash, err4 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost) 
-	
-	if err4 != nil {
-		fmt.Println("bcrypt err4:", err4)
-		return
-	}
-
 	_, err = sqldb.DB.Exec(`INSERT INTO Users ( 
 		firstName,
 		lastName,
@@ -85,7 +68,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		gender,
 		email,
 		passwordhash
-		) VALUES(?,?,?,?,?,?,?)`, regData.FirstName, regData.LastName, regData.NickName, regData.Age, regData.Gender, regData.Email, hash)
+		) VALUES(?,?,?,?,?,?,?)`, regData.FirstName, regData.LastName, regData.NickName, regData.Age, regData.Gender, regData.Email, regData.Password)
 
 	if err != nil {
 		fmt.Println("Error inserting into 'Users' table: ", err)
@@ -96,8 +79,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	var (
 		userID, age                                                int
-		firstName, lastName, nickName, gender, email string
+		firstName, lastName, nickName, gender, email, passwordhash string
 	)
 
-	rows.Scan(&userID, &firstName, &lastName, &nickName, &age, &gender, &email, &hash)
+	rows.Scan(&userID, &firstName, &lastName, &nickName, &age, &gender, &email, &passwordhash)
 }
