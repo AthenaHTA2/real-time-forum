@@ -266,7 +266,7 @@ func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 	}
 	http.SetCookie(w, cookie)
 
-	stmt, err := sqldb.DB.Prepare("DELETE FROM Session WHERE sessionID=?;")
+	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE sessionID=?;")
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
