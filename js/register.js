@@ -7,13 +7,19 @@
     if (email.match(pattern)) {
       form.classList.add('valid')
       form.classList.remove('invalid')
-      text.innerHTML = "Email Address is valid"
+      text.innerHTML = "Email is valid"
       text.style.color = '#00ff00'
+      text.style.fontSize = '25px';
+      text.style.fontFamily = "cursive";
+      text.style.fontWeight = "bold";
     } else {
       form.classList.remove('valid')
       form.classList.add('invalid')
-      text.innerHTML = "Email Address Not Valid"
+      text.innerHTML = "Email Not Valid"
       text.style.color = '#ff0000'
+      text.style.fontSize = '25px';
+      text.style.fontFamily = "cursive";
+      text.style.fontWeight = "bold";
     }
   
     if (email == '') {

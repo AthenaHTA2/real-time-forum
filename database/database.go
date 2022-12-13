@@ -14,7 +14,7 @@ func CreateDB() {
 				"age" INTEGER NOT NULL,
 				"gender" TEXT NOT NULL,
 				"email" TEXT NOT NULL UNIQUE, 
-				"passwordhash" BLOB NOT NULL
+				"passwordhash" BLOB(100) NOT NULL
 				);`)
 	// post table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Posts" ( 
@@ -49,26 +49,7 @@ func CreateDB() {
 				"cookieValue" STRING NOT NULL PRIMARY KEY, 
 				FOREIGN KEY(userID)REFERENCES Users(userID)
 				);`)
-	// // postlikedislike table
-	// sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "postlikedislike" (
-	// 			"postID" INTEGER NOT NULL,
-	// 			"userID" INTEGER NOT NULL,
-	// 			"likecount" INTEGER NOT NULL,
-	// 			"dislikecount" INTEGER NOT NULL,
-	// 			FOREIGN KEY(postID)REFERENCES posts(postID),
-	// 			FOREIGN KEY(userID)REFERENCES users(userID)
-	// 			);`)
-	// // commentlikedislike table
-	// sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "commlikedislike" (
-	// 			"commentID" INTEGER NOT NULL,
-	// 			"userID" INTEGER NOT NULL,
-	// 			"postID" INTEGER NOT NULL,
-	// 			"likecount" INTEGER NOT NULL,
-	// 			"dislikecount" INTEGER NOT NULL,
-	// 			FOREIGN KEY(commentID)REFERENCES comments(commentID),
-	// 			FOREIGN KEY(userID)REFERENCES users(userID),
-	// 			FOREIGN KEY(postID)REFERENCES posts(postID)
-	// 			);`)
+	
 	// // lduserpost table
 	// sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "lduserpost" (
 	// 			"userID" INTEGER NOT NULL,
