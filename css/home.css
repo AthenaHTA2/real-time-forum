@@ -282,6 +282,7 @@ h2 {
     position: relative;
   }
   
+
   #form #email {
     width: 300px;
     background: #292929;
@@ -334,3 +335,66 @@ h2 {
     padding: 0;
     font-family: 'Poppins', sans-serif;
   }
+
+.form{
+    padding: 30px 40px;
+}
+
+.reg-form-control{
+    margin-bottom: 10px;
+    padding-bottom: 20px;
+    position: relative;
+}
+
+.reg-form-control label{
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.reg-form-control input{
+    border: 2px solid #f0f0f0;
+    border-radius: 4px;
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+
+}
+
+.reg-form-control i{
+   visibility: hidden;
+   position:absolute;
+   top: 40px;
+   right: 10px;
+}
+
+.reg-form-control.success i.fa-circle-check{
+    visibility: visible;
+    color: #2ecc71;
+}
+
+.reg-form-control.error i.fa-exclamation{
+    visibility: visible;
+    color: #e71c3c;
+}
+
+.reg-form-control.pwshow i.fa-eye-slash{
+    visibility: visible;
+    color: #3936eb;
+}
+
+.reg-form-control small{
+    visibility: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.reg-form-control.success input{
+    border-color: #2ecc71;
+}
+
+.reg-form-control.error input{
+    border-color: #e71c3c;
+}
+
