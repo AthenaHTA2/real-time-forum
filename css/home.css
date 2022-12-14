@@ -1,6 +1,6 @@
 body {
     background-image: url("/css/img/canvas.png");
-    background-size: 100%;
+    background-size: 110%;
     --nav-width: 200px;
     --chat-width:200px;
     margin: 0 0 0 var(--nav-width);
@@ -8,7 +8,6 @@ body {
     font-family: cursive;
     font-size: 18px;
 }
-
 .nav {
     position: fixed;
     top: 0;
@@ -20,7 +19,6 @@ body {
     font-family: cursive;
     font-size: 2rem;
 }
-
 .nav__link {
     display: block;
     padding: 12px 18px;
@@ -28,18 +26,13 @@ body {
     color: #eeeeee;
     font-weight: 500;
 }
-
 .nav__link:hover {
     background-color: rgb(9, 162, 209);
     color: black;
 }
-
-
-
 a {
     color:white;
 }
-
 .chat {
     position: fixed;
     top: 0;
@@ -51,7 +44,6 @@ a {
     font-family: cursive;
     font-size: 2rem;
 }
-
 .chat__link {
     display: block;
     padding: 12px 18px;
@@ -59,12 +51,10 @@ a {
     color: #eeeeee;
     font-weight: 500;
 }
-
 .chat__link:hover {
     background-color: rgb(9, 162, 209);
     color: black;
 }
-
 #Header {
     margin-left: 6.7cm;
     color: whitesmoke;
@@ -72,28 +62,20 @@ a {
     font-family:cursive;
     margin-bottom: 0.01cm;
 }
-
 .modal {
-    width:2060px;
-    height: 1203.729px;
     display: none;
     margin-left: 1.5cm;
-    margin-right: 1.5cm;
     position: flex;
     z-index: 1;
     overflow: none;
     padding-top: 10px;
-
 }
-
 .modal-content {
-    width: 1400px;
-    height: 650px;
     margin-top: .25cm;
     border-radius: 25px;
     box-shadow: 2px 2px 2px 2px white;
-    margin-left: 5cm;
-    margin-right: 200px;
+    margin-left: 1.5cm;
+    margin-right: 10cm;
    background-image:url("/css/img/canvas.png");
    background-size: 100%;
    color: white;
@@ -102,23 +84,18 @@ a {
    font-family: cursive;
    margin-bottom: .25cm;
 }
-
-
 .animate {
     -webkit-animation: animate 1s;
     animation: animatezoom 1s;
 }
-
 @-webkit-keyframes animatezoom{
     from{-webkit-transform: scale(0)}
     to{-webkit-transform: scale(1);}
 }
-
 @keyframes animatezoom{
     from{-webkit-transform: scale(0)}
     to{-webkit-transform: scale(1);}
 }
-
 h1 {
     margin-top: 0cm;
     margin-bottom: 0cm;
@@ -127,7 +104,6 @@ h1 {
     color: white;
     font-family: cursive;
 }
-
 h2 {
     margin-top: 0cm;
     margin-bottom: 0cm;
@@ -136,7 +112,6 @@ h2 {
     color: white;
     font-family: cursive;
 }
-
 .posts{
     border-radius: 25px;
     background-image: url('/css/img/canvas.png');
@@ -156,35 +131,27 @@ h2 {
     flex-direction: column;
     box-shadow: 2px 2px 2px 2px white;
 }
-
-.container {  
-    width: 930px;
-    height: 75.591px;
-    margin-right: 600px;
-    margin-left: 200px;
+.container {
+    margin-right: 7cm;
+    padding-left: 320px;
+    padding-right: 2cm;
     padding-bottom: .01cm;
     display: flex;
     flex-direction: column;
 }
-
 .imgcontainer {
     margin-top: 0cm;
     margin-bottom: 0cm;
     padding-left: 7.8cm;
 }
-
 #loginModal{
     height: 100%;
     width: 100%;
-   /* width:2060px;
-   height: 603.729px;*/
 }
-
 #regModal {
-    height: 80%;
-    width: 80%;
+    height: 100%;
+    width: 100%;
 }
-
 .button{
     background-image: url('/css/img/canvas.png');
     background-size: 105%;
@@ -198,18 +165,13 @@ h2 {
     font-size: 1rem;
     font-family:cursive;
     font-weight: bolder;
-
 }
-
-
 .button:hover{
   background-image: none;
   background-color: rgb(136, 200, 176);
   color: rgb(15, 15, 120);
   font-weight: bolder;
 }
-
-
 .button1{
     display: inline-block;
     background-image: url('/css/img/canvas.png');
@@ -226,18 +188,13 @@ h2 {
     font-family:cursive;
     font-weight: bolder;
     width: 45%;
-
 }
-
-
 .button1:hover{
   background-image: none;
   background-color: rgb(136, 200, 176);
   color: rgb(15, 15, 120);
   font-weight: bolder;
 }
-
-
 #regConfirmed {
     padding-left: 1.5cm;
     align-items: center;
@@ -256,7 +213,6 @@ h2 {
     height: 100%;
     width: 25%;
 }
-
 #regRejected {
     padding-left: 1.5cm;
     align-items: center;
@@ -275,61 +231,21 @@ h2 {
     height: 100%;
     width: 25%;
 }
-
-
-#form {
-    position: relative;
-  }
-  
-  #form #email {
-    width: 300px;
-    background: #292929;
-    outline: none;
-    border: none;
-    padding: 10px;
-    border-radius: 6px;
-    color: #fff;
-    font-style: 18px;
-  }
-  
-  #form .input-box {
-    position: relative;
-  }
-  
-  #text {
-    display: block;
-    color: #000;
-    font-weight: 300;
-    font-style: italic;
-    padding: 5px;
-  }
-  
-  #form.invalid .input-box::before {
-    content: '';
-    position: absolute;
-    right: 12px;
-    top: 9px;
-    width: 24px;
-    height: 24px;
-    background: url(https://fadzrinmadu.github.io/hosted-assets/email-validation-check-using-javascript/invalid.png);
-    -webkit-background-size: cover;
-    background-size: cover;
-  }
-  
-  #form.valid .input-box::before {
-    content: '';
-    position: absolute;
-    right: 12px;
-    top: 9px;
-    width: 24px;
-    height: 24px;
-    background: url(https://fadzrinmadu.github.io/hosted-assets/email-validation-check-using-javascript/valid.png);
-    -webkit-background-size: cover;
-    background-size: cover;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-  }
+#LoggedOn {
+    padding-left: 1.5cm;
+    align-items: center;
+    margin-top: .25cm;
+    border-radius: 25px;
+    box-shadow: 2px 2px 2px 2px white;
+    margin-left: 10cm;
+    margin-right: 10cm;
+   background-color: rgb(0, 143, 0);
+   background-size: 100%;
+   color: white;
+   font-size: 1.5rem;
+   font-weight: bold;
+   font-family: cursive;
+   margin-bottom: .25cm;
+    height: 100%;
+    width: 25%;
+}

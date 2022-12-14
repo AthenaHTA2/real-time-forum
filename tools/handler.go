@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"rtforum/sqldb"
+	"strconv"
 	"time"
 
 	uuid "github.com/satori/go.uuid"
@@ -48,10 +49,11 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//Populate the User struct and upload into database
-func Register(w http.ResponseWriter, r *http.Request) {
+//instance of 'User' struct
+var CurrentUser User
 
-	var regData User
+//Populate the User struct and upload into database table 'Users'
+func Register(w http.ResponseWriter, r *http.Request) {
 
 	bytes, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -59,10 +61,10 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("Json from Regsister: ", string(bytes))
 
-	json.Unmarshal(bytes, &regData)
+	json.Unmarshal(bytes, &CurrentUser)
 
 	var hash []byte
-	password := regData.Password
+	password := CurrentUser.Password
 	// func GenerateFromPassword(password []byte, cost int) ([]byte, error)
 	hash, err4 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 
@@ -79,25 +81,17 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		gender,
 		email,
 		passwordhash
-		) VALUES(?,?,?,?,?,?,?)`, regData.FirstName, regData.LastName, regData.NickName, regData.Age, regData.Gender, regData.Email, hash)
+		) VALUES(?,?,?,?,?,?,?)`, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Email, hash)
 
 	if err != nil {
 		fmt.Println("Error inserting into 'Users' table: ", err)
 		return
 	}
 
-	rows, _ := sqldb.DB.Query("SELECT userID, firstName, lastName, nickName, age, gender, email, passwordhash from Users")
-
-	var (
-		userID, age                                  int
-		firstName, lastName, nickName, gender, email string
-	)
-
-	rows.Scan(userID, firstName, lastName, nickName, age, gender, email, hash)
-	fmt.Println(rows)
 }
 
-//To populate the LoginData struct and upload into database
+//To populate the LoginData struct, validate user password,
+//generate cookie data and upload these into database 'Sessions' table
 func Login(w http.ResponseWriter, r *http.Request) {
 	var logData LoginData
 
@@ -109,7 +103,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(loginD, &logData)
 
-	fmt.Println("LoginData struct in GO: ", logData.UserName, logData.Password)
+	//fmt.Println("LoginData struct in GO: ", logData.UserName, logData.Password)
 
 	//from 'forum':
 	username := logData.UserName
@@ -149,6 +143,15 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		fmt.Println("All current user's data from 'Users' database table: \n", userID, firstName, lastName, nickName, age, gender, email)
+		//populate the regData struct (instance of 'User' struct) with values from 'Users' db table:
+		CurrentUser.UserID = userID
+		CurrentUser.LastName = lastName
+		CurrentUser.NickName = nickName
+		CurrentUser.Age = strconv.Itoa(age)
+		CurrentUser.Gender = gender
+		CurrentUser.Email = email
+
+		//err3 = IsUserAuthenticated(w, &CurrentUser)
 		err3 = IsUserAuthenticated(w, &CurrentUser)
 		//fmt.Println("this user logged in: ", err3)
 		if err3 != nil {
@@ -159,7 +162,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		sessionToken := uuid.NewV4().String()
 		expiresAt := time.Now().Add(60 * time.Minute)
 		cookieNm := username + "_session"
-		// Finally, we set the client cookie for "session_token" as the session token we just generated
+		// Finally, we set the client cookie for "session_token='username_session'" as the session token we just generated
 		// we also set an expiry time of 120 minutes
 		http.SetCookie(w, &http.Cookie{
 			Name:     cookieNm,
@@ -168,9 +171,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			Expires:  expiresAt,
 			HttpOnly: true,
 		})
-		// storing the cookie values in struct to access on other pages.
+		// storing the cookie values in struct
 		user_session := Cookie{cookieNm, sessionToken, expiresAt}
-		fmt.Println("user_session:", user_session)
+		fmt.Println("Values in 'Cookie' struct :", user_session)
 		// Duplicates are ignored
 		insertsessStmt, err4 := sqldb.DB.Prepare("INSERT OR IGNORE INTO Sessions (userID, cookieName, cookieValue) VALUES (?, ?, ?);")
 		if err4 != nil {
@@ -179,8 +182,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer insertsessStmt.Close()
-		insertsessStmt.Exec(CurrentUser.UserID, cookieNm, sessionToken)
-
+		insertsessStmt.Exec(userID, cookieNm, sessionToken)
+		//granting access to the logged in user
+		//by setting selected 'User' struct fields to true etc.
+		CurrentUser.Password = password
+		CurrentUser.Access = 1
+		CurrentUser.LoggedIn = true
+		fmt.Println("User struct data from Login: \n", CurrentUser.UserID, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Password, CurrentUser.Access, CurrentUser.LoggedIn, CurrentUser.Posts, CurrentUser.Comments, CurrentUser.Email)
 		// redirect user to index handler after successful login
 		//http.Redirect(w, r, "/", http.StatusFound)
 		//return
@@ -217,7 +225,6 @@ func AddSession(w http.ResponseWriter, sessionName string, user *User) {
 // InsertSession ...
 func InsertSession(u *User, session *http.Cookie) *Session {
 	cookie := NewSession()
-	//stmnt, err := sqldb.DB.Prepare("INSERT OR IGNORE INTO Session (sessionID, userID) VALUES (?, ?)")
 	stmnt, err := sqldb.DB.Prepare("INSERT OR IGNORE INTO Session ( userID, cookieName, cookieValue) VALUES (?, ?, ?)")
 	if err != nil {
 		log.Fatalf(err.Error())
@@ -236,6 +243,7 @@ func InsertSession(u *User, session *http.Cookie) *Session {
 // IsUserAuthenticated ...
 func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 	var cookieValue string
+	//if user is not found in 'Sessions' db table return err = nil
 	if err := sqldb.DB.QueryRow("SELECT cookieValue FROM Sessions WHERE userID = ?", u.UserID).Scan(&cookieValue); err != nil {
 		return nil
 	}
