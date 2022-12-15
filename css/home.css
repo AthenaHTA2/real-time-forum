@@ -192,6 +192,10 @@ h2 {
     font-weight: bolder;
 
 }
+/*Guests can not see the 'submit post' button*/
+.postBtn{
+    visibility: hidden;
+}
 
 
 .button:hover{
@@ -286,4 +290,152 @@ h2 {
     height: 100%;
     width: 25%;
 }
+
+/*~~~~~~~~~~~~~~~~Start of 'chat' css ~~~~~~~~~~~~~~~*/
+
+#log {
+    /*background: #BCEAD5;*/
+    margin: 0;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    position: absolute;
+    top: 2em;
+    left: 0.5em;
+    right: 0.5em;
+    bottom: 3em;
+    overflow: auto;
+}
+
+#form {
+    padding: 0 0.5em 0 0.5em;
+    /*color: #9ED5C5;*/
+    color: #F9C5D5;
+    margin: 0;
+    position: absolute;
+    bottom: 1em;
+    left: 0px;
+    width: 100%;
+    overflow: hidden;
+}
+
+#msg{
+    color: white;
+   height: 0.9cm;
+    background-color: #8EC3B0;
+    /*border-color: #8EC3B0;*/
+}
+
+#msg:focus{
+    font-size: 0.65cm;
+    background-color:darkgreen;
+   /* border-color: #CDF0EA;
+    border-color: #F999B7;*/
+}
+
+#btn{
+    background-color: white;
+    width: 3cm;
+    height: 1.3cm;
+    font-size: 0.65cm;
+  color:green;
+  font-weight: 600;
+  border: 3px solid green;
+  border-radius: 15px;
+}
+
+#btn:hover{
+    background-color: white; /* Green */
+    border: 3px solid #2192FF;
+  color: #2192FF;
+}
+
+/* CSS talk bubble from www.codepen.io, not working!
+.talk-bubble {
+	margin: 40px;
+    display: inline-block;
+    position: relative;
+	width: 200px;
+	height: auto;
+	background-color: lightyellow;
+}*/
+
+/*Current User: Right triangle, placed bottom left side slightly in*/
+/*.tri-right.btm-left:before{
+	content: ' ';
+    color: #9ED5C5 ;
+    background-color: forestgreen;
+	position: absolute;
+	width: 0;
+	height: 0;
+	left: -8px;
+    right: auto;
+    top: auto;
+	bottom: -40px;
+	border: 22px solid;
+	border-color: transparent transparent transparent lightyellow;
+}
+
+.tri-right.btm-left:after{
+	content: ' ';
+    color: #9ED5C5 ;
+    background-color: forestgreen;
+	position: absolute;
+	width: 0;
+	height: 0;
+	left: 0px;
+    right: auto;
+    top: auto;
+	bottom: -20px;
+	border: 22px solid;
+	border-color: transparent transparent transparent lightyellow;
+}*/
+
+/* Other user: Right triangle placed top right flush. */
+/*.tri-right.right-top:before {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+    left: auto;
+	right: -40px;
+    top: -8px;
+	bottom: auto;
+    border: 20px solid;
+	border-color: transparent transparent transparent lightyellow;
+}*/
+/*.tri-right.right-top{
+	content: ' ';
+	position: absolute;
+    color:blue;
+    background-color:violet;
+	width: 0;
+	height: 0;
+     left: auto;
+	right: -20px;
+    top: 0px;
+	bottom: auto;
+	border: 20px solid;
+	border-color: lightyellow transparent transparent transparent;
+}
+
+
+.round{
+    border-radius: 30px;
+      -webkit-border-radius: 30px;
+      -moz-border-radius: 30px;
+  
+  }
+
+  .talktext{
+    padding: 1em;
+      text-align: left;
+    line-height: 1.5em;
+  }*/
+
+  /*.talktext p{
+
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0em;
+  }*/
+
+/*~~~~~~~~~~~~~~~~End of 'chat' css ~~~~~~~~~~~~~~~*/
 

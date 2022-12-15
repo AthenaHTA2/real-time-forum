@@ -24,7 +24,11 @@
 
     <nav class="chat">
         <a id ="Chat Here" href = "/chat" class="chat__link" data-link>Chat Here</a>
-     
+        <div id="log"></div>
+        <form id="form">
+            <input type="submit" id="btn" value="Send" />
+            <input type="text" id="msg" size="64" autofocus />
+        </form>
     </nav>
 
     <div id="postBlock"class ="posts" >
@@ -34,7 +38,7 @@
         <textarea name="postinput" type="text" rows="4" cols="60" id="PostContent" name="Content" placeholder="Description..."></textarea>
         <label for="Post Cat">Catergory:</label>
         <input type="dropdown" id="PostCat" name="Category" placeholder="Choose Categories..">
-        <button class="button" type="submit">Create Post</button>
+        <button class="button postBtn" type="submit">Create Post</button>
     
     </div>
 
@@ -99,8 +103,6 @@
         <label for="Email"><b>Email</b></label>
         <input id="Email" type="email" onkeydown="validation()" size="30" placeholder="Enter Email Address" name="Email" required>
         <span id="text"></span>
-        <!-- <label for="userName"><b>UserName</b></label>
-        <input type="text" placeholder="Enter Username" name="UserName" required> -->
 
         <label for="psw"><b>Password</b></label>
         <input id="PassWord" type="password" placeholder="Enter Password" name="psw" required>
@@ -139,10 +141,62 @@
     </div>
 
 </body>
-
-<!-- this script runs login modal -->
+<!---->
+<!--Adding JS for the chat here as js/chat.js not working-->
+<!--<script src='/js/Login.js'></script>-->
+<script type="text/javascript">
+    window.onload = function () {
+        var conn;
+        var msg = document.getElementById("msg");
+        var log = document.getElementById("log");
+    
+        function appendLog(item) {
+            var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
+            log.appendChild(item);
+            if (doScroll) {
+                log.scrollTop = log.scrollHeight - log.clientHeight;
+            }
+        }
+    
+        document.getElementById("form").onsubmit = function () {
+            if (!conn) {
+                return false;
+            }
+            if (!msg.value) {
+                return false;
+            }
+            conn.send(msg.value);
+            msg.value = "";
+            return false;
+        };
+    
+        if (window["WebSocket"]) {
+            conn = new WebSocket("ws://" + document.location.host + "/ws");
+            conn.onclose = function (evt) {
+                var item = document.createElement("div");
+                item.innerHTML = "<b>Connection closed.</b>";
+                appendLog(item);
+            };
+            conn.onmessage = function (evt) {
+                var messages = evt.data.split('\n');
+                for (var i = 0; i < messages.length; i++) {
+                    var item = document.createElement("div");
+                    item.style.color = '#80ed99'
+                    item.innerText = messages[i];
+                    appendLog(item);
+                }
+            };
+        } else {
+            var item = document.createElement("div");
+            item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
+            appendLog(item);
+        }
+    };
+    </script>
+<!-- this script runs register/login/chat modal -->
 <script src="/js/register.js"></script>
 <script src="/js/login.js"></script>
 <script src="/js/buttons.js"></script>
+<!--<script src="/js/chat.js"></script>-->
 
 </html>

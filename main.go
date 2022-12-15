@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
+	"rtforum/chat"
 	"rtforum/database"
 	"rtforum/sqldb"
 	rtforum "rtforum/tools"
@@ -13,6 +14,8 @@ import (
 )
 
 func main() {
+	hub := chat.NewHub()
+	go hub.Run()
 
 	sqldb.ConnectDB()
 	database.CreateDB()
@@ -21,15 +24,20 @@ func main() {
 	http.Handle("/css/",
 		http.StripPrefix("/css/", cssFolder))
 
-		jsFolder := http.FileServer(http.Dir("js/"))
-		http.Handle("/js/",
-			http.StripPrefix("/js/", jsFolder))
+	jsFolder := http.FileServer(http.Dir("js/"))
+	http.Handle("/js/",
+		http.StripPrefix("/js/", jsFolder))
 
-			
 	http.HandleFunc("/", rtforum.HomePage)
 	http.HandleFunc("/login", rtforum.Login)
 	http.HandleFunc("/register", rtforum.Register)
-
+	//serveWs function is a HTTP handler that upgrades the HTTP connection
+	//to the WebSocket protocol, creates a Client type, registers the Client
+	//with the hub and schedules the Client to be unregistered
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		chat.ServeWs(hub, w, r)
+	})
+	//http.HandleFunc("/posts", rtforum.Posts)
 
 	exec.Command("xdg-open", "http://localhost:8080/").Start()
 
