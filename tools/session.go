@@ -62,31 +62,22 @@ func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 	return nil
 }
 
-// logout handle
-/*func Logout(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/logout" {
-		c, err := r.Cookie("session_token")
-		if err != nil {
-			AddSession(w, "guest", nil)
-			http.Redirect(w, r, "/", http.StatusSeeOther)
-			fmt.Println("Logout error: ", err)
-		}
-		DeleteSession(w, c.Value)
-		fmt.Println("user logged out")
-		http.Redirect(w, r, "/", http.StatusFound)
-	}
-}*/
-
 // User's cookie expires when browser is closed, delete the cookie from the database.
 func DeleteSession(w http.ResponseWriter, cookieValue string) error {
+	var cookieName string
+	//if cookieName is not found in 'Sessions' db table return err = nil
+	if err := sqldb.DB.QueryRow("SELECT cookieName FROM Sessions WHERE cookieValue = ?", cookieValue).Scan(&cookieName); err != nil {
+		return nil
+	}
+	//removing cookie from browser
 	cookie := &http.Cookie{
-		Name:     "Session_token",
+		Name:     cookieName,
 		Value:    "",
 		MaxAge:   -1,
 		HttpOnly: true,
 	}
 	http.SetCookie(w, cookie)
-
+	//removing session record from 'Sessions' table
 	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE cookieValue=?;")
 	if err != nil {
 		log.Fatalf(err.Error())
@@ -98,4 +89,30 @@ func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 		return err
 	}
 	return nil
+}
+
+// GetUserByCookie ...
+func GetUserByCookie(cookieValue string) *User {
+	var userID int64
+	if err := sqldb.DB.QueryRow("SELECT userID from Sessions WHERE cookieValue = ?", cookieValue).Scan(&userID); err != nil {
+		return nil
+	}
+	u := FindByUserID(userID)
+	return u
+}
+
+// NewUser ...
+func NewUser() *User {
+	return &User{}
+}
+
+// FindByUserID ...
+func FindByUserID(UID int64) *User {
+	u := NewUser()
+	if err := sqldb.DB.QueryRow("SELECT * FROM Users WHERE userID = ?", UID).
+		Scan(&u.UserID, &u.FirstName, &u.LastName, &u.NickName, &u.Age, &u.Gender, &u.Email, &u.Access, &u.LoggedIn, &u.Posts, &u.Comments, &u.Password); err != nil {
+		fmt.Println("error find by user: ", err)
+		return nil
+	}
+	return u
 }

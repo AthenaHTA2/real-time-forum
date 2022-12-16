@@ -117,10 +117,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		} else if comparePass != nil {
 			fmt.Println("PASSWORD INCORRECT")
 		}
-		
-		// redirect user to index handler after successful login
-		//http.Redirect(w, r, "/", http.StatusFound)
-		//return
 	}
 
 
