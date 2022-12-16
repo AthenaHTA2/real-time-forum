@@ -1,20 +1,15 @@
-//to do: get message's user name
-let UserName = document.querySelector("#LUserName").value
-var msg = document.getElementById("msg");
-var log = document.getElementById("log");
-
-function AppendLog(item) {
-    var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
-    log.appendChild(item);
-    if (doScroll) {
-        log.scrollTop = log.scrollHeight - log.clientHeight;
-    }
-}
-
 window.onload = function () {
     var conn;
-
-    //AppendLog(msg)
+    var msg = document.getElementById("msg");
+    var log = document.getElementById("log");
+  
+    function AppendLog(item) {
+        var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
+        log.appendChild(item);
+        if (doScroll) {
+            log.scrollTop = log.scrollHeight - log.clientHeight;
+        }
+    }
   
     document.getElementById("form").onsubmit = function () {
         if (!conn) {
@@ -61,46 +56,24 @@ window.onload = function () {
   should be on the right and the receiver's bubble should be on the left. 
   Write some code that does this.*/
   
-  //Answer from https://chat.openai.com/chat:
+  //Answer from https://chat.openai.com/chat, does not work unfortunately:
   
   
   // First, let's define a function that takes a message and a username,
   // and returns the appropriate HTML for the message bubble.
-  function CreateMessageBubble(message, username) {
+  /*function CreateMessageBubble(message, username) {
     // If the username matches the current user's username,
     // the message bubble should be on the right side of the chat window.
-    if (username === UserName) {
-      /*return '<div class="message-bubble-container right">' +
+    if (username === LoginData.userName) {
+      return '<div class="message-bubble-container right">' +
         '<p class="message-bubble">' + message + '</p>' +
-        '</div>';*/
-        var a = document.createElement('div')
-        var b = document.createElement('div')
-        var c = document.createElement('p')
-        a.classList.add("talk-bubble")
-        a.classList.add("tri-right")
-        a.classList.add("btm-left")
-        a.classList.add("round")
-        b.classList.add("talktext")
-        c.innerHTML = `${message}`
-        var d = b.innerHTML = c
-        return a.innerHTML = d
+        '</div>';
     }
     // Otherwise, the message bubble should be on the left side of the chat window.
     else {
-      /*return '<div class="message-bubble-container left">' +
+      return '<div class="message-bubble-container left">' +
         '<p class="message-bubble">' + message + '</p>' +
-        '</div>';*/
-        var a = document.createElement('div')
-        var b = document.createElement('div')
-        var c = document.createElement('p')
-        a.classList.add("talk-bubble")
-        a.classList.add("tri-right")
-        a.classList.add("right-top")
-        a.classList.add("round")
-        b.classList.add("talktext")
-        c.innerHTML = `${message}`
-        var d = b.innerHTML = c
-        return a.innerHTML = d
+        '</div>';
     }
   }
   
@@ -119,5 +92,6 @@ window.onload = function () {
   // We can use the appendMessage function to add the message to the chat window.
   //var message = "Hello, world!";
   //var username = "User123";
-  //appendMessage(message, username);
+  //appendMessage(message, username);*/
+  
   
