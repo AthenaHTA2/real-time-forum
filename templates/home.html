@@ -25,10 +25,18 @@
     <nav class="chat">
         <a id ="Chat Here" href = "/chat" class="chat__link" data-link>Chat Here</a>
         <div id="log"></div>
-        <form id="formChat">
+        <form class="modal-content animate" action="/chat" id="formChat">
             <input type="submit" id="btn" value="Send" />
             <input type="text" id="msg" size="64" autofocus />
         </form>
+    </nav>
+
+    <nav class="loggedInUsers">
+        <a id="Select User" href = "/loggedInUsers" class="loggedInUsers__link" data-link><strong>Logged-in Users</strong></a>
+        <div id="usersLog">
+            <div style="color: rgb(128, 237, 153);"><a id="Select User" href = "/loggedInUsers" class="loggedInUsers__link" data-link>Arabella</a></div>
+            <div style="color: rgb(128, 237, 153);"><a id="Select User" href = "/loggedInUsers" class="loggedInUsers__link" data-link>Duke Oton</a></div>
+        </div>
     </nav>
 
     <div id="postBlock"class ="posts" >

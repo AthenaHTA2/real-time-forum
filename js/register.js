@@ -70,9 +70,9 @@ registerBtn.onclick= (e)=>{
     
     fetch("http://localhost:8080/register", configRegister)
       .then(function(response) {
+        //if(!response.ok){throw response}
         console.log('RegDataSuccess:', response)
-        return response.json();
-        
+
       })
 
       document.getElementById('regModal').style.display = "none";

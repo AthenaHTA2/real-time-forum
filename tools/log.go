@@ -7,11 +7,15 @@ import (
 	"log"
 	"net/http"
 	"rtforum/sqldb"
-	"time"
 	"strconv"
+	"time"
+
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
+
+//var c *Client
+//var h *Hub
 
 //Populate the LoginData struct, validate user password,
 //generate cookie data and upload these into database 'Sessions' table
@@ -114,9 +118,15 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		CurrentUser.Access = 1
 		CurrentUser.LoggedIn = true
 		fmt.Println("User struct data from Login: \n", CurrentUser.UserID, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Password, CurrentUser.Access, CurrentUser.LoggedIn, CurrentUser.Posts, CurrentUser.Comments, CurrentUser.Email)
-		} else if comparePass != nil {
-			fmt.Println("PASSWORD INCORRECT")
-		}
+
+		//LoggedUser := CurrentUser.NickName
+		//c.LoggedClient(LoggedUser)
+		//h.LoggedInClient(LoggedUser)
+
+		w.WriteHeader(http.StatusOK)
+
+	} else if comparePass != nil {
+		w.WriteHeader(http.StatusNotAcceptable)
+		fmt.Println("PASSWORD INCORRECT")
 	}
-
-
+}

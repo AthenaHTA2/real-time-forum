@@ -26,9 +26,19 @@ const LoginBtn=document.querySelector("#loginBtn")
   
   fetch("http://localhost:8080/login", configLogin)
     .then(function(response) {
-      console.log('LogDataSuccess:', response)
-      return response.json();
+      if (response.status == 200) {
+        successfulLogin()
+      } else {
+        unsuccessfulLogin()
+      }
+
     })
+  }
+
+
+  function successfulLogin() {
+    console.log("success - status 200")
+
     document.getElementById('loginModal').style.display = "none";
     document.getElementById('LoggedOn').style.display = 'block';
 
@@ -40,4 +50,23 @@ const LoginBtn=document.querySelector("#loginBtn")
     document.getElementById('postBlock').style.display = 'flex';
 
     document.getElementById('logout').style.display = 'block'
+
+    postBtn = document.querySelector("#postBlock > button")
+    postBtn.style.visibility = "visible"
   }
+
+  function unsuccessfulLogin() {
+    console.log("failed - not status 200")
+
+    document.getElementById('loginModal').style.display = "none";
+    document.getElementById('regRejected').style.display = 'block';
+
+    setTimeout(() => {
+        document.getElementById('regRejected').style.display = 'none';
+
+      },1500);
+
+    document.getElementById('postBlock').style.display = 'flex';
+  }
+
+  
