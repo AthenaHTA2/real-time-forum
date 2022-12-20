@@ -1,4 +1,3 @@
-
 package chat
 
 // Hub maintains the set of active clients and broadcasts messages to the
@@ -49,7 +48,19 @@ func (h *Hub) Run() {
 	}
 }
 
-/*Code authors: 
+//to show which users are logged in
+func (h *Hub) RegisteredUsers(nicknames [][]byte) {
+	for _, nknm := range nicknames {
+		nknm = <-h.Broadcast
+		for client := range h.Clients {
+			client.Send <- nknm
+
+		}
+	}
+
+}
+
+/*Code authors:
 Gary Burd <gary@beagledreams.com>
 Google LLC (https://opensource.google.com/)
 Joachim Bauch <mail@joachim-bauch.de>

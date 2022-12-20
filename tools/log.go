@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"rtforum/chat"
 	"rtforum/sqldb"
 	"strconv"
 	"time"
@@ -15,7 +16,7 @@ import (
 )
 
 //var c *Client
-//var h *Hub
+var h *chat.Hub
 
 //Populate the LoginData struct, validate user password,
 //generate cookie data and upload these into database 'Sessions' table
@@ -125,8 +126,36 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		w.WriteHeader(http.StatusOK)
 
+		//show all registered users, not yet working
+		//showUsers := GetAllUsers()
+		//h.RegisteredUsers(showUsers)
+
 	} else if comparePass != nil {
 		w.WriteHeader(http.StatusNotAcceptable)
 		fmt.Println("PASSWORD INCORRECT")
 	}
+}
+
+func GetAllUsers() [][]byte {
+	var allUsers [][]byte
+	rows, errUsr := sqldb.DB.Query("SELECT DISTINCT nickName FROM Users ORDER BY nickName ASC;")
+	if errUsr != nil {
+		fmt.Println("Error retrieving users from database: \n", errUsr)
+		return nil
+	}
+	for rows.Next() {
+		//var tempPost *Pitem = NewPost()
+		var tempUser string
+		err := rows.Scan(&tempUser)
+		if err != nil {
+			fmt.Println("err: ", err)
+		}
+		allUsers = append(allUsers, []byte(tempUser))
+	}
+	rows.Close()
+	for _, user := range allUsers {
+		fmt.Println("\n", string(user))
+	}
+
+	return allUsers
 }

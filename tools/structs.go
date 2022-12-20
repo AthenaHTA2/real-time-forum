@@ -40,7 +40,6 @@ type User struct {
 	Password  string `json:"PassWord"`
 }
 
-
 type LoginData struct {
 	UserName string `json:"UserName"`
 	Password string `json:"LoginPw"`

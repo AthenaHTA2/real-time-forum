@@ -33,7 +33,34 @@ const LoginBtn=document.querySelector("#loginBtn")
       }
 
     })
+    //Not yet working
+    ReadUsers()
+
   }
+
+  //show list of registered users
+  function ReadUsers(){
+    let configUsersList = {
+      method: "GET"
+      /*headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify(LoginData)*/
+    };
+    
+    fetch("http://localhost:8080/login", configUsersList)
+      .then(function(response) {
+        if (response.status == 200) {
+          console.log("Users showing: \n",response)
+        } else {
+          console.log("Error showing users")
+        }
+    
+      })
+  }
+
+
 
 
   function successfulLogin() {
@@ -54,6 +81,7 @@ const LoginBtn=document.querySelector("#loginBtn")
     postBtn = document.querySelector("#postBlock > button")
     postBtn.style.visibility = "visible"
     document.querySelector('.loggedInUsers').style.display = "block"
+    document.querySelector('#formChat').style.visibility = "visible"
   }
 
   function unsuccessfulLogin() {

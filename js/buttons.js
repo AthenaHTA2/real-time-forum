@@ -4,6 +4,7 @@ function openLogin() {
     document.getElementById('loginModal').style.display = "block";
     document.getElementById('regModal').style.display = "none";
     document.getElementById('regConfirmed').style.display = 'none';
+   
 
   }
   function openReg() {
@@ -26,4 +27,5 @@ function openLogin() {
 
   function DeleteSession(){
     document.querySelector('.loggedInUsers').style.display = "none"
+    document.querySelector('#formChat').style.visibility = "hidden"
   }

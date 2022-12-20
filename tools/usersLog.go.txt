@@ -1,7 +1,6 @@
 package tools
 
 import (
-	"bytes"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -56,7 +55,8 @@ type Client struct {
 	Send chan []byte
 }
 
-func (c *Client) LoggedClient(nickname string) {
+//Display all Users
+func (c *Client) RegisteredUsers(nicknames [][]byte) {
 	defer func() {
 		c.Hub.Unregister <- c
 		c.Conn.Close()
@@ -65,25 +65,22 @@ func (c *Client) LoggedClient(nickname string) {
 	c.Conn.SetReadDeadline(time.Now().Add(pongWait))
 	c.Conn.SetPongHandler(func(string) error { c.Conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
-		/*_, message, err := c.Conn.ReadMessage()
-		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Printf("error: %v", err)
-			}
-			break
-		}*/
-		message := bytes.TrimSpace(bytes.Replace([]byte(nickname), newline, space, -1))
-		c.Hub.Broadcast <- message
+		for _, nknm := range nicknames {
+			//message := bytes.TrimSpace(bytes.Replace(nknm[i]), newline, space, -1)
+			c.Hub.Broadcast <- nknm
+		}
+
 	}
 }
 
 //to show which users are logged in
-func (h *Hub) LoggedInClient(nickname string) {
-	var loggedIn = []byte(nickname)
-	loggedIn = <-h.Broadcast
-	for client := range h.Clients {
-		client.Send <- loggedIn
+func (h *Hub) RegisteredUsers(nicknames [][]byte) {
+	for _, nknm := range nicknames {
+		nknm = <-h.Broadcast
+		for client := range h.Clients {
+			client.Send <- nknm
 
+		}
 	}
 
 }
