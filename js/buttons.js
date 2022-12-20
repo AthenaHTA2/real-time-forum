@@ -23,3 +23,7 @@ function openLogin() {
     document.getElementById('regConfirmed').style.display = 'none';
 
   }
+
+  function DeleteSession(){
+    document.querySelector('.loggedInUsers').style.display = "none"
+  }

@@ -53,6 +53,7 @@ const LoginBtn=document.querySelector("#loginBtn")
 
     postBtn = document.querySelector("#postBlock > button")
     postBtn.style.visibility = "visible"
+    document.querySelector('.loggedInUsers').style.display = "block"
   }
 
   function unsuccessfulLogin() {
