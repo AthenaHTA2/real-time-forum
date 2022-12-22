@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"rtforum/chat"
 	"rtforum/sqldb"
 	"strconv"
 	"time"
@@ -16,7 +15,7 @@ import (
 )
 
 //var c *Client
-var h *chat.Hub
+//var h *chat.Hub
 
 //Populate the LoginData struct, validate user password,
 //generate cookie data and upload these into database 'Sessions' table
@@ -144,7 +143,6 @@ func GetAllUsers() [][]byte {
 		return nil
 	}
 	for rows.Next() {
-		//var tempPost *Pitem = NewPost()
 		var tempUser string
 		err := rows.Scan(&tempUser)
 		if err != nil {

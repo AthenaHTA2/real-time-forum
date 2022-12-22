@@ -2,6 +2,7 @@ window.onload = function () {
     var conn;
     var msg = document.getElementById("msg");
     var log = document.getElementById("log");
+    var usersLog = document.querySelector("#usersLog");
   
     function AppendLog(item) {
         var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
@@ -25,7 +26,32 @@ window.onload = function () {
   
     if (window["WebSocket"]) {
         conn = new WebSocket("ws://" + document.location.host + "/ws");
-        conn.onclose = function (evt) {
+
+        /*~~~~~~ Start of printing list of registered users~~~~~ */
+        // Parse the received JSON data into a js object 
+        conn.onopen = function(event) { 
+            
+            var registeredUsers = JSON.parse(event.data);
+            var regUsers = registeredUsers.split('\n')
+            // Loop through the registeredUsers array and add each user 
+            //to the usersLog div.
+            regUsers.forEach(function(user) {
+            var userNickName = user;
+    
+            // Append the user to the usersLog div.
+            //$('#usersLog').append(
+                usersLog.append(
+            '<br>' +
+            '<div class="user-container">' +
+            '<p class="userNickName">' + userNickName + '</p>' +
+            '</div>'
+            );
+            });
+        };
+    
+  /*~~~~~~ End of printing list of registered users~~~~~ */
+
+        conn.onclose = function () {
             var item = document.createElement("div");
             item.innerHTML = "<b>Connection closed.</b>";
             AppendLog(item);

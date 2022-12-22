@@ -4,7 +4,10 @@ import (
 	"bytes"
 	"log"
 	"net/http"
+
 	"time"
+
+	"rtforum/tools"
 
 	"github.com/gorilla/websocket"
 )
@@ -42,6 +45,19 @@ type Client struct {
 
 	// Buffered channel of outbound messages.
 	Send chan []byte
+}
+
+//~~~~~~~~~~~~~~~~~~~from chat.openai.com/chat:
+
+//sends the registeredUsers slice to the ws client as a JSON array.
+func SendRegisteredUsers(conn *websocket.Conn) {
+	//put database query result in registeredUsers
+	registeredUsers := tools.GetAllUsers()
+	// Encode the registeredUsers slice as a JSON array and send it as message to the client.
+	err := conn.WriteJSON(registeredUsers)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 //msgToHub go routine reads messages from the webSocket connection
@@ -97,7 +113,6 @@ func (c *Client) msgFromHub() {
 				return
 			}
 
-			
 			w.Write(message)
 
 			// Add queued chat messages to the current websocket message.
@@ -128,7 +143,8 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	}
 	client := &Client{Hub: hub, Conn: conn, Send: make(chan []byte, 256)}
 	client.Hub.Register <- client
-
+	//send json of registered users to client
+	SendRegisteredUsers(conn)
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
 	go client.msgFromHub()

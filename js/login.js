@@ -34,12 +34,12 @@ const LoginBtn=document.querySelector("#loginBtn")
 
     })
     //Not yet working
-    ReadUsers()
+    //ReadUsers()
 
   }
 
   //show list of registered users
-  function ReadUsers(){
+  /*function ReadUsers(){
     let configUsersList = {
       method: "GET"
       /*headers: {
@@ -47,7 +47,7 @@ const LoginBtn=document.querySelector("#loginBtn")
         "Accept": "application/json",
       },
       body: JSON.stringify(LoginData)*/
-    };
+    /*};
     
     fetch("http://localhost:8080/login", configUsersList)
       .then(function(response) {
@@ -58,7 +58,7 @@ const LoginBtn=document.querySelector("#loginBtn")
         }
     
       })
-  }
+  }*/
 
 
 
