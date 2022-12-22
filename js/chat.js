@@ -48,7 +48,6 @@ window.onload = function () {
                         '</div>'
                         );
                 }
-            };
         };
     
   /*~~~~~~ End of printing list of registered users~~~~~ */
