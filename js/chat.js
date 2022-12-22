@@ -32,21 +32,23 @@ window.onload = function () {
         conn.onopen = function(event) { 
             
             var registeredUsers = JSON.parse(event.data);
-            var regUsers = registeredUsers.split('\n')
+            console.log("parsed Jason",registeredUsers)
+            //var regUsers = registeredUsers.split('\n')
             // Loop through the registeredUsers array and add each user 
             //to the usersLog div.
-            regUsers.forEach(function(user) {
-            var userNickName = user;
+            //registeredUsers.forEach(function(user) {
+            //var userNickName = user;
     
             // Append the user to the usersLog div.
             //$('#usersLog').append(
-                usersLog.append(
-            '<br>' +
-            '<div class="user-container">' +
-            '<p class="userNickName">' + userNickName + '</p>' +
-            '</div>'
-            );
-            });
+                for ( let usr = 0; usr < registeredUsers.length; usr++){
+                    usersLog.append(
+                        '<div class="user-container">' +
+                        '<p class="userNickName">' + registeredUsers[usr] + '</p>' +
+                        '</div>'
+                        );
+                }
+            };
         };
     
   /*~~~~~~ End of printing list of registered users~~~~~ */

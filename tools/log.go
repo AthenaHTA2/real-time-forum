@@ -135,8 +135,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetAllUsers() [][]byte {
-	var allUsers [][]byte
+func GetAllUsers() []string{
+	var allUsers []string
 	rows, errUsr := sqldb.DB.Query("SELECT DISTINCT nickName FROM Users ORDER BY nickName ASC;")
 	if errUsr != nil {
 		fmt.Println("Error retrieving users from database: \n", errUsr)
@@ -148,11 +148,11 @@ func GetAllUsers() [][]byte {
 		if err != nil {
 			fmt.Println("err: ", err)
 		}
-		allUsers = append(allUsers, []byte(tempUser))
+		allUsers = append(allUsers, tempUser)
 	}
 	rows.Close()
 	for _, user := range allUsers {
-		fmt.Println("\n", string(user))
+		fmt.Println(string(user))
 	}
 
 	return allUsers
