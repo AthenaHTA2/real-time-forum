@@ -206,30 +206,20 @@
                         var item = document.createElement("div");
                         item.style.color = '#80ed99'
                         item.innerText = messages[i];
+                        //if message is a list of chat members
                         if (messages[0] == "UsersList"){
+                            if(i < messages.length){
+                            //do not print 'UsersList'
+                            item.innerText = messages[i+1]
+                            //print list inside 'usersLog' div
                             AppendUser(item);
-                        }else{                      
+                            }
+                        }else{   
+                            //print list inside 'log' div                   
                             appendLog(item);
                         }
                 };
 
-                /*conn.onopen = function() { 
-                    conn.onmessage = function (evt) {
-                    var messages = evt.data.split('\n');
-                    for (var i = 0; i < messages.length; i++) {
-                        var item = document.createElement("div");
-                        item.style.color = '#80ed99'
-                        item.innerText = messages[i];
-                        AppendUser(item);
-                    }
-                };
-                    for ( let usr = 0; usr < regUsers.length; usr++){
-                    usersLog.append(
-                        '<div class="user-container">' +
-                        '<p class="userNickName">' + String.fromCharCode(...regUsers[usr]) + '</p>' +
-                        '</div>'
-                        );
-                }*/
         };
 
             } else {
