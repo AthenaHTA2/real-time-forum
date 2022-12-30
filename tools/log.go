@@ -119,24 +119,17 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		CurrentUser.LoggedIn = true
 		fmt.Println("User struct data from Login: \n", CurrentUser.UserID, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Password, CurrentUser.Access, CurrentUser.LoggedIn, CurrentUser.Posts, CurrentUser.Comments, CurrentUser.Email)
 
-		//LoggedUser := CurrentUser.NickName
-		//c.LoggedClient(LoggedUser)
-		//h.LoggedInClient(LoggedUser)
-
 		w.WriteHeader(http.StatusOK)
 
-		//show all registered users, not yet working
-		//showUsers := GetAllUsers()
-		//h.RegisteredUsers(showUsers)
-
+		GetAllUsers()
 	} else if comparePass != nil {
 		w.WriteHeader(http.StatusNotAcceptable)
 		fmt.Println("PASSWORD INCORRECT")
 	}
 }
 
-func GetAllUsers() []string{
-	var allUsers []string
+func GetAllUsers() []byte {
+	var allUsers string
 	rows, errUsr := sqldb.DB.Query("SELECT DISTINCT nickName FROM Users ORDER BY nickName ASC;")
 	if errUsr != nil {
 		fmt.Println("Error retrieving users from database: \n", errUsr)
@@ -148,12 +141,12 @@ func GetAllUsers() []string{
 		if err != nil {
 			fmt.Println("err: ", err)
 		}
-		allUsers = append(allUsers, tempUser)
+		allUsers = allUsers + "\n" + tempUser
 	}
 	rows.Close()
 	for _, user := range allUsers {
 		fmt.Println(string(user))
 	}
 
-	return allUsers
+	return []byte(allUsers)
 }

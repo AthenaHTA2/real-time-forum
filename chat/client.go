@@ -50,13 +50,34 @@ type Client struct {
 //~~~~~~~~~~~~~~~~~~~from chat.openai.com/chat:
 
 //sends the registeredUsers slice to the ws client as a JSON array.
-func SendRegisteredUsers(conn *websocket.Conn) {
+func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
+
 	//put database query result in registeredUsers
 	registeredUsers := tools.GetAllUsers()
-	// Encode the registeredUsers slice as a JSON array and send it as message to the client.
-	err := conn.WriteJSON(registeredUsers)
+	err := c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
 	if err != nil {
-		log.Println(err)
+		// The hub closed the channel.
+		c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
+		return
+	}
+	w, err := c.Conn.NextWriter(websocket.TextMessage)
+	if err != nil {
+		return
+	}
+
+	w.Write(registeredUsers)
+
+	// Add queued chat messages to the current websocket message.
+	n := len(c.Send)
+	for i := 0; i < n; i++ {
+		if string(registeredUsers[i]) == string(newline) {
+			w.Write(newline)
+		}
+		w.Write(<-c.Send)
+	}
+
+	if err := w.Close(); err != nil {
+		return
 	}
 }
 
@@ -143,12 +164,12 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	}
 	client := &Client{Hub: hub, Conn: conn, Send: make(chan []byte, 256)}
 	client.Hub.Register <- client
-	//send json of registered users to client
-	SendRegisteredUsers(conn)
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
 	go client.msgFromHub()
 	go client.msgToHub()
+	//send json of registered users to client
+	go client.SendRegisteredUsers(conn)
 }
 
 /*Code authors:
