@@ -23,7 +23,7 @@
     </nav>
 
     <nav class="chat">
-        <a id ="Chat Here" href = "/chat" class="chat__link" data-link>Chat Here</a>
+        <a id ="Chat Here" href = "/chat" class="chat__link" data-link>  Chat Here</a>
         <div id="log"></div>
         <form class="modal-content animate" action="/chat" id="formChat">
             <input type="submit" id="btn" value="Send" />
@@ -32,7 +32,7 @@
     </nav>
 
     <nav class="loggedInUsers">
-        <a id="Select User" onclick="SendRegisteredUsers(); "class="loggedInUsers__link" data-link><strong>Logged-in Users</strong></a>
+        <a id="Select User" class="loggedInUsers__link" data-link><strong>Chat Members</strong></a>
         <div id="usersLog">
           <!--<div style="color: rgb(128, 237, 153);"><a id="Select User" href = "/loggedInUsers" class="loggedInUsers__link" data-link>Arabella</a></div>
             <div style="color: rgb(128, 237, 153);"><a id="Select User" href = "/loggedInUsers" class="loggedInUsers__link" data-link>Duke Oton</a></div>-->
@@ -156,6 +156,7 @@
             var conn;
             var msg = document.getElementById("msg");
             var log = document.getElementById("log");
+            var usersLog = document.getElementById("usersLog");
         
             function appendLog(item) {
                 var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
@@ -164,6 +165,20 @@
                     log.scrollTop = log.scrollHeight - log.clientHeight;
                 }
             }
+
+            function AppendUser(item) {
+                /*if(item.innerText == "UsersList"){
+                item.innerText = " "
+            }else{
+                item.innerText = item.innerText
+            }*/
+            var doScroll = usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
+            item.style.color = 'white'
+            usersLog.appendChild(item);
+            if (doScroll) {
+                usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
+            }
+        }
         
             document.getElementById("formChat").onsubmit = function () {
                 if (!conn) {
@@ -184,15 +199,39 @@
                     item.innerHTML = "<b>Connection closed.</b>";
                     appendLog(item);
                 };
+
                 conn.onmessage = function (evt) {
                     var messages = evt.data.split('\n');
                     for (var i = 0; i < messages.length; i++) {
                         var item = document.createElement("div");
                         item.style.color = '#80ed99'
                         item.innerText = messages[i];
-                        appendLog(item);
+                        if (messages[0] == "UsersList"){
+                            AppendUser(item);
+                        }else{                      
+                            appendLog(item);
+                        }
+                };
+
+                /*conn.onopen = function() { 
+                    conn.onmessage = function (evt) {
+                    var messages = evt.data.split('\n');
+                    for (var i = 0; i < messages.length; i++) {
+                        var item = document.createElement("div");
+                        item.style.color = '#80ed99'
+                        item.innerText = messages[i];
+                        AppendUser(item);
                     }
                 };
+                    for ( let usr = 0; usr < regUsers.length; usr++){
+                    usersLog.append(
+                        '<div class="user-container">' +
+                        '<p class="userNickName">' + String.fromCharCode(...regUsers[usr]) + '</p>' +
+                        '</div>'
+                        );
+                }*/
+        };
+
             } else {
                 var item = document.createElement("div");
                 item.innerHTML = "<b>Your browser does not support WebSockets.</b>";

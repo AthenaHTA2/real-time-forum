@@ -47,11 +47,11 @@ type Client struct {
 	Send chan []byte
 }
 
-//~~~~~~~~~~~~~~~~~~~from chat.openai.com/chat:
+//~~~~~~~~~~~~~~~~~~~Show list of Users
 
-//sends the registeredUsers slice to the ws client as a JSON array.
+//sends the registeredUsers to the ws client as a byte slice.
 func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
-
+	
 	//put database query result in registeredUsers
 	registeredUsers := tools.GetAllUsers()
 	err := c.Conn.SetWriteDeadline(time.Now().Add(writeWait))

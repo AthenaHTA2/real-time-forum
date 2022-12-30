@@ -129,7 +129,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllUsers() []byte {
-	var allUsers string
+	allUsers := "UsersList"
 	rows, errUsr := sqldb.DB.Query("SELECT DISTINCT nickName FROM Users ORDER BY nickName ASC;")
 	if errUsr != nil {
 		fmt.Println("Error retrieving users from database: \n", errUsr)

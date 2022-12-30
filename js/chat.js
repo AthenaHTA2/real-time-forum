@@ -2,17 +2,28 @@ window.onload = function () {
     var conn;
     var msg = document.getElementById("msg");
     var log = document.getElementById("log");
-    var usersLog = document.querySelector("#usersLog");
-  
-    function AppendLog(item) {
+    var usersLog = document.getElementById("usersLog");
+
+    function appendLog(item) {
         var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
         log.appendChild(item);
         if (doScroll) {
             log.scrollTop = log.scrollHeight - log.clientHeight;
         }
     }
-  
-    document.getElementById("form").onsubmit = function () {
+
+    function AppendUser(item) {
+    if (item == "UsersList"){
+        item = ""
+    }
+    var doScroll = usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
+    usersLog.appendChild(item);
+    if (doScroll) {
+        usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
+    }
+}
+
+    document.getElementById("formChat").onsubmit = function () {
         if (!conn) {
             return false;
         }
@@ -23,102 +34,54 @@ window.onload = function () {
         msg.value = "";
         return false;
     };
-  
+
     if (window["WebSocket"]) {
         conn = new WebSocket("ws://" + document.location.host + "/ws");
-
-        /*~~~~~~ Start of printing list of registered users~~~~~ */
-        // Parse the received JSON data into a js object 
-        conn.onopen = function(event) { 
-            
-            var registeredUsers = JSON.parse(event.data);
-            console.log("parsed Jason",registeredUsers)
-            //var regUsers = registeredUsers.split('\n')
-            // Loop through the registeredUsers array and add each user 
-            //to the usersLog div.
-            //registeredUsers.forEach(function(user) {
-            //var userNickName = user;
-    
-            // Append the user to the usersLog div.
-            //$('#usersLog').append(
-                for ( let usr = 0; usr < registeredUsers.length; usr++){
-                    usersLog.append(
-                        '<div class="user-container">' +
-                        '<p class="userNickName">' + registeredUsers[usr] + '</p>' +
-                        '</div>'
-                        );
-                }
-        };
-    
-  /*~~~~~~ End of printing list of registered users~~~~~ */
-
-        conn.onclose = function () {
+        conn.onclose = function (evt) {
             var item = document.createElement("div");
             item.innerHTML = "<b>Connection closed.</b>";
-            AppendLog(item);
+            appendLog(item);
         };
         conn.onmessage = function (evt) {
             var messages = evt.data.split('\n');
             for (var i = 0; i < messages.length; i++) {
-                //var item = document.createElement("div");
-               // item.style.color = '#80ed99'
-               // item.innerText = messages[i];
-               AppendMessage(messages[i], UserName)
-                //AppendLog(item);
+                console.log(messages[0])
+                var item = document.createElement("div");
+                
+                item.innerText = messages[i];
+                if(messages[0]== "UsersList"){
+                    item.style.color = 'white'
+                    AppendUser(item);
+                }else{
+                    item.style.color = '#80ed99'
+                    appendLog(item);
+                }
+               
             }
         };
+
+        /*conn.onopen = function() { 
+            conn.onmessage = function (evt) {
+            var messages = evt.data.split('\n');
+            for (var i = 0; i < messages.length; i++) {
+                var item = document.createElement("div");
+                item.style.color = '#80ed99'
+                item.innerText = messages[i];
+                AppendUser(item);
+            }
+        };
+            for ( let usr = 0; usr < regUsers.length; usr++){
+            usersLog.append(
+                '<div class="user-container">' +
+                '<p class="userNickName">' + String.fromCharCode(...regUsers[usr]) + '</p>' +
+                '</div>'
+                );
+        }
+}*/;
+
     } else {
         var item = document.createElement("div");
         item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
-        AppendLog(item);
+        appendLog(item);
     }
-  };
-  
-  /*Question to https://chat.openai.com/chat:
-  I am building a chat application using javascript for the front end 
-  and golang for the back end. So far I have managed using websockets 
-  to allow users to have conversations with each other using different browsers.
-  I have a problem. I would like the messages in the chat to have 
-  a different bubble for each user's individual message. The sender's bubble 
-  should be on the right and the receiver's bubble should be on the left. 
-  Write some code that does this.*/
-  
-  //Answer from https://chat.openai.com/chat, does not work unfortunately:
-  
-  
-  // First, let's define a function that takes a message and a username,
-  // and returns the appropriate HTML for the message bubble.
-  /*function CreateMessageBubble(message, username) {
-    // If the username matches the current user's username,
-    // the message bubble should be on the right side of the chat window.
-    if (username === LoginData.userName) {
-      return '<div class="message-bubble-container right">' +
-        '<p class="message-bubble">' + message + '</p>' +
-        '</div>';
-    }
-    // Otherwise, the message bubble should be on the left side of the chat window.
-    else {
-      return '<div class="message-bubble-container left">' +
-        '<p class="message-bubble">' + message + '</p>' +
-        '</div>';
-    }
-  }
-  
-  // Now, let's define a function that takes a message and a username,
-  // and appends the message bubble to the chat window.
-  function AppendMessage(message, username) {
-    // First, create the message bubble HTML using the createMessageBubble function.
-    var messageBubble = CreateMessageBubble(message, username);
-  
-    // Then, append the message bubble to the chat window.
-    //$('#chat-window').append(messageBubble);
-    AppendLog(messageBubble)
-  }
-  
-  // Now, let's say we have a chat message and the username of the sender.
-  // We can use the appendMessage function to add the message to the chat window.
-  //var message = "Hello, world!";
-  //var username = "User123";
-  //appendMessage(message, username);*/
-  
-  
+};

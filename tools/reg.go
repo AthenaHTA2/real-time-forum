@@ -8,8 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"rtforum/sqldb"
-	
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -62,7 +61,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = sqldb.DB.Exec(`INSERT INTO Users ( 
+	_, err = db.Exec(`INSERT INTO Users ( 
 		firstName,
 		lastName,
 		nickName,
