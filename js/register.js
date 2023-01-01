@@ -71,11 +71,15 @@ registerBtn.onclick= (e)=>{
     fetch("http://localhost:8080/register", configRegister)
       .then(function(response) {
         //if(!response.ok){throw response}
-        console.log('RegDataSuccess:', response)
-
+        //console.log('RegDataSuccess:', response)
+        if(!response.ok){
+          unsuccessfulReg() 
+        }else{
+          successfulReg() 
+        }
       })
 
-      document.getElementById('regModal').style.display = "none";
+      /*document.getElementById('regModal').style.display = "none";
       document.getElementById('regConfirmed').style.display = 'block';
 
 
@@ -87,6 +91,39 @@ registerBtn.onclick= (e)=>{
       document.getElementById('postBlock').style.display = 'flex';
 
       document.getElementById('logout').style.display = 'block'
-
+      */
 
     }
+
+    function successfulReg() {
+      console.log("success - status 200")
+  
+      document.getElementById('regModal').style.display = "none";
+      document.getElementById('regConfirmed').style.display = 'block';
+  
+      setTimeout(() => {
+          document.getElementById('regConfirmed').style.display = 'none';
+  
+        },2000);
+  
+      document.getElementById('postBlock').style.display = 'flex';
+  
+      document.getElementById('logout').style.display = 'block'
+    }
+
+
+
+    function unsuccessfulReg() {
+      console.log("failed - not status 200")
+  
+      document.getElementById('loginModal').style.display = "none";
+      document.getElementById('regRejected').style.display = 'block';
+  
+      setTimeout(() => {
+          document.getElementById('regRejected').style.display = 'none';
+  
+        },2000);
+  
+      document.getElementById('postBlock').style.display = 'flex';
+    }
+  

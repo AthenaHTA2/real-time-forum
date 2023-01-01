@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"rtforum/sqldb"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -23,15 +24,10 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 
 	templ, err := template.ParseFiles("templates/home.html")
 
-	if err != nil {
-		http.Error(w, "Error with parsing home.html", http.StatusInternalServerError)
-		return
-	}
-
 	err = templ.Execute(w, "")
 
 	if err != nil {
-		http.Error(w, "Error with writing home.html", http.StatusInternalServerError)
+		http.Error(w, "Error with parsing home.html", http.StatusInternalServerError)
 		return
 	}
 
@@ -61,7 +57,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = db.Exec(`INSERT INTO Users ( 
+	_, err = sqldb.DB.Exec(`INSERT INTO Users ( 
 		firstName,
 		lastName,
 		nickName,
