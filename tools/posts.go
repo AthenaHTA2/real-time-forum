@@ -14,7 +14,9 @@ var thePost post
 
 func Posts(w http.ResponseWriter, r *http.Request) {
 	var usrID = GetUserID()
+	fmt.Println(usrID)
 	var nkName = GetNickName()
+	fmt.Println(nkName)
 	var postTime = time.Now()
 
 	//input post data into post table

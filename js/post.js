@@ -49,7 +49,7 @@
         console.log("success - status 200")
         PostTitle.value = ""
         PostContent.value = ""
-        PostCateg.value = ""
+        document.querySelector("#PostCat").value = ""
  
       }
   
