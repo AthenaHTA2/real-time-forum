@@ -22,7 +22,8 @@ func CreateDB() {
 				"authorID" INTEGER NOT NULL,
 				"author" TEXT NOT NULL,
 				"title" TEXT NOT NULL, 
-				"content" TEXT NOT NULL, 
+				"content" TEXT NOT NULL,
+				"category" TEXT NOT NULL, 
 				"creationDate" TIMESTAMP,
 				FOREIGN KEY(authorID)REFERENCES users(userID)
 				);`)

@@ -108,7 +108,7 @@ registerBtn.onclick= (e)=>{
   
       document.getElementById('postBlock').style.display = 'flex';
   
-      document.getElementById('logout').style.display = 'block'
+      //document.getElementById('logout').style.display = 'block'
     }
 
 

@@ -150,3 +150,27 @@ func GetAllUsers() []byte {
 
 	return []byte(allUsers)
 }
+
+func GetUserID() int {
+	var logData LoginData
+	var UserID int
+	username := logData.UserName
+
+	stmt := "SELECT userID FROM Sessions WHERE Name = ?"
+	row := sqldb.DB.QueryRow(stmt, username)
+	err := row.Scan(&UserID)
+	if err != nil {
+		fmt.Println("err selecting userID in db by cookieName", username, err)
+		fmt.Println("check username and password")
+		}
+	fmt.Println(UserID)
+	return UserID
+}
+
+func GetNickName() string {
+	var logData LoginData
+	NickName := logData.UserName
+	return NickName
+}
+
+

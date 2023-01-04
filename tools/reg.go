@@ -1,7 +1,6 @@
 package tools
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -13,7 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var db *sql.DB
+//var db *sql.DB
 
 func HomePage(w http.ResponseWriter, r *http.Request) {
 
@@ -23,11 +22,12 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	templ, err := template.ParseFiles("templates/home.html")
-
+	fmt.Println(err)
 	err = templ.Execute(w, "")
 
 	if err != nil {
 		http.Error(w, "Error with parsing home.html", http.StatusInternalServerError)
+		fmt.Println(err)
 		return
 	}
 

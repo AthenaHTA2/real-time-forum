@@ -1,3 +1,6 @@
+var User = false;
+var UserList
+
 window.onload = function () {
     var conn;
     var msg = document.getElementById("msg");
@@ -13,14 +16,13 @@ window.onload = function () {
     }
 
     function AppendUser(item) {
-    if (item == "UsersList"){
-        item = ""
-    }
-    var doScroll = usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
-    usersLog.appendChild(item);
-    if (doScroll) {
-        usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
-    }
+
+        var doScroll = usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
+        usersLog.appendChild(item);
+        if (doScroll) {
+            usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
+        }
+    
 }
 
     document.getElementById("formChat").onsubmit = function () {
@@ -44,15 +46,21 @@ window.onload = function () {
         };
         conn.onmessage = function (evt) {
             var messages = evt.data.split('\n');
+            if(string(messages[0])== "UsersList"){
+                UserList = messages.slice(1)
+                User = true;
+                
+            }
             for (var i = 0; i < messages.length; i++) {
-                console.log(messages[0])
                 var item = document.createElement("div");
                 
-                item.innerText = messages[i];
-                if(messages[0]== "UsersList"){
+                if(User){
                     item.style.color = 'white'
+                    item.innerText = UserList[i];
                     AppendUser(item);
                 }else{
+                    console.log("not User", messages)
+                    item.innerText = messages[i];
                     item.style.color = '#80ed99'
                     appendLog(item);
                 }

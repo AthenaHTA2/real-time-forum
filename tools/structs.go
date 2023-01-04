@@ -16,9 +16,9 @@ type comment struct {
 type post struct {
 	PostID      int
 	Author      string // author
-	Title       string
-	Content     string
-	Category    string
+	Title       string `json:"PstTitle"`
+	Content     string `json:"PstContent"`
+	Category    string `json:"PstCateg"`
 	PostTime    time.Time
 	PostTimeStr string
 	Comments    []comment
