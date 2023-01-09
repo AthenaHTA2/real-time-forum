@@ -13,10 +13,10 @@ import (
 var thePost post
 
 func Posts(w http.ResponseWriter, r *http.Request) {
-	var usrID = GetUserID()
-	fmt.Println(usrID)
-	var nkName = GetNickName()
-	fmt.Println(nkName)
+	// var usrID = GetUserID()
+	// fmt.Println(usrID)
+	// var nkName = GetNickName()
+	// fmt.Println(nkName)
 	var postTime = time.Now()
 
 	//input post data into post table
@@ -27,7 +27,19 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Json from post: ", string(bytes))
 
 	json.Unmarshal(bytes, &thePost)
-	fmt.Println("post values", thePost)
+	fmt.Println("post struct values", thePost)
+	//hardcoded cookie as javascript formula not working
+	//thePost.Cookie = "5a476276-ee41-4415-bc4d-73a63d70d247"
+	//thePost.Modify("5a476276-ee41-4415-bc4d-73a63d70d247")
+	fmt.Println("the post after adding cookie:", thePost)
+	//CookieID := "5a476276-ee41-4415-bc4d-73a63d70d247"
+	CookieID := thePost.Cookie
+	fmt.Println("CookieID:", CookieID)
+	var usr = GetUserByCookie(CookieID)
+	fmt.Println("the user data:", usr)
+	//get user name and user ID
+	var nkName = usr.NickName
+	var usrID = usr.UserID
 
 	_, err = sqldb.DB.Exec(`INSERT INTO Posts ( 
 		authorID,
@@ -35,11 +47,17 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 		title,
 		content,
 		category,
-		creationDate
-		) VALUES(?,?,?,?,?,?)`, usrID, nkName, thePost.Title, thePost.Content, thePost.Category, postTime)
+		creationDate,
+		cookieID
+		) VALUES(?,?,?,?,?,?,?)`, usrID, nkName, thePost.Title, thePost.Content, thePost.Category, postTime, thePost.Cookie)
 
 	if err != nil {
 		fmt.Println("Error inserting into 'Posts' table: ", err)
 		return
 	}
+}
+
+//to modify the 'Cookie' field of the post struct
+func (p *post) Modify(ck string) {
+	p.Cookie = ck
 }

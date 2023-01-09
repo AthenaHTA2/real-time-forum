@@ -109,8 +109,8 @@ func NewUser() *User {
 // FindByUserID ...
 func FindByUserID(UID int64) *User {
 	u := NewUser()
-	if err := sqldb.DB.QueryRow("SELECT * FROM Users WHERE userID = ?", UID).
-		Scan(&u.UserID, &u.FirstName, &u.LastName, &u.NickName, &u.Age, &u.Gender, &u.Email, &u.Access, &u.LoggedIn, &u.Posts, &u.Comments, &u.Password); err != nil {
+	if err := sqldb.DB.QueryRow("SELECT userID, firstName, lastName, nickName, age, gender, email, passwordhash FROM Users WHERE userID = ?", UID).
+		Scan(&u.UserID, &u.FirstName, &u.LastName, &u.NickName, &u.Age, &u.Gender, &u.Email, &u.Password); err != nil {
 		fmt.Println("error find by user: ", err)
 		return nil
 	}

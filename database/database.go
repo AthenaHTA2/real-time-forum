@@ -25,6 +25,7 @@ func CreateDB() {
 				"content" TEXT NOT NULL,
 				"category" TEXT NOT NULL, 
 				"creationDate" TIMESTAMP,
+				"cookieID" TEXT NOT NULL,
 				FOREIGN KEY(authorID)REFERENCES users(userID)
 				);`)
 	// category table TABLE NOT USED YET
