@@ -88,15 +88,17 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		}
 		sessionToken := uuid.NewV4().String()
 		expiresAt := time.Now().Add(60 * time.Minute)
-		cookieNm := username + "_session"
+		//cookieNm := username + "_session" removing username in order to be able to get cookieID in JS
+		cookieNm := "user_session"
 		// Finally, we set the client cookie for "session_token='username_session'" as the session token we just generated
 		// we also set an expiry time of 120 minutes
 		http.SetCookie(w, &http.Cookie{
-			Name:     cookieNm,
-			Value:    sessionToken,
-			MaxAge:   7200,
-			Expires:  expiresAt,
-			HttpOnly: true,
+			Name:    cookieNm,
+			Value:   sessionToken,
+			MaxAge:  7200,
+			Expires: expiresAt,
+			// SameSite: true,
+			// HttpOnly: true, //removed in order to allow Javascript to access cookie
 		})
 		// storing the cookie values in struct
 		user_session := Cookie{cookieNm, sessionToken, expiresAt}

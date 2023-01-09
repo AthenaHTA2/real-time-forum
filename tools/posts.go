@@ -13,10 +13,7 @@ import (
 var thePost post
 
 func Posts(w http.ResponseWriter, r *http.Request) {
-	// var usrID = GetUserID()
-	// fmt.Println(usrID)
-	// var nkName = GetNickName()
-	// fmt.Println(nkName)
+
 	var postTime = time.Now()
 
 	//input post data into post table
@@ -28,11 +25,7 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(bytes, &thePost)
 	fmt.Println("post struct values", thePost)
-	//hardcoded cookie as javascript formula not working
-	//thePost.Cookie = "5a476276-ee41-4415-bc4d-73a63d70d247"
-	//thePost.Modify("5a476276-ee41-4415-bc4d-73a63d70d247")
 	fmt.Println("the post after adding cookie:", thePost)
-	//CookieID := "5a476276-ee41-4415-bc4d-73a63d70d247"
 	CookieID := thePost.Cookie
 	fmt.Println("CookieID:", CookieID)
 	var usr = GetUserByCookie(CookieID)
