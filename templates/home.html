@@ -10,21 +10,21 @@
 </head>
 
 <body>
+
     <div id="Header">🅡🅔🅐🅛-🅣🅘🅜🅔-🅕🅞🅡🅤🅜</div>
 
     <nav class="nav">
-        <a id ="homePage" href = "/" class="nav__link" data-link>HomePage</a>
-        <a id ="register" onclick="openReg() ;"class="nav__link" data-link>Register</a>
-        <a id ="login" onclick="openLogin() ;"class="nav__link" data-link>Login</a>
-        <a id ="post" href = "/posts" class="nav__link" data-link>Posts</a>
-        <a id="profile" href = "/profile" class="nav__link" data-link>Profile</a>    
-        <a id="logout" href = "/" class="nav__link" style="display:none" data-link>LogOut</a>    
+        <a id ="homePage" href = "/" class="nav__link">HomePage</a>
+        <a id ="register" onclick="openReg() ;"class="nav__link">Register</a>
+        <a id ="login" onclick="openLogin() ;"class="nav__link">Login</a>
+        <a id ="post" href = "/posts" class="nav__link">Posts</a>
+        <a id="profile" class="nav__link" style="display:none">Profile</a>    
+        <a id="logout" class="nav__link" style="display:none">LogOut</a>    
 
     </nav>
 
     <nav class="chat">
-        <a id ="Chat Here" href = "/chat" class="chat__link" data-link>Chat Here</a>
-     
+        <a id ="Chat Here" href = "/chat" class="chat__link" data-link>Messsenger</a>
     </nav>
 
     <div id="postBlock"class ="posts" >
@@ -34,7 +34,7 @@
         <textarea name="postinput" type="text" rows="4" cols="60" id="PostContent" name="Content" placeholder="Description..."></textarea>
         <label for="Post Cat">Catergory:</label>
         <input type="dropdown" id="PostCat" name="Category" placeholder="Choose Categories..">
-        <button class="button" type="submit">Create Post</button>
+        <button class="button" id="addPost" type="submit">Create Post</button>
     
     </div>
 
@@ -113,29 +113,75 @@
        
       </span>
        
-
-        
-
        </div>
     </form>
     </div>
 
 
+    <!-- happy face emoji's -->
+    <div id="happyFace" style="display:none">
+        <img id="happyFace" src="/css/img/thumbsup.gif" height="15%" width="15%">
+    </div>
+
+    <div id="byeFace" style="display:none">
+        <img id="byeFace" src="/css/img/bye.gif" height="15%" width="15%">
+    </div>
+
+
+    <!-- registration confirmed pop-up -->
     <div id="regConfirmed" style="display:none">
         <h4>
             You're are now Registered
+      
         </h4>
     </div>
 
+
+    <!-- registration invalid pop-up -->
     <div id="regRejected" style="display:none">
         <h4>
-            Sorry Error with registration
-        </h4>
+            Sorry Error with Registration
+            <h5></h5>
+
+        </h4><img src="/css/img/sad.gif" alt="" srcset="" height="25%" width="25%">
     </div>
+
+    <!-- loggen on configm popup -->
     <div id="LoggedOn" style="display:none">
         <h4>
             You're are Logged in.
         </h4>
+    </div>
+
+        <!-- loggen on configm popup -->
+        <div id="LoggedOut" style="display:none">
+            <h4>
+                You're are Logged Out.
+            </h4>
+        </div>
+
+
+    <div id="profileMod" class="modal">
+        <form class="modal-content animate" action="/login">
+        <img id="profilePic" src="/css/img/happy.gif" height="15%" width="15%">
+        <div id="firstName">
+            <h5>First Name : </h5>
+        </div>
+        <div id="lastName">
+            <h5>Last Name : </h5>
+        </div>
+        <div id="NickName">
+            <h5>Nick Name : </h5>
+        </div>
+        <div id="Age">
+            <h5>Age : </h5>
+        </div>
+        <div id="Gender">
+            <h5>Gender : </h5>
+        </div>
+        <div id="Email">
+            <h5>Email : </h5>
+        </div>
     </div>
 
 </body>

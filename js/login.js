@@ -24,20 +24,41 @@ LoginBtn.onclick = (e) => {
     fetch("http://localhost:8080/login", configLogin)
     .then(function(response) {
         console.log('LogDataSuccess: ', response)
-        return response.json();
+
+        if(response.status == 200) {
+            successfulLogin()
+        } else {
+            unsuccessfulLogin()
+        }
     })
 
-    document.getElementById('loginModal').style.display ="none"; 
+}
 
+const successfulLogin = () => {
+    document.getElementById('loginModal').style.display ="none"; 
+    document.getElementById('profile').style.display ="block"; 
     document.getElementById('LoggedOn').style.display = 'block';
+    document.getElementById('happyFace').style.display = 'block';
+
 
     setTimeout(() => {
         document.getElementById('LoggedOn').style.display = 'none';
+        document.getElementById('happyFace').style.display = 'none';
 
       },1500);
 
     document.getElementById('postBlock').style.display = 'flex';
-
     document.getElementById('logout').style.display = 'block'
+}
 
+const unsuccessLogin = () => {
+    
+    console.log("failed - not status 200")
+
+    document.getElementById('loginModal').style.display = "none";
+    document.getElementById('regRejected').style.display = 'block';
+    setTimeout(() => {
+        document.getElementById('regRejected').style.display = 'none';
+      },1500);
+    document.getElementById('postBlock').style.display = 'flex';
 }

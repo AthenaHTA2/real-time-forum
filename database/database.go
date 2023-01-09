@@ -14,7 +14,7 @@ func CreateDB() {
 				"age" INTEGER NOT NULL,
 				"gender" TEXT NOT NULL,
 				"email" TEXT NOT NULL UNIQUE, 
-				"passwordhash" BLOB(100) NOT NULL
+				"passwordhash" BLOB NOT NULL
 				);`)
 	// post table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Posts" ( 
@@ -23,6 +23,7 @@ func CreateDB() {
 				"author" TEXT NOT NULL,
 				"title" TEXT NOT NULL, 
 				"content" TEXT NOT NULL, 
+				"category" TEXT NOT NULL,
 				"creationDate" TIMESTAMP,
 				FOREIGN KEY(authorID)REFERENCES users(userID)
 				);`)

@@ -50,6 +50,7 @@ func InsertSession(u *User, session *http.Cookie) *Session {
 // IsUserAuthenticated ...
 func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 	var cookieValue string
+	//if user is not found in "sessions" db table return err = nil
 	if err := sqldb.DB.QueryRow("SELECT sessionID FROM Sessions WHERE userID = ?", u.UserID).Scan(&cookieValue); err != nil {
 		return nil
 	}
@@ -68,6 +69,7 @@ func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 		HttpOnly: true,
 	}
 	http.SetCookie(w, cookie)
+	//removing session record from 'sessions' table
 	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE sessionID = ?;")
 	if err != nil {
 		log.Fatalf(err.Error())
@@ -79,4 +81,32 @@ func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 		return err
 	}
 	return nil
+}
+
+// GetUserByCookie ...
+func GetUserByCookie(cookieValue string) *User {
+	var userID int64
+	if err := sqldb.DB.QueryRow("SELECT userID from Sessions WHERE cookieValue = ?", cookieValue).Scan(&userID); err != nil {
+		return nil
+	}
+	u := FindByUserID(userID)
+	return u
+}
+
+//function for new user
+func NewUser() *User {
+	return &User{}
+}
+
+//Find the user by their ID
+func FindByUserID(UID int64) *User {
+	u:= NewUser()
+
+	if err := sqldb.DB.QueryRow("SELECT * FROM Users WHERE userID = ?", UID).
+			Scan(&u.UserID, &u.FirstName, &u.LastName, &u.NickName, &u.Age, &u.Gender, &u.Email,
+				 &u.Access, &u.LoggedIn, &u.Posts, &u.Comments, &u.Password); err != nil {
+					fmt.Println("error finding user by ID line 93", err)
+					return nil
+				 }
+				 return u
 }

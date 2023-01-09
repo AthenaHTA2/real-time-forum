@@ -132,6 +132,25 @@ h2 {
     font-family: cursive;
 }
 
+#happyFace {
+    margin-bottom: 0;
+    padding-left: 6.2cm;
+}
+
+#byeFace {
+    margin-bottom: 0;
+    padding-left: 6.2cm;
+}
+
+#profilePic {
+    margin-bottom: 0;
+    padding-left: 10cm;
+}
+
+h6 {
+    padding-left: 3cm;
+}
+
 .posts{
     border-radius: 25px;
     background-image: url('/css/img/canvas.png');
@@ -233,18 +252,17 @@ h2 {
 #regConfirmed {
     padding-left: 1.5cm;
     align-items: center;
-    margin-top: .25cm;
     border-radius: 25px;
     box-shadow: 2px 2px 2px 2px white;
     margin-left: 10cm;
     margin-right: 10cm;
-   background-color: rgb(0, 143, 0);
-   background-size: 100%;
-   color: white;
-   font-size: 1.5rem;
-   font-weight: bold;
-   font-family: cursive;
-   margin-bottom: .25cm;
+    background-color: rgb(0, 143, 0);
+    background-size: 100%;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: cursive;
+    margin-bottom: .25cm;
     height: 100%;
     width: 25%;
 }
@@ -257,13 +275,13 @@ h2 {
     box-shadow: 2px 2px 2px 2px white;
     margin-left: 10cm;
     margin-right: 10cm;
-   background-color: rgb(191, 23, 8);
-   background-size: 100%;
-   color: white;
-   font-size: 1.5rem;
-   font-weight: bold;
-   font-family: cursive;
-   margin-bottom: .25cm;
+    background-color: rgb(191, 23, 8);
+    background-size: 100%;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: cursive;
+    margin-bottom: .25cm;
     height: 100%;
     width: 25%;
 }
@@ -271,19 +289,45 @@ h2 {
 #LoggedOn {
     padding-left: 1.5cm;
     align-items: center;
-    margin-top: .25cm;
+    margin-top: .05cm;
     border-radius: 25px;
     box-shadow: 2px 2px 2px 2px white;
     margin-left: 10cm;
     margin-right: 10cm;
-   background-color: rgb(0, 143, 0);
-   background-size: 100%;
-   color: white;
-   font-size: 1.5rem;
-   font-weight: bold;
-   font-family: cursive;
-   margin-bottom: .25cm;
+    background-color: rgb(0, 143, 0);
+    background-size: 100%;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: cursive;
+    margin-bottom: .25cm;
     height: 100%;
     width: 25%;
 }
+
+#LoggedOut {
+    padding-left: 1.5cm;
+    align-items: center;
+    margin-top: .05cm;
+    border-radius: 25px;
+    box-shadow: 2px 2px 2px 2px white;
+    margin-left: 10cm;
+    margin-right: 10cm;
+    background-color: rgb(0, 143, 0);
+    background-size: 100%;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: cursive;
+    margin-bottom: .25cm;
+    height: 100%;
+    width: 25%;
+}
+
+#profileMod {
+    height: 100%;
+    width: 100%;
+    align-items: center;
+}
+
 
