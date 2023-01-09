@@ -52,3 +52,12 @@ const successfulPost = () => {
 const unsuccessfulPost = () => {
     console.log("POST FAILED --- NOT STATUS 200")
 };
+
+
+const openPosts = () => {
+    document.getElementById('postBlock').style.display = 'block';
+    document.getElementById('profileMod').style.display = "none";
+    document.getElementById('regModal').style.display = "none";
+    document.getElementById('loginModal').style.display = "none";
+    document.getElementById('postedAritcles').style.display = "block";
+}

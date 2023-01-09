@@ -35,11 +35,12 @@ LoginBtn.onclick = (e) => {
 }
 
 const successfulLogin = () => {
+    document.getElementById('postedArticles').style.display ="none"; 
     document.getElementById('loginModal').style.display ="none"; 
     document.getElementById('profile').style.display ="block"; 
     document.getElementById('LoggedOn').style.display = 'block';
     document.getElementById('happyFace').style.display = 'block';
-
+    document.getElementById('profileMod').style.display = "none";
 
     setTimeout(() => {
         document.getElementById('LoggedOn').style.display = 'none';
@@ -55,6 +56,8 @@ const unsuccessLogin = () => {
     
     console.log("failed - not status 200")
 
+    document.getElementById('postedArticles').style.display ="none"; 
+    document.getElementById('profileMod').style.display = "none";
     document.getElementById('loginModal').style.display = "none";
     document.getElementById('regRejected').style.display = 'block';
     setTimeout(() => {

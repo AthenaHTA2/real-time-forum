@@ -29,6 +29,7 @@ func main() {
 	http.HandleFunc("/", rtforum.HomePage)
 	http.HandleFunc("/login", rtforum.Login)
 	http.HandleFunc("/register", rtforum.Register)
+	http.HandleFunc("/post", rtforum.Post)
 
 
 	exec.Command("xdg-open", "http://localhost:8080/").Start()

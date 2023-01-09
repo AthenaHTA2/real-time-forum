@@ -17,7 +17,7 @@
         <a id ="homePage" href = "/" class="nav__link">HomePage</a>
         <a id ="register" onclick="openReg() ;"class="nav__link">Register</a>
         <a id ="login" onclick="openLogin() ;"class="nav__link">Login</a>
-        <a id ="post" href = "/posts" class="nav__link">Posts</a>
+        <a id ="post" onclick="openPosts()" class="nav__link">Posts</a>
         <a id="profile" class="nav__link" style="display:none">Profile</a>    
         <a id="logout" class="nav__link" style="display:none">LogOut</a>    
 
@@ -27,7 +27,7 @@
         <a id ="Chat Here" href = "/chat" class="chat__link" data-link>Messsenger</a>
     </nav>
 
-    <div id="postBlock"class ="posts" >
+    <div id="postBlock" class="posts" >
         <label for="PostTitle">Post Title:</label>
         <textarea name="postTitle" type="text" rows="1" cols="60" id="PostTitle" name="Title" placeholder="Enter Title..."></textarea>
         <label for="Post Content"> Content:  </label>
@@ -35,6 +35,17 @@
         <label for="Post Cat">Catergory:</label>
         <input type="dropdown" id="PostCat" name="Category" placeholder="Choose Categories..">
         <button class="button" id="addPost" type="submit">Create Post</button>
+    
+    </div>
+
+    <div id="postedArticles" class="posts" >
+        <label for="TitleCreated">Post Title:</label>
+        <textarea name="postTitle" type="text" rows="1" cols="60" id="PostTitle" name="Title" placeholder="Enter Title..."></textarea>
+        <label for="ContCreated"> Content:  </label>
+        <textarea name="postinput" type="text" rows="4" cols="60" id="PostContent" name="Content" placeholder="Description..."></textarea>
+        <label for="ChosenCat">Catergory:</label>
+        <input type="dropdown" id="PostCat" name="Category" placeholder="Choose Categories..">
+        <button class="button" id="addPost" type="submit">See Comments Here</button>
     
     </div>
 
