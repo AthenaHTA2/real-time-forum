@@ -206,15 +206,20 @@
                         var item = document.createElement("div");
                         item.style.color = '#80ed99'
                         item.innerText = messages[i];
-                        //if message is a list of chat members
-                        if (messages[0] == "UsersList"){
+                        //if message is a list of chat members, it begins with a space
+                        if (messages[0] == " "){
                             if(i < messages.length){
-                            //do not print 'UsersList'
-                            item.innerText = messages[i+1]
+                            item.innerText = messages[i]
                             //print list inside 'usersLog' div
                             AppendUser(item);
                             }
-                        }else{   
+                        //the list of posts starts with a double space
+                        }else if(messages[0] == "  "){
+                                //print all posts
+                                item.innerText = messages[i]
+                            //append posts inside in the main window
+                            AppendPosts(item);
+                    }else{   
                             //print list inside 'log' div                   
                             appendLog(item);
                         }

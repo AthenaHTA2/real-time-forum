@@ -1,4 +1,5 @@
 var User = false;
+var postFlag = false;
 var UserList
 
 window.onload = function () {
@@ -6,6 +7,7 @@ window.onload = function () {
     var msg = document.getElementById("msg");
     var log = document.getElementById("log");
     var usersLog = document.getElementById("usersLog");
+    var postList = document.getElementById("postList");
 
     function appendLog(item) {
         var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
@@ -24,6 +26,15 @@ window.onload = function () {
         }
     
 }
+
+    function AppendPosts(item){
+        var doScroll = postList.scrollTop > postList.scrollHeight - postList.clientHeight - 1;
+        postList.appendChild(item);
+        if (doScroll) {
+            postList.scrollTop = postList.scrollHeight - postList.clientHeight;
+        }
+
+    }
 
     document.getElementById("formChat").onsubmit = function () {
         if (!conn) {
@@ -46,10 +57,14 @@ window.onload = function () {
         };
         conn.onmessage = function (evt) {
             var messages = evt.data.split('\n');
-            if(string(messages[0])== "UsersList"){
-                UserList = messages.slice(1)
+            //a space at the start of msg signals that this is the list of registered users
+            //that needs to be printed in a different place than normal websocket messages
+            if(string(messages[0])== " "){
+                //UserList = messages.slice(1)
                 User = true;
-                
+            //double space at start of message means this is the list of posts 
+            } else if (string(messages[0]) == "  "){
+                postFlag = true;
             }
             for (var i = 0; i < messages.length; i++) {
                 var item = document.createElement("div");
@@ -58,6 +73,10 @@ window.onload = function () {
                     item.style.color = 'white'
                     item.innerText = UserList[i];
                     AppendUser(item);
+                }else if(postFlag){
+                    item.style.color = 'white'
+                    item.innerText = UserList[i];
+                    AppendPosts(item)
                 }else{
                     console.log("not User", messages)
                     item.innerText = messages[i];

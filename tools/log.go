@@ -131,7 +131,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllUsers() []byte {
-	allUsers := "UsersList"
+	//space of start of websocket message signals that this is the list of users
+	allUsers := " "
 	rows, errUsr := sqldb.DB.Query("SELECT DISTINCT nickName FROM Users ORDER BY nickName ASC;")
 	if errUsr != nil {
 		fmt.Println("Error retrieving users from database: \n", errUsr)
@@ -153,23 +154,27 @@ func GetAllUsers() []byte {
 	return []byte(allUsers)
 }
 
-func GetUserID() int {
-	var logData LoginData
-	var UserID int
-	username := logData.UserName
+//Retrieve from db all posts that will be shown on R-T-F front page
+func AllPosts() []byte {
+	var postData post
+	var postItem string
 
-	stmt := "SELECT userID FROM Sessions WHERE cookieName = ?"
-	row := sqldb.DB.QueryRow(stmt, username)
-	err := row.Scan(&UserID)
+	stmt := "SELECT author, category, title, content FROM Posts WHERE author = ?"
+	row := sqldb.DB.QueryRow(stmt, '*')
+	err := row.Scan(&postData.Author, &postData.Category, &postData.Title, &postData.Content)
 	if err != nil {
-		fmt.Println("err selecting userID in db by cookieName", username, err)
+		fmt.Println("err selecting postData in db", err)
 	}
-	fmt.Println(UserID)
-	return UserID
+
+	fmt.Println("postData: ", postData)
+	postItem = postData.Author + " " + postData.Category + " " + postData.Title + " " + postData.Content + "\n"
+	fmt.Println("postItem: ", postItem)
+	onePost := []byte(postItem)
+	return onePost
 }
 
-func GetNickName() string {
+/*func GetNickName() string {
 	var logData LoginData
 	NickName := logData.UserName
 	return NickName
-}
+}*/

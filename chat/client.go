@@ -47,11 +47,11 @@ type Client struct {
 	Send chan []byte
 }
 
-//~~~~~~~~~~~~~~~~~~~Show list of Users
+//~~~~~~~~~~~~~~~~~~~Start of Show list of Users
 
 //sends the registeredUsers to the ws client as a byte slice.
 func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
-	
+
 	//put database query result in registeredUsers
 	registeredUsers := tools.GetAllUsers()
 	err := c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
@@ -80,6 +80,42 @@ func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 		return
 	}
 }
+
+//~~~~~~~~ End of Show list of Users
+
+//~~~~~~~~~~Start of Show list of Posts
+func (c *Client) GetAllPosts(conn *websocket.Conn) {
+
+	//put database query result in registeredUsers
+	allPosts := tools.AllPosts()
+	err := c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
+	if err != nil {
+		// The hub closed the channel.
+		c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
+		return
+	}
+	w, err := c.Conn.NextWriter(websocket.TextMessage)
+	if err != nil {
+		return
+	}
+
+	w.Write(allPosts)
+
+	// Add queued chat messages to the current websocket message.
+	n := len(c.Send)
+	for i := 0; i < n; i++ {
+		if string(allPosts[i]) == string(newline) {
+			w.Write(newline)
+		}
+		w.Write(<-c.Send)
+	}
+
+	if err := w.Close(); err != nil {
+		return
+	}
+}
+
+//~~~~~~~~~~~End of Show list of Posts
 
 //msgToHub go routine reads messages from the webSocket connection
 //and sends them to the hub
@@ -170,6 +206,7 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	go client.msgToHub()
 	//send json of registered users to client
 	go client.SendRegisteredUsers(conn)
+	go client.GetAllPosts(conn)
 }
 
 /*Code authors:
