@@ -131,7 +131,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllUsers() []byte {
-	//space of start of websocket message signals that this is the list of users
+	//space at start of websocket message signals that this is the list of users
 	allUsers := " "
 	rows, errUsr := sqldb.DB.Query("SELECT DISTINCT nickName FROM Users ORDER BY nickName ASC;")
 	if errUsr != nil {
@@ -156,22 +156,54 @@ func GetAllUsers() []byte {
 
 //Retrieve from db all posts that will be shown on R-T-F front page
 func AllPosts() []byte {
-	var postData post
-	var postItem string
+	//double space at start of websocket message signals that this is the list of posts
+	postItems := "  "
+	var (
+		tempPost, auth, cat, titl, cont string
+	)
+	rows, errPost := sqldb.DB.Query("SELECT author, category, title, content FROM Posts ORDER BY creationDate ASC;")
+	if errPost != nil {
+		fmt.Println("Error retrieving posts from database: \n", errPost)
+		return nil
+	}
+	for rows.Next() {
 
-	stmt := "SELECT author, category, title, content FROM Posts WHERE author = ?"
-	row := sqldb.DB.QueryRow(stmt, '*')
+		//copy row columns into corresponding variables
+		err := rows.Scan(&auth, &cat, &titl, &cont)
+		if err != nil {
+			fmt.Println("error copying post data: ", err)
+		}
+		//collect each post's data into 'tempPost'
+		tempPost = auth + " " + cat + " " + titl + " " + cont
+		//aggregate all posts separated by '\n'
+		postItems = postItems + "\n" + tempPost
+	}
+	rows.Close()
+	for _, post := range postItems {
+		fmt.Println(string(post))
+	}
+
+	return []byte(postItems)
+}
+
+//Retrieve from db all posts that will be shown on R-T-F front page
+/*func AllPosts() []byte {
+	var postData post
+	var postItem string = "  "
+
+	stmt := "SELECT author, category, title, content FROM Posts ORDER BY creationDate ASC;"
+	row := sqldb.DB.QueryRow(stmt)
 	err := row.Scan(&postData.Author, &postData.Category, &postData.Title, &postData.Content)
 	if err != nil {
 		fmt.Println("err selecting postData in db", err)
 	}
 
 	fmt.Println("postData: ", postData)
-	postItem = postData.Author + " " + postData.Category + " " + postData.Title + " " + postData.Content + "\n"
+	postItem = postItem + postData.Author + " " + postData.Category + " " + postData.Title + " " + postData.Content + "\n"
 	fmt.Println("postItem: ", postItem)
 	onePost := []byte(postItem)
 	return onePost
-}
+}*/
 
 /*func GetNickName() string {
 	var logData LoginData

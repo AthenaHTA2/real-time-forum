@@ -2,9 +2,9 @@ package chat
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"net/http"
-
 	"time"
 
 	"rtforum/tools"
@@ -84,10 +84,12 @@ func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 //~~~~~~~~ End of Show list of Users
 
 //~~~~~~~~~~Start of Show list of Posts
+//Gets all posts and sends them as a byte array through a web socket
 func (c *Client) GetAllPosts(conn *websocket.Conn) {
 
 	//put database query result in registeredUsers
 	allPosts := tools.AllPosts()
+	fmt.Println("allPosts:", allPosts)
 	err := c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
 	if err != nil {
 		// The hub closed the channel.
@@ -107,6 +109,7 @@ func (c *Client) GetAllPosts(conn *websocket.Conn) {
 		if string(allPosts[i]) == string(newline) {
 			w.Write(newline)
 		}
+		fmt.Println("sending posts through a websocket")
 		w.Write(<-c.Send)
 	}
 
@@ -209,7 +212,7 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	go client.GetAllPosts(conn)
 }
 
-/*Code authors:
+/*Gorilla Websocket Code authors:
 Gary Burd <gary@beagledreams.com>
 Google LLC (https://opensource.google.com/)
 Joachim Bauch <mail@joachim-bauch.de>

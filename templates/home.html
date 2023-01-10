@@ -147,6 +147,9 @@
             You're are Logged in.
         </h4>
     </div>
+    <div id="postList">
+
+    </div>
     <!---->
 
 <!--<script src='/js/Login.js'></script>-->
@@ -154,9 +157,11 @@
     <script type="text/javascript">
         window.onload = function () {
             var conn;
+            var pst = document.getElementById("postList");
             var msg = document.getElementById("msg");
             var log = document.getElementById("log");
             var usersLog = document.getElementById("usersLog");
+
         
             function appendLog(item) {
                 var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
@@ -167,16 +172,20 @@
             }
 
             function AppendUser(item) {
-                /*if(item.innerText == "UsersList"){
-                item.innerText = " "
-            }else{
-                item.innerText = item.innerText
-            }*/
             var doScroll = usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
             item.style.color = 'white'
             usersLog.appendChild(item);
             if (doScroll) {
                 usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
+            }
+        }
+
+        function AppendPosts(item){
+            var doScroll = pst.scrollTop > pst.scrollHeight - pst.clientHeight - 1;
+            item.style.color = 'white'
+            pst.appendChild(item);
+            if (doScroll) {
+                pst.scrollTop = pst.scrollHeight - pst.clientHeight;
             }
         }
         
@@ -215,11 +224,11 @@
                             }
                         //the list of posts starts with a double space
                         }else if(messages[0] == "  "){
-                                //print all posts
+                                //append all posts at end of main page
                                 item.innerText = messages[i]
                             //append posts inside in the main window
                             AppendPosts(item);
-                    }else{   
+                        }else{   
                             //print list inside 'log' div                   
                             appendLog(item);
                         }
