@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
-
 	"rtforum/tools"
+
+	//"strings"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -45,6 +46,8 @@ type Client struct {
 
 	// Buffered channel of outbound messages.
 	Send chan []byte
+
+	Username string
 }
 
 //~~~~~~~~~~~~~~~~~~~Start of Show list of Users
@@ -201,7 +204,23 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	client := &Client{Hub: hub, Conn: conn, Send: make(chan []byte, 256)}
+	cookie, err := r.Cookie("user_session")
+
+	// var myArray = strings.Split(cookie.Value, "=")
+	// cookieID := myArray[1]
+
+	if err != nil {
+		fmt.Println("cookie err:", err)
+		return
+	}
+	//return user data via cookie
+	fmt.Println("cookie: ", cookie.Value)
+	usr := tools.GetUserByCookie(cookie.Value)
+	userName := usr.NickName
+	fmt.Println("usrNm:", userName)
+	//u := tools.GetUserByCookie("user_session")
+
+	client := &Client{Hub: hub, Username: userName, Conn: conn, Send: make(chan []byte, 256)}
 	client.Hub.Register <- client
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.

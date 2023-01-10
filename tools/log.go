@@ -94,6 +94,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		// we also set an expiry time of 120 minutes
 		http.SetCookie(w, &http.Cookie{
 			Name:    cookieNm,
+			//Value:   sessionToken + "&" + username,
 			Value:   sessionToken,
 			MaxAge:  7200,
 			Expires: expiresAt,

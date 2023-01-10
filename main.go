@@ -14,11 +14,12 @@ import (
 )
 
 func main() {
-	hub := chat.NewHub()
+	DB := sqldb.ConnectDB()
+	database.CreateDB()
+
+	hub := chat.NewHub(DB)
 	go hub.Run()
 
-	sqldb.ConnectDB()
-	database.CreateDB()
 
 	cssFolder := http.FileServer(http.Dir("css/"))
 	http.Handle("/css/",
