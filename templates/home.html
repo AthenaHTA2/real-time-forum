@@ -7,56 +7,122 @@
     <title> RT-Forum </title>
     <link rel="shortcut icon" href="/css/img/chat.png">
     <link rel ="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <script src="https://kit.fontawesome.com/3c167d6bd6.js" crossorigin="anonymous"></script>
+
 
 <body>
     <div id="Header">🅡🅔🅐🅛-🅣🅘🅜🅔-🅕🅞🅡🅤🅜</div>
 
-<!-- **************************************** LEFT MAIN NAV LINK***********************************************-->
+<!-- 
+===========================================================================================================
+                               LEFT MAIN NAV LINK                                                    
+===========================================================================================================
+-->
     <nav class="nav">
         <a id ="homePage" href = "/" class="nav__link" data-link>HomePage</a>
+        <a id ="register" onclick="openReg() ;"class="nav__link" data-link>Register</a>
         <a id ="login" onclick="openLogin() ;"class="nav__link" data-link>Login</a>
         <a id ="post" href = "/posts" class="nav__link" data-link>Posts</a>
         <a id="profile" href = "/profile" class="nav__link" data-link>Profile</a>    
-        <a id="logout" href = "/" class="nav__link" style="display:none" data-link>LogOut</a>    
-
+        <a id="logout" onclick="DeleteSession() ;" href = "/" class="nav__link" style="display:none" data-link>LogOut</a>
     </nav>
-
-<!--****************************************** RIGHT CHAT NAV LINK*********************************************-->
-    <nav class="chat">
-        <a id ="Chat Here" href = "/chat" class="chat__link" data-link>Chat Here</a>
-     
-    </nav>
-
-<!-- **************************************** CREATE POST BLOCK *************************************************************-->
-    <div id="postBlock"class ="posts" >
-        <div>
-            <label for="PostTitle">Post Title:</label>
-            <textarea name="postTitle" type="text" rows="1" cols="60" id="PostTitle" name="Title" placeholder="Enter Title..."></textarea>
-        </div>
-
-        <div>
-            <label for="Post Content"> Content:  </label>
-            <textarea name="postinput" type="text" rows="4" cols="60" id="PostContent" name="Content" placeholder="Description..."></textarea>
-        </div>
-
-        <div>
-            <label for="Post Cat">Catergory:</label>
-            <input type="dropdown" id="PostCat" name="Category" placeholder="Choose Categories..">
-        </div>
-
-        <button class="button" type="submit">Create Post</button>
-    
-    </div>
 
 <!-- 
-*************************************************************************************************************
-*********************************** LOGIN MODAL************************************************************
-*************************************************************************************************************
+===========================================================================================================
+                               RIGHT CHAT NAV LINK                                                     
+===========================================================================================================
+-->
+    <nav class="chat">
+        <a id ="Chat Here" href = "/chat" class="chat__link" data-link>  Chat Here</a>
+        <div id="log"></div>
+        <form class="modal-content animate" action="/chat" id="formChat">
+            <input type="submit" id="btn" value="Send" />
+            <input type="text" id="msg" size="64" autofocus />
+        </form>
+    </nav>
+
+    <nav class="loggedInUsers">
+        <a id="Select User" class="loggedInUsers__link" data-link><strong>Chat Members</strong></a>
+        <div id="usersLog">
+        <!--<div style="color: rgb(128, 237, 153);"><a id="Select User" href = "/loggedInUsers" class="loggedInUsers__link" data-link>Arabella</a></div>
+            <div style="color: rgb(128, 237, 153);"><a id="Select User" href = "/loggedInUsers" class="loggedInUsers__link" data-link>Duke Oton</a></div>-->
+        </div>
+    </nav>
+
+<!-- 
+===========================================================================================================
+                                    CREATE POST BLOCK                                                       
+===========================================================================================================
+-->
+    <div id="postBlock"class ="posts" >
+        <label for="PostTitle">Post Title:</label>
+        <textarea name="postTitle" type="text" rows="1" cols="60" id="PostTitle" name="Title" placeholder="Enter Title..."></textarea>
+        <label for="Post Content"> Content:  </label>
+        <textarea name="postinput" type="text" rows="4" cols="60" id="PostContent" name="Content" placeholder="Description..."></textarea>
+        <label for="Post Cat">Catergory:</label>
+        <input type="dropdown" id="PostCat" name="Category" placeholder="Choose Categories..">
+        <button class="button postBtn" id="addPost" type="submit">Create Post</button>
+    </div>
+<!-- 
+===========================================================================================================
+                                       POST FEED DISPLAY MODAL                                                         
+===========================================================================================================
+ -->
+
+
+ <!-- <div>
+    <div class="posts">
+        <-- If user is authenticated, displaying greeting -->
+        <!-- Displaying of all posts -->
+        <!-- {{if .PostScroll}} {{range .PostScroll}} -->
+        <!-- <div class="post">
+          <div class="post_top"> -->
+            <!-- <div class="description">
+              <h3>
+                <a class="title" target="_self" rel="noopener noreferrer" href="/post?id={{.Post.PostID}}">{{.Post.Title}}</a>
+              </h3> -->
+              <!-- <div class="content"><strong>Post:</strong><em> {{.Post.Text}} </em></div>
+              <span class="categories"><strong>Category:</strong> {{.Post.Category1}} {{.Post.Category2}} {{.Post.Category3}} {{.Post.Category4}}||</span>
+              
+              <span class="author"><strong>Author:</strong> {{.Post.Author}} ||</span>
+              <span class="date"><strong>Created at:</strong> {{.Post.CreationDate}}</span>
+            </div> -->
+          <!-- </div>
+          <div class="post_bottom">
+            <div class="content_info">
+              <p>
+                <a class="like_title" href="/rate?post_id={{.Post.PostID}}">Like 👍</a>
+                <span class="like_num">{{.PostLD.Likecount}} |</span>
+                <a
+                  class="dislike_title"
+                  href="/rate?post_id=-{{.Post.PostID}}"
+                  >Dislike 👎</a
+                >
+                <span class="dislike_num"> {{.PostLD.Dislikecount}}</span>
+              </p> -->
+            <!-- </div>
+            <br />
+          </div>
+        </div>
+        {{end}} {{end}}
+      </div>
+ </div> --> 
+
+
+
+
+
+
+
+<!-- 
+===========================================================================================================
+                                       LOGIN MODAL                                                         
+===========================================================================================================
  -->
     <div id="loginModal" class="modal"> 
         <div class="modal-content animate">
-        <form id="form" class="form" action="/login">
+        <form id="loginform" class="form" action="/login" method="post">
             <div class="imgcontainer">
                 <img src="/css/img/user-group-man-woman.png" height="250px" width="300px" alt="Avatar" class="avatar">
             </div> 
@@ -96,19 +162,21 @@
         </div>
     </div>
 <!-- 
-***********************************LOGIN MODAL ENDS************************************************************
- -->
-
+===========================================================================================================
+                                              END OF LOGIN MODAL                                                    
+===========================================================================================================
+-->
 
 
 <!-- 
-*************************************************************************************************************
-***********************************REGISTER MODAL************************************************************
-*************************************************************************************************************
- -->
+===========================================================================================================
+                                             REGISTER MODAL                                                    
+===========================================================================================================
+-->
+
     <div id="regModal" class="modal">     
         <div class="modal-content animate">
-        <form id="regform" class="form"  action="/register">
+        <form id="regform" class="form"  action="register.js" method ="post">
         <div class="imgcontainer">
             <img src="/css/img/user-group-man-woman.png" height="230px" width="290px" alt="Avatar" class="avatar">
         </div> 
@@ -119,7 +187,7 @@
 
             <div class="reg-form-control">
                 <label for="FirstName"><b>First Name</b></label>
-                <input id="FirstName" type="text" placeholder="Enter First Name" name="FirstName" required>
+                <input id="FirstName" type="text" placeholder="Enter First Name" name="FirstName" value="" required>
                 <i class="fa-regular fa-circle-check"></i>
                 <i class="fa-regular fa-exclamation"></i>           
                 <small>Error Message</small>
@@ -127,7 +195,7 @@
              
             <div class="reg-form-control">
                 <label for="LastName"><b>Last Name</b></label>
-                <input id="LastName" type="text" placeholder="Enter Last Name" name="Last Name" required>
+                <input id="LastName" type="text" placeholder="Enter Last Name" name="LastName" value="" required>
                 <i class="fa-regular fa-circle-check"></i>
                 <i class="fa-regular fa-exclamation"></i>
                 <small>Error Message</small>
@@ -135,7 +203,7 @@
 
             <div class="reg-form-control">
                 <label for="NickName"><b>NickName</b></label>
-                <input id="NickName" type="text" placeholder="This will be your userName" name="Nick Name" required  minlength="4" maxlength="10">
+                <input id="NickName" type="text" placeholder="This will be your userName" name="NickName" value="" required  minlength="4" maxlength="10">
                 <i class="fa-regular fa-circle-check"></i>
                 <i class="fa-regular fa-exclamation"></i>
                 <small>Error Message</small>
@@ -143,7 +211,7 @@
 
             <div class="reg-form-control">
                 <label for="Age"><b>Age</b></label>
-                <input id="Age" type="number" placeholder="Enter Age" name="Age" required>
+                <input id="Age" type="number" placeholder="Enter Age" name="Age" value="" required>
                 <i class="fa-regular fa-circle-check"></i>
                 <i class="fa-regular fa-exclamation"></i>
                 <small>Error Message</small>
@@ -151,7 +219,7 @@
 
             <div class="reg-form-control">
                 <label  for="Gender"><b>Gender</b></label>
-                <input id="Gender" type="text" placeholder="Enter Gender" name="Gender" required>
+                <input id="Gender" type="text" placeholder="Enter Gender" name="Gender" value="" required>
                 <i class="fa-regular fa-circle-check"></i>
                 <i class="fa-regular fa-exclamation"></i>
                 <small>Error Message</small>
@@ -159,7 +227,7 @@
 
             <div class="reg-form-control">
                 <label for="Email"><b>Email</b></label>
-                <input id="Email" type="email" size="30" placeholder="Enter Email Address" name="Email" required>
+                <input id="Email" type="email" size="30" placeholder="Enter Email Address" name="Email" value="" required>
                 <span id="text"></span>
                 <i class="fa-regular fa-circle-check"></i>
                 <i class="fa-regular fa-exclamation"></i>
@@ -168,16 +236,15 @@
             
             <div class="reg-form-control">
                 <label for="psw"><b>Password</b></label>
-                <input id="PassWord" type="password" placeholder="Enter Password" name="psw" required>
-                <!-- <input type="checkbox" class="togglePw" id="pwd" onclick="showPassword('PassWord')"/> -->
-                <i class="fa-light fa-eye-slash" class="pwshow" onclick="showPassword('PassWord')"></i>
+                <input id="PassWord" type="password" placeholder="Enter Password" name="PassWord" value="" required>
+                <i class="far fa-eye" id="togglePassword" style="cursor: pointer; visibility: visible; color:gray; top: 40px; right: 40px;"></i>
                 <i class="fa-regular fa-circle-check"></i>
                 <i class="fa-regular fa-exclamation"></i>
                 <small>Error Message</small>
             </div>
             
             <span>
-                <button class="button1" id="registerBtn" type="submit">Register</button>
+                <button class="button1 submit-disabled-state" id="registerBtn" type="submit">Register</button>
                 
                 <button id="cancelbtn" type="button" onclick="document.getElementById('regModal').style.display='none'; closeBtn()" class="button1">Cancel</button>
             </span>
@@ -187,9 +254,17 @@
         </div>
     </div>
 <!-- 
-***********************************REGISTER MODAL ENDS************************************************************
- -->
+===========================================================================================================
+                                           END OF REGISTER MODAL                                                    
+===========================================================================================================
+-->
 
+
+<!-- 
+===========================================================================================================
+                                           NOTIFYING ERRORS ETC                                                    
+===========================================================================================================
+-->
 
     <div id="regConfirmed" style="display:none">
         <h4>
@@ -203,8 +278,109 @@
         </h4>
     </div>
 
+    <div id="LoggedOn" style="display:none">
+        <h4>
+            You're are Logged in.
+        </h4>
+    </div>
+<!-- 
+===========================================================================================================
+                                           SCRIPT FOR register/login/chat modal                                                    
+===========================================================================================================
+-->
+
+    <!--<script src='/js/Login.js'></script>-->
+<!--Adding JS for the chat here as js/chat.js not working-->
+<script type="text/javascript">
+    window.onload = function () {
+        var conn;
+        var msg = document.getElementById("msg");
+        var log = document.getElementById("log");
+        var usersLog = document.getElementById("usersLog");
+    
+        function appendLog(item) {
+            var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
+            log.appendChild(item);
+            if (doScroll) {
+                log.scrollTop = log.scrollHeight - log.clientHeight;
+            }
+        }
+
+        function AppendUser(item) {
+            /*if(item.innerText == "UsersList"){
+            item.innerText = " "
+        }else{
+            item.innerText = item.innerText
+        }*/
+        var doScroll = usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
+        item.style.color = 'white'
+        usersLog.appendChild(item);
+        if (doScroll) {
+            usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
+        }
+    }
+    
+        document.getElementById("formChat").onsubmit = function () {
+            if (!conn) {
+                return false;
+            }
+            if (!msg.value) {
+                return false;
+            }
+            conn.send(msg.value);
+            msg.value = "";
+            return false;
+        };
+    
+        if (window["WebSocket"]) {
+            conn = new WebSocket("ws://" + document.location.host + "/ws");
+            conn.onclose = function (evt) {
+                var item = document.createElement("div");
+                item.innerHTML = "<b>Connection closed.</b>";
+                appendLog(item);
+            };
+
+            conn.onmessage = function (evt) {
+                var messages = evt.data.split('\n');
+                for (var i = 0; i < messages.length; i++) {
+                    var item = document.createElement("div");
+                    item.style.color = '#80ed99'
+                    item.innerText = messages[i];
+                    //if message is a list of chat members, it begins with a space
+                    if (messages[0] == " "){
+                        if(i < messages.length){
+                        item.innerText = messages[i]
+                        //print list inside 'usersLog' div
+                        AppendUser(item);
+                        }
+                    //the list of posts starts with a double space
+                    }else if(messages[0] == "  "){
+                            //print all posts
+                            item.innerText = messages[i]
+                        //append posts inside in the main window
+                        AppendPosts(item);
+                }else{   
+                        //print list inside 'log' div                   
+                        appendLog(item);
+                    }
+            };
+
+    };
+
+        } else {
+            var item = document.createElement("div");
+            item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
+            appendLog(item);
+        }
+    };
+    </script>
+
 </body>
 
-<!-- this script runs login modal -->
+<script src="/js/post.js"></script>
+<script src="/js/login.js"></script>
 <script src="/js/register.js"></script>
-</html>
+<script src="/js/buttons.js"></script>
+<!--<script src="/js/chat.js"></script>-->
+
+</html> 

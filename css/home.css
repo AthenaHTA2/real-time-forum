@@ -1,7 +1,6 @@
 body {
-    width: 100%;
     background-image: url("/css/img/canvas.png");
-    background-size: 100%;
+    background-size: 110%;
     --nav-width: 200px;
     --chat-width:200px;
     margin: 0 0 0 var(--nav-width);
@@ -75,11 +74,8 @@ a {
 }
 
 .modal {
-    width:2060px;
-    height: 1203.729px;
     display: none;
     margin-left: 1.5cm;
-    margin-right: 1.5cm;
     position: flex;
     z-index: 1;
     overflow: none;
@@ -88,13 +84,11 @@ a {
 }
 
 .modal-content {
-    width: 1400px;
-    height: 650px;
     margin-top: .25cm;
     border-radius: 25px;
     box-shadow: 2px 2px 2px 2px white;
-    margin-left: 5cm;
-    margin-right: 200px;
+    margin-left: 1.5cm;
+    margin-right: 10cm;
    background-image:url("/css/img/canvas.png");
    background-size: 100%;
    color: white;
@@ -158,11 +152,10 @@ h2 {
     box-shadow: 2px 2px 2px 2px white;
 }
 
-.container {  
-    width: 930px;
-    height: 75.591px;
-    margin-right: 600px;
-    margin-left: 200px;
+.container {
+    margin-right: 7cm;
+    padding-left: 320px;
+    padding-right: 2cm;
     padding-bottom: .01cm;
     display: flex;
     flex-direction: column;
@@ -175,15 +168,13 @@ h2 {
 }
 
 #loginModal{
-    height: 80%;
-    width: 80%;
-    width:2060px;
-    height: 603.729px;
+    height: 100%;
+    width: 100%;
 }
 
 #regModal {
-    height: 80%;
-    width: 80%;
+    height: 100%;
+    width: 100%;
 }
 
 .button{
@@ -277,64 +268,25 @@ h2 {
     width: 25%;
 }
 
+#LoggedOn {
+    padding-left: 1.5cm;
+    align-items: center;
+    margin-top: .25cm;
+    border-radius: 25px;
+    box-shadow: 2px 2px 2px 2px white;
+    margin-left: 10cm;
+    margin-right: 10cm;
+   background-color: rgb(0, 143, 0);
+   background-size: 100%;
+   color: white;
+   font-size: 1.5rem;
+   font-weight: bold;
+   font-family: cursive;
+   margin-bottom: .25cm;
+    height: 100%;
+    width: 25%;
+}
 
-#form {
-    position: relative;
-  }
-  
-
-  #form #email {
-    width: 300px;
-    background: #292929;
-    outline: none;
-    border: none;
-    padding: 10px;
-    border-radius: 6px;
-    color: #fff;
-    font-style: 18px;
-  }
-  
-  #form .input-box {
-    position: relative;
-  }
-  
-  #text {
-    display: block;
-    color: #000;
-    font-weight: 300;
-    font-style: italic;
-    padding: 5px;
-  }
-  
-  #form.invalid .input-box::before {
-    content: '';
-    position: absolute;
-    right: 12px;
-    top: 9px;
-    width: 24px;
-    height: 24px;
-    background: url(https://fadzrinmadu.github.io/hosted-assets/email-validation-check-using-javascript/invalid.png);
-    -webkit-background-size: cover;
-    background-size: cover;
-  }
-  
-  #form.valid .input-box::before {
-    content: '';
-    position: absolute;
-    right: 12px;
-    top: 9px;
-    width: 24px;
-    height: 24px;
-    background: url(https://fadzrinmadu.github.io/hosted-assets/email-validation-check-using-javascript/valid.png);
-    -webkit-background-size: cover;
-    background-size: cover;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-  }
 
 .form{
     padding: 30px 40px;
@@ -375,7 +327,7 @@ h2 {
 
 .reg-form-control.error i.fa-exclamation{
     visibility: visible;
-    color: #e71c3c;
+    color: #e74c3c;
 }
 
 .reg-form-control.pwshow i.fa-eye-slash{
@@ -388,6 +340,7 @@ h2 {
     position: absolute;
     bottom: 0;
     left: 0;
+    color: #e74c3c;
 }
 
 .reg-form-control.success input{
@@ -395,6 +348,13 @@ h2 {
 }
 
 .reg-form-control.error input{
-    border-color: #e71c3c;
+    border-color: #e74c3c;
 }
 
+.reg-form-control.error small{
+    visibility: visible;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: #e74c3c;
+}

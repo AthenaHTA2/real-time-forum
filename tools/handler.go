@@ -70,8 +70,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	var hash []byte
 	password := regData.Password
 	// func GenerateFromPassword(password []byte, cost int) ([]byte, error)
-	hash, err4 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost) 
-	
+	hash, err4 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+
 	if err4 != nil {
 		fmt.Println("bcrypt err4:", err4)
 		return
@@ -89,13 +89,19 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		fmt.Println("Error inserting into 'Users' table: ", err)
+		if(err.Error() =="UNIQUE constraint failed: Users.email"){
+			w.Write([]byte("ERROR: This email already exists, please log in instead"))
+		} else if (err.Error() == "UNIQUE constraint failed: Users.nickName"){
+			w.Write([]byte("ERROR: This username already exists, please log in instead"))
+		}
+		// w.Write([]byte(err.Error()))
 		return
 	}
 
 	rows, _ := sqldb.DB.Query("SELECT userID, firstName, lastName, nickName, age, gender, email, passwordhash from Users")
 
 	var (
-		userID, age                                                int
+		userID, age                                  int
 		firstName, lastName, nickName, gender, email string
 	)
 
