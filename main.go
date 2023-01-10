@@ -18,8 +18,8 @@ func main() {
 	database.CreateDB()
 
 	hub := chat.NewHub(DB)
+	go hub.LogConns()
 	go hub.Run()
-
 
 	cssFolder := http.FileServer(http.Dir("css/"))
 	http.Handle("/css/",

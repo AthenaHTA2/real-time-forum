@@ -26,7 +26,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Json from Login: ", string(loginD))
+	//fmt.Println("Json from Login: ", string(loginD))
 
 	json.Unmarshal(loginD, &logData)
 
@@ -36,7 +36,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	username := logData.UserName
 	password := logData.Password
 
-	fmt.Println("Logged in nickName and password:", username, password)
+	//fmt.Println("Logged in nickName and password:", username, password)
 
 	// retrieve password from db to compare (hash) with user supplied password's hash
 	var hash string
@@ -44,15 +44,15 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	row := sqldb.DB.QueryRow(stmt, username)
 	err2 := row.Scan(&hash)
 	if err2 != nil {
-		fmt.Println("err2 selecting passwordhash in db by nickName", username, err2)
-		fmt.Println("check username and password")
+		//fmt.Println("err2 selecting passwordhash in db by nickName", username, err2)
+		//fmt.Println("check username and password")
 		return
 	}
 
 	// func CompareHashAndPassword(hashed password, password []byte) error
 	comparePass := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	fmt.Println("Error from comparing 'passwordhash' with user's pw. ('nil' error = success) : ", comparePass)
-	fmt.Println("user supplied password and 'passwordhash' from database: \n", string([]byte(password)), string([]byte(hash)))
+	//fmt.Println("Error from comparing 'passwordhash' with user's pw. ('nil' error = success) : ", comparePass)
+	//fmt.Println("user supplied password and 'passwordhash' from database: \n", string([]byte(password)), string([]byte(hash)))
 	// returns nil on success
 
 	if comparePass == nil {
@@ -65,11 +65,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		)
 		err3 := rowCurrentUser.Scan(&userID, &firstName, &lastName, &nickName, &age, &gender, &email, &password)
 		if err3 != nil {
-			fmt.Println("error with currentUser", err3)
+			//fmt.Println("error with currentUser", err3)
 			fmt.Println("error accessing DB")
 			return
 		}
-		fmt.Println("All current user's data from 'Users' database table: \n", userID, firstName, lastName, nickName, age, gender, email)
+		//fmt.Println("All current user's data from 'Users' database table: \n", userID, firstName, lastName, nickName, age, gender, email)
 		//populate the CurrentUser struct (instance of 'User' struct) with values from 'Users' db table:
 		CurrentUser.UserID = userID
 		CurrentUser.LastName = lastName
@@ -82,8 +82,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		err3 = IsUserAuthenticated(w, &CurrentUser)
 		//fmt.Println("this user logged in: ", err3)
 		if err3 != nil {
-			fmt.Println("You are already logged in 🧐")
-			fmt.Println("already logged in: ", err3)
+			//fmt.Println("You are already logged in 🧐")
+			//fmt.Println("already logged in: ", err3)
 			return
 		}
 		sessionToken := uuid.NewV4().String()
@@ -93,7 +93,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		// Finally, we set the client cookie for "session_token='username_session'" as the session token we just generated
 		// we also set an expiry time of 120 minutes
 		http.SetCookie(w, &http.Cookie{
-			Name:    cookieNm,
+			Name: cookieNm,
 			//Value:   sessionToken + "&" + username,
 			Value:   sessionToken,
 			MaxAge:  7200,
@@ -107,20 +107,20 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		// Duplicates are ignored
 		insertsessStmt, err4 := sqldb.DB.Prepare("INSERT OR IGNORE INTO Sessions (userID, cookieName, cookieValue) VALUES (?, ?, ?);")
 		if err4 != nil {
-			fmt.Println("err4 with inserting session:", err4)
+			//fmt.Println("err4 with inserting session:", err4)
 			//WarnMessage(w, "there was a problem logging in")
 			return
 		}
 		defer insertsessStmt.Close()
 		insertsessStmt.Exec(userID, cookieNm, sessionToken)
-		fmt.Println("PASSWORD IS CORRECT")
-		fmt.Println("User successfully logged in")
+		//fmt.Println("PASSWORD IS CORRECT")
+		//fmt.Println("User successfully logged in")
 		//granting access to the logged in user
 		//by setting selected 'User' struct fields to true etc.
 		CurrentUser.Password = password
 		CurrentUser.Access = 1
 		CurrentUser.LoggedIn = true
-		fmt.Println("User struct data from Login: \n", CurrentUser.UserID, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Password, CurrentUser.Access, CurrentUser.LoggedIn, CurrentUser.Posts, CurrentUser.Comments, CurrentUser.Email)
+		//fmt.Println("User struct data from Login: \n", CurrentUser.UserID, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Password, CurrentUser.Access, CurrentUser.LoggedIn, CurrentUser.Posts, CurrentUser.Comments, CurrentUser.Email)
 
 		w.WriteHeader(http.StatusOK)
 
@@ -180,9 +180,9 @@ func AllPosts() []byte {
 		postItems = postItems + "\n" + tempPost
 	}
 	rows.Close()
-	for _, post := range postItems {
+	/*for _, post := range postItems {
 		fmt.Println(string(post))
-	}
+	}*/
 
 	return []byte(postItems)
 }

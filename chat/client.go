@@ -2,7 +2,6 @@ package chat
 
 import (
 	"bytes"
-	"fmt"
 	"log"
 	"net/http"
 	"rtforum/tools"
@@ -92,7 +91,7 @@ func (c *Client) GetAllPosts(conn *websocket.Conn) {
 
 	//put database query result in registeredUsers
 	allPosts := tools.AllPosts()
-	fmt.Println("allPosts:", allPosts)
+	//fmt.Println("allPosts:", allPosts)
 	err := c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
 	if err != nil {
 		// The hub closed the channel.
@@ -112,7 +111,7 @@ func (c *Client) GetAllPosts(conn *websocket.Conn) {
 		if string(allPosts[i]) == string(newline) {
 			w.Write(newline)
 		}
-		fmt.Println("sending posts through a websocket")
+		//fmt.Println("sending posts through a websocket")
 		w.Write(<-c.Send)
 	}
 
@@ -210,14 +209,14 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	// cookieID := myArray[1]
 
 	if err != nil {
-		fmt.Println("cookie err:", err)
+		//fmt.Println("cookie err:", err)
 		return
 	}
 	//return user data via cookie
-	fmt.Println("cookie: ", cookie.Value)
+	//fmt.Println("cookie: ", cookie.Value)
 	usr := tools.GetUserByCookie(cookie.Value)
 	userName := usr.NickName
-	fmt.Println("usrNm:", userName)
+	//fmt.Println("usrNm:", userName)
 	//u := tools.GetUserByCookie("user_session")
 
 	client := &Client{Hub: hub, Username: userName, Conn: conn, Send: make(chan []byte, 256)}
