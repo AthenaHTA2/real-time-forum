@@ -1,5 +1,5 @@
 
-  
+    //Sending post data to the back end
     //Put post data into a JS object if user clicks 'Create Post' button
   
   const AddPost = document.querySelector("#addPost")
@@ -9,7 +9,6 @@
     //grab post data
     let theCookie = GetCookie("user_session")
     console.log({theCookie})
-    //let PostCookieID = "5ddb3d0b-5755-4f67-8bde-6df3258a657b"
     let PostCookieID = theCookie
     let PostTitle = document.querySelector("#PostTitle").value
     let PostContent = document.querySelector("#PostContent").value
@@ -27,8 +26,8 @@
   
       
       
-  //send user input in the 'post' form to the 'Data' struct in go
-  // via the 'Register' handler function in go
+  //send user input in the 'post' form to the 'Post' struct in go
+  // via the '/post' handler function in go
       let configPost = {
         method: "POST",
         headers: {
@@ -40,8 +39,7 @@
       
       fetch("http://localhost:8080/post", configPost)
         .then(function(response) {
-          //if(!response.ok){throw response}
-          //console.log('RegDataSuccess:', response)
+          //console.log('PostDataSuccess:', response)
           if(!response.ok){
             unsuccessfulPost() 
           }else{
@@ -88,5 +86,131 @@
               //Return null if not found
               return null;
              }
-    
+
+  //retrieving all posts from the back end
+  function getPosts() {
+    fetch()
+  }
+
+  function refreshPosts(){
+    fetch("/getPosts", {
+      headers : {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+
+    })
+    .then((response)=> {
+      response.text().then(function(data){
+        let posts = JSON.parse(data);
+        console.log("posts:", posts);
+        //post shows all latest posts from database
+        displayPosts(posts)
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+
+    function displayPosts(posts) {
+      console.log("called", posts)
+      postsContainer = document.querySelector("#postList")
+      postsContainer.innerHTML = "";
+      for (let i = posts.length - 1; i >= 0; i--) {
+        postsContainer.innerHTML += `
+        <div id=` + posts[i].PostID + `>
+        <p>`+ posts[i].Author + `</p>
+        <p>`+ convertDate(posts[i].PostTime) + `</p>
+        <p>`+ posts[i].PstCateg + `</p>
+        <p>`+ posts[i].PstContent + `</p>
+        <p>`+ posts[i].PstTitle + `</p>
+        </div>
+        `
+      }
+  }
+
+  //To convert JS time stamp into a string
+  function convertDate(date) {
+    // Seperate year, day, hour and minutes into vars
+    let yyyy = date.slice(0, 4);
+    let dd = date.slice(8, 10);
+    let hh = date.slice(11, 13);
+    let mm = date.slice(14, 16);
   
+    // Get int for day of the week (0-6, Sunday-Saturday)
+    const d = new Date(date);
+    let dayInt = d.getDay();
+    let day = "";
+    switch (dayInt) {
+      case 0:
+        day = "Sunday";
+        break;
+      case 1:
+        day = "Monday";
+        break;
+      case 2:
+        day = "Tuesday";
+        break;
+      case 3:
+        day = "Wednesday";
+        break;
+      case 4:
+        day = "Thursday";
+        break;
+      case 5:
+        day = "Friday";
+        break;
+      case 6:
+        day = "Saturday";
+        break;
+    }
+  
+    // Get int for month (0-11, January-December)
+    let monthInt = d.getMonth();
+    let month = "";
+    switch (monthInt) {
+      case 0:
+        month = "January";
+        break;
+      case 1:
+        month = "February";
+        break;
+      case 2:
+        month = "March";
+        break;
+      case 3:
+        month = "April";
+        break;
+      case 4:
+        month = "May";
+        break;
+      case 5:
+        month = "June";
+        break;
+      case 6:
+        month = "July";
+        break;
+      case 7:
+        month = "August";
+        break;
+      case 8:
+        month = "September";
+        break;
+      case 9:
+        month = "October";
+        break;
+      case 10:
+        month = "November";
+        break;
+      case 11:
+        month = "December";
+        break;
+    }
+    fullDate =
+      day + ", " + dd + " " + month + ", " + yyyy + " @ " + hh + ":" + mm;
+    return fullDate;
+  }
+    

@@ -21,15 +21,15 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Json from post: ", string(bytes))
+	//fmt.Println("Json from post: ", string(bytes))
 
 	json.Unmarshal(bytes, &thePost)
-	fmt.Println("post struct values", thePost)
-	fmt.Println("the post after adding cookie:", thePost)
+	//fmt.Println("post struct values", thePost)
+	//fmt.Println("the post after adding cookie:", thePost)
 	CookieID := thePost.Cookie
-	fmt.Println("CookieID:", CookieID)
+	//fmt.Println("CookieID:", CookieID)
 	var usr = GetUserByCookie(CookieID)
-	fmt.Println("the user data:", usr)
+	//fmt.Println("the user data:", usr)
 	//get user name and user ID
 	var nkName = usr.NickName
 	var usrID = usr.UserID
@@ -50,7 +50,7 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//to modify the 'Cookie' field of the post struct
+//to modify the 'Cookie' field of the post struct, not used
 func (p *post) Modify(ck string) {
 	p.Cookie = ck
 }

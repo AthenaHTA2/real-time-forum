@@ -33,6 +33,9 @@ const LoginBtn=document.querySelector("#loginBtn")
       }
 
     })
+    .then(function(LoginData) {
+console.log(LoginData)
+    })
     //Not yet working
     //ReadUsers()
 
@@ -64,6 +67,7 @@ const LoginBtn=document.querySelector("#loginBtn")
 
 
   function successfulLogin() {
+    //refreshPosts()
     console.log("success - status 200")
 
     document.getElementById('loginModal').style.display = "none";

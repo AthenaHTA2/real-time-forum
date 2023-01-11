@@ -147,8 +147,8 @@
             You're are Logged in.
         </h4>
     </div>
+    <button onclick="refreshPosts()">Refresh Posts</button>
     <div id="postList">
-
     </div>
     <!---->
 
@@ -242,6 +242,21 @@
                 appendLog(item);
             }
         };
+
+        // by Kingsley: Concatenates the user's details within the HTML after login
+/*function updateUserDetails(data) {
+  console.log(
+    "updated User Details",
+    data.User.firstName,
+    data.User.lastName,
+    data.User.username
+  );
+  document.querySelector("p.name").innerHTML =
+    data.User.firstName +   + data.User.lastName;
+  document.querySelector("p.username").innerHTML = @ + data.User.username;
+  document.querySelector("#postBody").placeholder =
+    What's new,  + data.User.firstName + ?;
+}*/
         </script>
 </body>
 <!-- this script runs register/login/chat modal -->

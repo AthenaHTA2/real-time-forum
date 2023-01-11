@@ -14,13 +14,13 @@ type comment struct {
 }
 
 type post struct {
-	PostID      int
-	Author      string // author
-	Cookie      string `json:"PstCookieID"`
-	Title       string `json:"PstTitle"`
-	Content     string `json:"PstContent"`
-	Category    string `json:"PstCateg"`
-	PostTime    time.Time
+	PostID      int       `json:"PostID"`
+	Author      string    // author
+	Cookie      string    `json:"PstCookieID"`
+	Title       string    `json:"PstTitle"`
+	Content     string    `json:"PstContent"`
+	Category    string    `json:"PstCateg"`
+	PostTime    time.Time `json:"PostTime"`
 	PostTimeStr string
 	Comments    []comment
 	IPs         string

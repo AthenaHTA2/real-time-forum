@@ -87,7 +87,7 @@ func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 
 //~~~~~~~~~~Start of Show list of Posts
 //Gets all posts and sends them as a byte array through a web socket
-func (c *Client) GetAllPosts(conn *websocket.Conn) {
+/*func (c *Client) GetAllPosts(conn *websocket.Conn) {
 
 	//put database query result in registeredUsers
 	allPosts := tools.AllPosts()
@@ -118,7 +118,7 @@ func (c *Client) GetAllPosts(conn *websocket.Conn) {
 	if err := w.Close(); err != nil {
 		return
 	}
-}
+}*/
 
 //~~~~~~~~~~~End of Show list of Posts
 
@@ -227,7 +227,7 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	go client.msgToHub()
 	//send json of registered users to client
 	go client.SendRegisteredUsers(conn)
-	go client.GetAllPosts(conn)
+	//go client.GetAllPosts(conn)
 }
 
 /*Gorilla Websocket Code authors:
