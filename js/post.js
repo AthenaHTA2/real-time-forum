@@ -130,7 +130,7 @@
 
         <p class='post-content'>`+ "Comment: " + `<input type="text" class='post-content' id="comment" placeholder="Write a comment..">&nbsp; &nbsp;<button class="button commentBtn" id="addComment"  onclick= 'displayComments(${posts[i].PostID})'> ` + "Send comment" + `</button></p>
         <div id="c${posts[i].PostID}" class="posts commentBlock">
-        <p>"The comments will show up here"</p>
+        <p>"The comments will show up here"</p><button class="button hideCommentBtn" id="btn${posts[i].PostID}"  onclick= 'closeComments(${posts[i].PostID})'> ` + "Close" + `</button>
         </div>
         </div>
         `
@@ -143,7 +143,17 @@
   function displayComments(id) {
     console.log(id)
     let commentBlock = document.querySelector("#c"+id)
+    let clearCommentBtn = document.querySelector("#btn"+id)
     commentBlock.style.visibility = "visible"
+    clearCommentBtn.style.visibility = "visible"
+  }
+
+  //hide a post's comments section
+  function closeComments(id){
+    let commentBlock = document.querySelector("#c"+id)
+    let clearCommentBtn = document.querySelector("#btn"+id)
+    commentBlock.style.visibility = "hidden"
+    clearCommentBtn.style.visibility = "hidden"
   }
 
 
