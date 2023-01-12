@@ -128,9 +128,9 @@
         <p class='post-content'>`+ "Content: " + posts[i].PstContent + `</p>
         <p class='post-content'>`+ "Creation Time: " + convertDate(posts[i].PostTime) + `</p>
 
-        <p class='post-content'>`+ "Comment: " + `<input type="text" class='post-content' id="comment" placeholder="Write a comment..">&nbsp; &nbsp;<button class="button commentBtn" id="addComment"  onclick= 'displayComments(${posts[i].PostID})'> ` + "Send comment" + `</button></p>
+        <p class='post-content'>`+ "Comment: " + `<input type="text" class='comment-content' id="commentTxt${posts[i].PostID}" placeholder="Write a comment.." ; >&nbsp; &nbsp;<button class="button commentBtn" id="addComment"  onclick= 'displayComments(${posts[i].PostID})'> ` + "Send comment" + `</button></p>
         <div id="c${posts[i].PostID}" class="posts commentBlock">
-        <p>"The comments will show up here"</p><button class="button hideCommentBtn" id="btn${posts[i].PostID}"  onclick= 'closeComments(${posts[i].PostID})'> ` + "Close" + `</button>
+        <button class="button hideCommentBtn" id="btn${posts[i].PostID}"  onclick= 'closeComments(${posts[i].PostID})'> ` + "Close" + `</button>
         </div>
         </div>
         `
@@ -139,12 +139,19 @@
 
 
 
-  //shows a post's commemts section
+  //shows a post's comments section
   function displayComments(id) {
     console.log(id)
+    //select the text input for a particular post's 
+    let commentText = document.querySelector("#commentTxt"+id).value
+    commentText.value = ""
     let commentBlock = document.querySelector("#c"+id)
     let clearCommentBtn = document.querySelector("#btn"+id)
     commentBlock.style.visibility = "visible"
+    sendCommentToDB(commentText, id)
+    //clear the comment from text input
+    commentText.value = ""
+    //show comments section
     clearCommentBtn.style.visibility = "visible"
   }
 
@@ -154,6 +161,18 @@
     let clearCommentBtn = document.querySelector("#btn"+id)
     commentBlock.style.visibility = "hidden"
     clearCommentBtn.style.visibility = "hidden"
+  }
+
+  function sendCommentToDB(comment, id){
+    let commentBlock = document.querySelector("#c"+id)
+    
+    //show new comment at the top
+    //commentBlock.innerHTML = "";
+
+      let item = document.createElement('p');
+      item.innerHTML = `${comment}`;
+      commentBlock.appendChild(item)
+    
   }
 
 

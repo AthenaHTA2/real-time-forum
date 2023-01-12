@@ -160,8 +160,16 @@ h2 {
     margin: 1% auto;
 }
 
-#comment{
+.comment-content{
     height: 25px;
+}
+
+.comment{
+    color:whitesmoke;
+    font-size: 1.5rem;
+    font-family:cursive;
+    height: 30vh;
+    width: 90vh;
 }
 
 .container {
@@ -215,7 +223,7 @@ h2 {
 
 .hideCommentBtn{
     visibility: hidden;
-    
+
 }
 
 .commentBlock{
