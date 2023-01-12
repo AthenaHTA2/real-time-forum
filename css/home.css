@@ -213,6 +213,10 @@ h2 {
     visibility:visible;
 }
 
+.commentBlock{
+    visibility: hidden;
+}
+
 
 .button:hover{
   background-image: none;

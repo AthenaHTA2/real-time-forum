@@ -128,10 +128,22 @@
         <p class='post-content'>`+ "Content: " + posts[i].PstContent + `</p>
         <p class='post-content'>`+ "Creation Time: " + convertDate(posts[i].PostTime) + `</p>
 
-        <p class='post-content'>`+ "Comment: " + `<input type="text" class='post-content' id="comment" placeholder="Write a comment..">&nbsp; &nbsp;<button class="button commentBtn" id="addComment" type="submit"> ` + "Send comment" + `</button></p>
+        <p class='post-content'>`+ "Comment: " + `<input type="text" class='post-content' id="comment" placeholder="Write a comment..">&nbsp; &nbsp;<button class="button commentBtn" id="addComment"  onclick= 'displayComments(${posts[i].PostID})'> ` + "Send comment" + `</button></p>
+        <div id="c${posts[i].PostID}" class="posts commentBlock">
+        <p>"The comments will show up here"</p>
+        </div>
         </div>
         `
       }
+  }
+
+
+
+  //shows a post's commemts section
+  function displayComments(id) {
+    console.log(id)
+    let commentBlock = document.querySelector("#c"+id)
+    commentBlock.style.visibility = "visible"
   }
 
 
