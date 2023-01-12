@@ -127,9 +127,8 @@
         <p class='post-content'>`+ "Title: " + posts[i].PstTitle + `</p>
         <p class='post-content'>`+ "Content: " + posts[i].PstContent + `</p>
         <p class='post-content'>`+ "Creation Time: " + convertDate(posts[i].PostTime) + `</p>
-        <br>
-        <p class='post-content'>`+ "Write a comment: " + `<input type="text" class='post-content' id="comment" placeholder="Write a comment..">`+ `
-        <button class="button postBtn" id="addComment" type="submit"> ` + "Send comment" + `</button></p> 
+
+        <p class='post-content'>`+ "Comment: " + `<input type="text" class='post-content' id="comment" placeholder="Write a comment..">&nbsp; &nbsp;<button class="button commentBtn" id="addComment" type="submit"> ` + "Send comment" + `</button></p>
         </div>
         `
       }
