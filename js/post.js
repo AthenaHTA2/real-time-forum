@@ -141,17 +141,14 @@
 
   //shows a post's comments section
   function displayComments(id) {
-    console.log(id)
+    //console.log(id)
     //select the text input for a particular post's 
     let commentText = document.querySelector("#commentTxt"+id).value
-    commentText.value = ""
     let commentBlock = document.querySelector("#c"+id)
     let clearCommentBtn = document.querySelector("#btn"+id)
     commentBlock.style.visibility = "visible"
     sendCommentToDB(commentText, id)
-    //clear the comment from text input
-    commentText.value = ""
-    //show comments section
+    //show comments section, including the cancel button
     clearCommentBtn.style.visibility = "visible"
   }
 
@@ -163,20 +160,64 @@
     clearCommentBtn.style.visibility = "hidden"
   }
 
+  //send comment, post ID, and cookie to the database
   function sendCommentToDB(comment, id){
+    let commentText = document.querySelector("#commentTxt"+id)
+    //clear the comment from text input
+    commentText.value = ""
     let commentBlock = document.querySelector("#c"+id)
-    
-    //show new comment at the top
-    //commentBlock.innerHTML = "";
-
+    //append the latest comment to the comments section
       let item = document.createElement('p');
       item.innerHTML = `${comment}`;
       commentBlock.appendChild(item)
-    
+
+     
+        let theCookie = GetCookie("user_session")
+        console.log({theCookie})
+        let CommentContent = comment
+        let PostID = id
+        let CommentCookie = theCookie
+     
+      console.log(CommentContent, PostID, CommentCookie)
+      //populate JS object with comment data
+      let CommentData = {
+        CommContent: CommentContent,
+        PstID: PostID,
+        CommCookie: CommentCookie,
+      }
+      //send user comment to the 'comment' struct in go
+      // via the '/comment' handler function in go
+  let configComment = {
+    method: "POST",
+    headers: {
+     "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+    body: JSON.stringify(CommentData)
+  };
+  fetch("http://localhost:8080/comment", configComment)
+  .then(function(response) {
+    //console.log('PostDataSuccess:', response)
+    if(!response.ok){
+      unsuccessfulComment() 
+    }else{
+      successfulComment() 
+    }
+  })
+  }
+
+  function successfulComment() {
+    console.log("success - status 200")
+
+  }
+
+  function unsuccessfulComment() {
+    console.log("failed - not status 200")
+
   }
 
 
-  //To convert JS time stamp into a string
+  //Converts JS time stamp into a string, used when displaying posts
   function convertDate(date) {
     // Seperate year, day, hour and minutes into vars
     let yyyy = date.slice(0, 4);
