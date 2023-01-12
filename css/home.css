@@ -152,6 +152,18 @@ h2 {
     box-shadow: 2px 2px 2px 2px white;
 }
 
+
+
+.post-content {
+    text-align: left;
+    height: 10%;
+    margin: 1% auto;
+}
+
+#comment{
+    height: 25px;
+}
+
 .container {
     margin-right: 7cm;
     padding-left: 320px;

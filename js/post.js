@@ -121,16 +121,20 @@
       postsContainer.innerHTML = "";
       for (let i = posts.length - 1; i >= 0; i--) {
         postsContainer.innerHTML += `
-        <div id=` + posts[i].PostID + `>
-        <p>`+ posts[i].Author + `</p>
-        <p>`+ convertDate(posts[i].PostTime) + `</p>
-        <p>`+ posts[i].PstCateg + `</p>
-        <p>`+ posts[i].PstContent + `</p>
-        <p>`+ posts[i].PstTitle + `</p>
+        <div class ="posts" id=` + posts[i].PostID + `>
+        <p class='post-content' >`+ "Author: " + posts[i].Author + `</p>
+        <p class='post-content'>`+ "Category: " + posts[i].PstCateg + `</p>
+        <p class='post-content'>`+ "Title: " + posts[i].PstTitle + `</p>
+        <p class='post-content'>`+ "Content: " + posts[i].PstContent + `</p>
+        <p class='post-content'>`+ "Creation Time: " + convertDate(posts[i].PostTime) + `</p>
+        <br>
+        <p class='post-content'>`+ "Write a comment: " + `<input type="text" class='post-content' id="comment" placeholder="Write a comment..">`+ `
+        <button class="button postBtn" id="addComment" type="submit"> ` + "Send comment" + `</button></p> 
         </div>
         `
       }
   }
+
 
   //To convert JS time stamp into a string
   function convertDate(date) {
