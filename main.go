@@ -35,6 +35,7 @@ func main() {
 	http.HandleFunc("/post", tools.Posts)
 	http.HandleFunc("/comment", tools.Comments)
 	http.HandleFunc("/getPosts", tools.SendLatestPosts)
+	http.HandleFunc("/getComments", tools.SendLatestComments)
 	//serveWs function is a HTTP handler that upgrades the HTTP connection
 	//to the WebSocket protocol, creates a Client type, registers the Client
 	//with the hub and schedules the Client to be unregistered

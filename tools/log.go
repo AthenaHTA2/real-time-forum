@@ -14,8 +14,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-//var c *Client
-//var h *chat.Hub
+
 
 //Populate the LoginData struct, validate user password,
 //generate cookie data and upload these into database 'Sessions' table
@@ -155,79 +154,7 @@ func GetAllUsers() []byte {
 	return []byte(allUsers)
 }
 
-//Retrieve from db all posts that will be shown on R-T-F front page working but need post fields
-/*func AllPosts() []byte {
-	//double space at start of websocket message signals that this is the list of posts
-	postItems := "  "
-	var (
-		tempPost, auth, cat, titl, cont string
-	)
-	rows, errPost := sqldb.DB.Query("SELECT author, category, title, content FROM Posts ORDER BY creationDate ASC;")
-	if errPost != nil {
-		fmt.Println("Error retrieving posts from database: \n", errPost)
-		return nil
-	}
-	for rows.Next() {
 
-		//copy row columns into corresponding variables
-		err := rows.Scan(&auth, &cat, &titl, &cont)
-		if err != nil {
-			fmt.Println("error copying post data: ", err)
-		}
-		//collect each post's data into 'tempPost'
-		tempPost = auth + " " + cat + " " + titl + " " + cont
-		//aggregate all posts separated by '\n'
-		postItems = postItems + "\n" + tempPost
-	}
-	rows.Close()
-	//for _, post := range postItems {
-	//	fmt.Println(string(post))
-	//}
-
-	return []byte(postItems)
-}*/
-
-func GetPosts() []post {
-	//double space at start of websocket message signals that this is the list of posts
-	//postItems := "  "
-	var posts []post
-	var myPost post
-
-	rows, errPost := sqldb.DB.Query("SELECT postID, author, category, title, content, creationDate FROM Posts;")
-	if errPost != nil {
-		fmt.Println("Error retrieving posts from database: \n", errPost)
-		return nil
-	}
-	for rows.Next() {
-
-		//copy row columns into corresponding variables
-		err := rows.Scan(&myPost.PostID, &myPost.Author, &myPost.Category, &myPost.Title, &myPost.Content, &myPost.PostTime)
-		if err != nil {
-			fmt.Println("error copying post data: ", err)
-		}
-		//collect each post's data into 'tempPost'
-		//tempPost = auth + " " + cat + " " + titl + " " + cont
-		//aggregate all posts separated by '\n'
-		posts = append(posts, myPost)
-	}
-	rows.Close()
-	/*for _, post := range postItems {
-		fmt.Println(string(post))
-	}*/
-
-	return posts
-}
-
-func SendLatestPosts(w http.ResponseWriter, r *http.Request) {
-	//Send user information back to client using JSON format
-	posts := GetPosts()
-	js, err := json.Marshal(posts)
-	if err != nil {
-		log.Fatal(err)
-	}
-	w.WriteHeader(http.StatusOK) //Ceck in authentication.js, alerts user
-	w.Write([]byte(js))
-}
 
 //Retrieve from db logged-in user data that will be shown on R-T-F front page
 /*func Profile() []byte {

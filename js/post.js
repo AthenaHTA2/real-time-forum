@@ -26,7 +26,7 @@
   
       
       
-  //send user input in the 'post' form to the 'Post' struct in go
+  //send user input in the 'post' form to the back-end
   // via the '/post' handler function in go
       let configPost = {
         method: "POST",
@@ -128,93 +128,15 @@
         <p class='post-content'>`+ "Content: " + posts[i].PstContent + `</p>
         <p class='post-content'>`+ "Creation Time: " + convertDate(posts[i].PostTime) + `</p>
 
-        <p class='post-content'>`+ "Comment: " + `<input type="text" class='comment-content' id="commentTxt${posts[i].PostID}" placeholder="Write a comment.." ; >&nbsp; &nbsp;<button class="button commentBtn" id="addComment"  onclick= 'displayComments(${posts[i].PostID})'> ` + "Send comment" + `</button></p>
+        <p class='post-content'>`+ "Comment: " + `<input type="text" class='comment-content' id="commentTxt${posts[i].PostID}" placeholder="Write a comment.." ; >&nbsp; &nbsp;<button class="button commentBtn" id="addComment"  onclick= 'DisplayComments(${posts[i].PostID})'> ` + "Send comment" + `</button></p>
         <div id="c${posts[i].PostID}" class="posts commentBlock">
-        <button class="button hideCommentBtn" id="btn${posts[i].PostID}"  onclick= 'closeComments(${posts[i].PostID})'> ` + "Close" + `</button>
+        <button class="button hideCommentBtn" id="btn${posts[i].PostID}"  onclick= 'CloseComments(${posts[i].PostID})'> ` + "Close" + `</button>
         </div>
         </div>
         `
       }
   }
 
-
-
-  //shows a post's comments section
-  function displayComments(id) {
-    //console.log(id)
-    //select the text input for a particular post's 
-    let commentText = document.querySelector("#commentTxt"+id).value
-    let commentBlock = document.querySelector("#c"+id)
-    let clearCommentBtn = document.querySelector("#btn"+id)
-    commentBlock.style.visibility = "visible"
-    sendCommentToDB(commentText, id)
-    //show comments section, including the cancel button
-    clearCommentBtn.style.visibility = "visible"
-  }
-
-  //hide a post's comments section
-  function closeComments(id){
-    let commentBlock = document.querySelector("#c"+id)
-    let clearCommentBtn = document.querySelector("#btn"+id)
-    commentBlock.style.visibility = "hidden"
-    clearCommentBtn.style.visibility = "hidden"
-  }
-
-  //send comment, post ID, and cookie to the database
-  function sendCommentToDB(comment, id){
-    let commentText = document.querySelector("#commentTxt"+id)
-    //clear the comment from text input
-    commentText.value = ""
-    let commentBlock = document.querySelector("#c"+id)
-    //append the latest comment to the comments section
-      let item = document.createElement('p');
-      item.innerHTML = `${comment}`;
-      commentBlock.appendChild(item)
-
-     
-        let theCookie = GetCookie("user_session")
-        console.log({theCookie})
-        let CommentContent = comment
-        let PostID = id
-        let CommentCookie = theCookie
-     
-      console.log(CommentContent, PostID, CommentCookie)
-      //populate JS object with comment data
-      let CommentData = {
-        CommContent: CommentContent,
-        PstID: PostID,
-        CommCookie: CommentCookie,
-      }
-      //send user comment to the 'comment' struct in go
-      // via the '/comment' handler function in go
-  let configComment = {
-    method: "POST",
-    headers: {
-     "Content-Type": "application/json",
-      "Accept": "application/json",
-    },
-    body: JSON.stringify(CommentData)
-  };
-  fetch("http://localhost:8080/comment", configComment)
-  .then(function(response) {
-    //console.log('PostDataSuccess:', response)
-    if(!response.ok){
-      unsuccessfulComment() 
-    }else{
-      successfulComment() 
-    }
-  })
-  }
-
-  function successfulComment() {
-    console.log("success - status 200")
-
-  }
-
-  function unsuccessfulComment() {
-    console.log("failed - not status 200")
-
-  }
 
 
   //Converts JS time stamp into a string, used when displaying posts
