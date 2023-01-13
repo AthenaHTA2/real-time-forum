@@ -129,7 +129,7 @@
         <p class='post-content'>`+ "Creation Time: " + convertDate(posts[i].PostTime) + `</p>
 
         <p class='post-content'>`+ "Comment: " + `<input type="text" class='comment-content' id="commentTxt${posts[i].PostID}" placeholder="Write a comment.." ; >&nbsp; &nbsp;<button class="button commentBtn" id="addComment"  onclick= 'DisplayComments(${posts[i].PostID})'> ` + "Send comment" + `</button></p>
-        <div id="c${posts[i].PostID}" class="posts commentBlock">
+        <div id="c${posts[i].PostID}" class="commentBlock">
         <button class="button hideCommentBtn" id="btn${posts[i].PostID}"  onclick= 'CloseComments(${posts[i].PostID})'> ` + "Close" + `</button>
         </div>
         </div>

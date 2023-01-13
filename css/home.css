@@ -227,9 +227,17 @@ h2 {
 }
 
 .commentBlock{
+    padding: 0px 0 200px 0;
     visibility: hidden;
+    overflow: auto;
+    z-index: 1;
+    background-color: grey ;
+    border-radius: 30px;
 }
 
+.comment-container p {
+    display: inline;
+}
 
 .button:hover{
   background-image: none;

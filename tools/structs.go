@@ -6,11 +6,11 @@ import (
 
 type comment struct {
 	CommentID      int
-	Cookie         string `json:"CommCookie"`
-	Author         string
-	PostID         int    `json:"PstID"`
-	Content        string `json:"CommContent"`
-	CommentTime    time.Time
+	Cookie         string    `json:"CommCookie"`
+	Author         string    `json:"Author"`
+	PostID         int       `json:"PstID"`
+	Content        string    `json:"CommContent"`
+	CommentTime    time.Time `json:"CommentTime"`
 	CommentTimeStr string
 }
 
