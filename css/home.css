@@ -241,6 +241,13 @@ h2 {
     height: 350px;
 }
 
+.profile{
+    color: whitesmoke;
+    font-size: 1.2rem;
+    font-family:cursive;
+    font-weight: bolder;
+}
+
 .button:hover{
   background-image: none;
   background-color: rgb(136, 200, 176);

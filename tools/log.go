@@ -14,8 +14,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-
-
 //Populate the LoginData struct, validate user password,
 //generate cookie data and upload these into database 'Sessions' table
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -71,11 +69,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("All current user's data from 'Users' database table: \n", userID, firstName, lastName, nickName, age, gender, email)
 		//populate the CurrentUser struct (instance of 'User' struct) with values from 'Users' db table:
 		CurrentUser.UserID = userID
+		CurrentUser.FirstName = firstName
 		CurrentUser.LastName = lastName
 		CurrentUser.NickName = nickName
 		CurrentUser.Age = strconv.Itoa(age)
 		CurrentUser.Gender = gender
 		CurrentUser.Email = email
+
+
 
 		//err3 = IsUserAuthenticated(w, &CurrentUser)
 		err3 = IsUserAuthenticated(w, &CurrentUser)
@@ -121,6 +122,15 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		CurrentUser.LoggedIn = true
 		//fmt.Println("User struct data from Login: \n", CurrentUser.UserID, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Password, CurrentUser.Access, CurrentUser.LoggedIn, CurrentUser.Posts, CurrentUser.Comments, CurrentUser.Email)
 
+
+		marshalledUser, err := json.Marshal(CurrentUser)
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.WriteHeader(http.StatusOK) //alerts user
+		//Now we send user details back to the front-end
+		w.Write([]byte(marshalledUser))
+
 		w.WriteHeader(http.StatusOK)
 
 		GetAllUsers()
@@ -154,26 +164,6 @@ func GetAllUsers() []byte {
 	return []byte(allUsers)
 }
 
-
-
-//Retrieve from db logged-in user data that will be shown on R-T-F front page
-/*func Profile() []byte {
-	var userData User
-	var userItem string = "   "
-
-	stmt := "SELECT firstName, lastName, nickName, age, gender, email FROM Users ORDER BY creationDate ASC;"
-	row := sqldb.DB.QueryRow(stmt)
-	err := row.Scan(&postData.Author, &postData.Category, &postData.Title, &postData.Content)
-	if err != nil {
-		fmt.Println("err selecting postData in db", err)
-	}
-
-	fmt.Println("postData: ", postData)
-	postItem = postItem + postData.Author + " " + postData.Category + " " + postData.Title + " " + postData.Content + "\n"
-	fmt.Println("postItem: ", postItem)
-	onePost := []byte(postItem)
-	return onePost
-}*/
 
 /*func GetNickName() string {
 	var logData LoginData

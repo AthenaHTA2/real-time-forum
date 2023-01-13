@@ -28,18 +28,45 @@ const LoginBtn=document.querySelector("#loginBtn")
     .then(function(response) {
       if (response.status == 200) {
         successfulLogin()
+
+        response.text().then(function(data){//Here we get user profile data
+          let userDetails = JSON.parse(data);
+          console.log("posts:", userDetails);
+          //print user data
+          showProfile(userDetails)
+        });
+
+
       } else {
         unsuccessfulLogin()
       }
 
     })
-    .then(function(LoginData) {
-console.log(LoginData)
-    })
-    //Not yet working
-    //ReadUsers()
 
   }
+
+  //print profile data
+  function showProfile(user) {
+    console.log("showProfile called", user)
+    profileContainer = document.querySelector("#userProfile")
+    profileContainer.innerHTML = "";
+
+    profileContainer.innerHTML += `
+      <div class ="profile">
+      <br>
+      <br>
+      <br>
+      <h2 class ="profile"><u>Profile</u></h2>
+      <p >`+ "First Name: " + user.FirstName + `</p>
+      <p >`+ "Last Name: " + user.LastName + `</p>
+      <p >`+ "Nickname: " + user.NickName + `</p>
+      <p >`+ "Gender: " + user.Gender + `</p>
+      <p >`+ "Email: " + user.Email + `</p>
+      <p >`+ "Age: " + user.Age + `</p>
+      </div>
+      `
+    
+}
 
   //show list of registered users
   /*function ReadUsers(){

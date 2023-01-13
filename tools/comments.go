@@ -51,7 +51,7 @@ func Comments(w http.ResponseWriter, r *http.Request) {
 func GetDBComments() []comment {
 	var allComments []comment
 
-	rows, errComment := sqldb.DB.Query("SELECT commentID, postID, author, content, creationDate FROM Comments;")
+	rows, errComment := sqldb.DB.Query("SELECT commentID, postID, author, content, creationDate FROM Comments ORDER BY creationDate ASC;")
 	if errComment != nil {
 		fmt.Println("Error retrieving comments from database: \n", errComment)
 		return nil
