@@ -126,12 +126,12 @@
         <p class='post-content'>`+ "Category: " + posts[i].PstCateg + `</p>
         <p class='post-content'>`+ "Title: " + posts[i].PstTitle + `</p>
         <p class='post-content'>`+ "Content: " + posts[i].PstContent + `</p>
-        <p class='post-content'>`+ "Creation Time: " + convertDate(posts[i].PostTime) + `</p>
-
+        <p class='post-content'>`+ "Creation Time: " + ConvertDate(posts[i].PostTime) + `</p>
+        
         <p class='post-content'>`+ "Comment: " + `<input type="text" class='comment-content' id="commentTxt${posts[i].PostID}" placeholder="Write a comment.." ; >&nbsp; &nbsp;<button class="button commentBtn" id="addComment"  onclick= 'DisplayComments(${posts[i].PostID})'> ` + "Send comment" + `</button></p>
-        <div id="c${posts[i].PostID}" class="commentBlock">
-        <button class="button hideCommentBtn" id="btn${posts[i].PostID}"  onclick= 'CloseComments(${posts[i].PostID})'> ` + "Close" + `</button>
         </div>
+        <div id="c${posts[i].PostID}" class="commentBlock" style='height: 400px;'>
+        <button class="button hideCommentBtn" id="btn${posts[i].PostID}"  onclick= 'CloseComments(${posts[i].PostID})'> ` + "Close" + `</button>
         </div>
         `
       }
@@ -140,7 +140,7 @@
 
 
   //Converts JS time stamp into a string, used when displaying posts
-  function convertDate(date) {
+  function ConvertDate(date) {
     // Seperate year, day, hour and minutes into vars
     let yyyy = date.slice(0, 4);
     let dd = date.slice(8, 10);

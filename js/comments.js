@@ -5,18 +5,18 @@
     let commentText = document.querySelector("#commentTxt"+id).value
     let commentBlock = document.querySelector("#c"+id)
     let clearCommentBtn = document.querySelector("#btn"+id)
-    commentBlock.style.visibility = "visible"
+    commentBlock.style.display = "block"
     SendCommentToDB(commentText, id)
     //show comments section, including the cancel button
     clearCommentBtn.style.visibility = "visible"
-    refreshComments()
+    refreshComments(id)
   }
 
   //hides a post's comments section
   function CloseComments(id){
     let commentBlock = document.querySelector("#c"+id)
     let clearCommentBtn = document.querySelector("#btn"+id)
-    commentBlock.style.visibility = "hidden"
+    commentBlock.style.display = "none"
     clearCommentBtn.style.visibility = "hidden"
   }
 
@@ -26,10 +26,10 @@
     //clear the comment from text input
     commentText.value = ""
     let commentBlock = document.querySelector("#c"+id)
-    //append the latest comment to the comments section
-      let item = document.createElement('p');
-      item.innerHTML = `${comment}`;
-      commentBlock.appendChild(item)
+    //Not needed: append the latest comment to the comments section
+      //let item = document.createElement('p');
+     // item.innerHTML = `${comment}`;
+     // commentBlock.appendChild(item)
 
      
         let theCookie = GetCookie("user_session")
@@ -78,7 +78,7 @@
   }
 
   //fetch comments data and display in front-end
-  function refreshComments(){
+  function refreshComments(id){
     fetch("/getComments", {
       headers : {
         Accept: "application/json",
@@ -92,7 +92,7 @@
         let comments = JSON.parse(data);
         console.log("comments:", comments);
         //post shows all latest posts from database
-        displayComments(comments)
+        displayCommentsHist(comments, id)
       });
     })
     .catch((error) => {
@@ -101,14 +101,19 @@
   }
 
   //To display comments history in front-end
-  function displayComments(comments) {
+  function displayCommentsHist(comments, id) {
     console.log("called", comments)
-    
-    // postsContainer.innerHTML = "";
+    console.log(id)
+    let commentsContainer = document.querySelector(`#c${id}`)
+
+    commentsContainer.innerHTML = `<button class="button" id="btn${id}"  onclick= 'CloseComments(${id})'> ` + "Close" + `</button>`;
     for (let i = comments.length - 1; i >= 0; i--) {
-      let commentsContainer = document.querySelector(`#c${comments[i].PstID}`)
+
+        if (comments[i].PstID !== id) {
+            continue
+        }
       commentsContainer.innerHTML += `
-      <div class="comment-container"><p class='' >`+ "Author: " + comments[i].Author + `</p><p class=''>`+ "Comment: " + comments[i].CommContent + `</p><p class=''>`+ "Time: " + comments[i].CommentTime + `</p></div>
+      <div class="comment-container"><p class='' >`+ "Author: " + comments[i].Author + `</p>&nbsp;&nbsp;<p class=''>`+ "Comment: " + comments[i].CommContent + `</p>&nbsp;&nbsp;<p class=''>`+ "Time: " + ConvertDate(comments[i].CommentTime) + `</p></div>
       `
     //   <p class='post-content'>`+ "Comment: " + `<input type="text" class='comment-content' id="commentTxt${comments[i].PostID}" placeholder="Write a comment.." ; >&nbsp; &nbsp;<button class="button commentBtn" id="addComment"  onclick= 'DisplayComments(${comments[i].PostID})'> ` + "Send comment" + `</button></p>
     //   <div id="c${comments[i].PostID}" class="posts commentBlock">
