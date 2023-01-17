@@ -6,20 +6,22 @@ import (
 
 type comment struct {
 	CommentID      int
-	Author         string
-	PostID         int
-	Content        string
-	CommentTime    time.Time
+	Cookie         string    `json:"CommCookie"`
+	Author         string    `json:"Author"`
+	PostID         int       `json:"PstID"`
+	Content        string    `json:"CommContent"`
+	CommentTime    time.Time `json:"CommentTime"`
 	CommentTimeStr string
 }
 
 type post struct {
-	PostID      int
-	Author      string // author
-	Title       string
-	Content     string
-	Category    string
-	PostTime    time.Time
+	PostID      int       `json:"PostID"`
+	Author      string    // author
+	Cookie      string    `json:"PstCookieID"`
+	Title       string    `json:"PstTitle"`
+	Content     string    `json:"PstContent"`
+	Category    string    `json:"PstCateg"`
+	PostTime    time.Time `json:"PostTime"`
 	PostTimeStr string
 	Comments    []comment
 	IPs         string
@@ -45,6 +47,7 @@ var CurrentUser User
 
 type LoginData struct {
 	UserName string `json:"LUserName"`
+	UserEmail string `json:"LEmail"`
 	Password string `json:"LPassW"`
 }
 

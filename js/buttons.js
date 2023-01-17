@@ -41,6 +41,16 @@ const logOut = document.querySelector('#logout')
     document.getElementById('logout').style.display = "none";
     document.getElementById('LoggedOut').style.display = "block";
     document.getElementById('byeFace').style.display = 'block';
+    document.getElementById('addPost').style.display = "none";
+    document.getElementById('login').style.display ="block"; 
+    document.getElementById('register').style.display ="block"; 
+    document.getElementById('Messenger').style.display ="none"; 
+    document.getElementById('Users').style.display ="none"; 
+    document.getElementById('Online').style.display ="none"; 
+    document.getElementById('Offline').style.display ="none"; 
+    document.getElementById('welcomemsg').style.display ="block"; 
+   
+
 
     setTimeout(() => {
       document.getElementById('LoggedOut').style.display = "none";
@@ -60,8 +70,12 @@ const logOut = document.querySelector('#logout')
 
     }
 
-const DeleteSession = () => {
-  
-}
+    const openPosts = () => {
+      document.getElementById('postBlock').style.display = 'block';
+      document.getElementById('profileMod').style.display = "none";
+      document.getElementById('regModal').style.display = "none";
+      document.getElementById('loginModal').style.display = "none";
+      document.getElementById('postedAritcles').style.display = "block";
+  }
 
   

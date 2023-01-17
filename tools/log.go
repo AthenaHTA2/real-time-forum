@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"rtforum/sqldb"
+	"strconv"
 	"time"
 
 	uuid "github.com/satori/go.uuid"
@@ -14,6 +15,8 @@ import (
 )
 
 //function for login
+//Populate the LoginData struct, validate user password,
+//generate cookie data and upload these into database 'Sessions' table
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	var loginData LoginData
@@ -23,26 +26,22 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Json from Login: ", string(loginD))
-
 	json.Unmarshal(loginD, &loginData)
 
-	fmt.Println("LoginData struct in GO: ", loginData.UserName, loginData.Password)
-
-	LogUserName := loginData.UserName
+	LogUserEmail := loginData.UserEmail
 	LogPassword := loginData.Password
 
-	fmt.Println("Logged in User:", LogUserName)
+	fmt.Println("Logged in User:", LogUserEmail)
 
 	// retrieve password from db to compare (hash) with user supplied password's hash
 	var hash string
 
-	stmt := "SELECT passwordhash FROM Users WHERE nickName = ?"
-	row := sqldb.DB.QueryRow(stmt, LogUserName)
+	stmt := "SELECT passwordhash FROM Users WHERE nickName = ? OR email = ?"
+	row := sqldb.DB.QueryRow(stmt, LogUserEmail)
 	err2 := row.Scan(&hash)
 	if err2 != nil {
-		fmt.Println("err with PASSWORD", LogUserName, LogPassword)
-		fmt.Println("check username and password")
+		fmt.Println("err with PASSWORD", LogUserEmail, LogPassword)
+		fmt.Println("check username or email and password")
 		return
 	}
 
@@ -54,8 +53,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	//returns nil on success
 
 	if comparePass == nil {
-		stmtCurrentUser := "SELECT * FROM Users WHERE nickName = ?"
-		rowCurrentUser := sqldb.DB.QueryRow(stmtCurrentUser, LogUserName)
+		stmtCurrentUser := "SELECT * FROM Users WHERE nickName = ? OR email = ?"
+		rowCurrentUser := sqldb.DB.QueryRow(stmtCurrentUser, LogUserEmail)
 
 		fmt.Println(stmtCurrentUser)
 
@@ -64,13 +63,24 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			firstName, lastName, nickName, gender, email string
 		)
 
+	
+
 		err3 := rowCurrentUser.Scan(&userID, &firstName, &lastName, &nickName, &age, &gender, &email, &LogPassword)
 
 		if err3 != nil {
 			fmt.Println("Error with currentUser", err3)
 			fmt.Println("error accessing DB")
 			return
-		}
+		}	
+		
+		//populate the CurrentUser struct (instance of 'User' struct) with values from 'Users' db table:
+		CurrentUser.UserID = userID
+		CurrentUser.FirstName = firstName
+		CurrentUser.LastName = lastName
+		CurrentUser.NickName = nickName
+		CurrentUser.Age = strconv.Itoa(age)
+		CurrentUser.Gender = gender
+		CurrentUser.Email = email
 
 		err3 = IsUserAuthenticated(w, &CurrentUser)
 		fmt.Println("user logged in is : ", err3)
@@ -82,7 +92,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		sessionToken := uuid.NewV4().String()
 		expiresAT := time.Now().Add(60 * time.Minute)
-		cookieNm := LogUserName + "_session"
+		//cookieNm := username + "_session" removing username in order to be able to get cookieID in JS
+		cookieNm := LogUserEmail + "_session"
 
 		// Finally, we set the client cookie for "session_token" as the session token we just generated
 		// we also set an expiry time of 120 minutes
@@ -92,7 +103,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			Value:    sessionToken,
 			MaxAge:   7200,
 			Expires:  expiresAT,
-			HttpOnly: true,
 		})
 
 		// storing the cookie values in struct to access on other pages.
@@ -105,15 +115,49 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Error with inserting session", err4)
 			return
 		}
-
+		
 		defer insertSession.Close()
 		insertSession.Exec(CurrentUser.UserID, cookieNm, sessionToken)
 
-		fmt.Println("PASSWORD IS CORRECT")
-		fmt.Println("User successfully logged in")
+		CurrentUser.Password = LogPassword
+		CurrentUser.Access = 1
+		CurrentUser.LoggedIn = true
+
+		marshalledUser, err := json.Marshal(CurrentUser)
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.WriteHeader(http.StatusOK) //alerts user
+		//Now we send user details back to the front-end
+		w.Write([]byte(marshalledUser))
+		w.WriteHeader(http.StatusOK)
+		GetAllUsers()
 
 	} else if comparePass != nil {
 		fmt.Println("PASSWORD INCORRECT")
 	}
 
+}
+
+func GetAllUsers() []byte {
+	//space at start of websocket message signals that this is the list of users
+	allUsers := " "
+	rows, errUsr := sqldb.DB.Query("SELECT DISTINCT nickName FROM Users ORDER BY nickName ASC;")
+	if errUsr != nil {
+		fmt.Println("Error retrieving users from database:  line 147\n", errUsr)
+		return nil
+	}
+	for rows.Next() {
+		var tempUser string
+		err := rows.Scan(&tempUser)
+		if err != nil {
+			fmt.Println("err: ", err)
+		}
+		allUsers = allUsers + "\n" + tempUser
+	}
+	rows.Close()
+	for _, user := range allUsers {
+		fmt.Println(string(user))
+	}
+	return []byte(allUsers)
 }

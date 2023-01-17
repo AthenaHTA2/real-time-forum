@@ -33,8 +33,10 @@
   //Put register data into a JS object if user clicks 'Register' button
 const registerBtn=document.querySelector("#registerBtn")
 registerBtn.onclick= (e)=>{
+  
   //stop browser refreshing
   e.preventDefault();
+
   //grab user data
   let FirstName = document.querySelector("#FirstName").value
   let LastName = document.querySelector("#LastName").value
@@ -43,6 +45,7 @@ registerBtn.onclick= (e)=>{
   let Gender =  document.querySelector("#Gender").value
   let Email = document.querySelector("#Email").value
   let PassWord = document.querySelector("#PassWord").value
+
   //populate JS object with user data
   let RegisterData = {
     FirstName: FirstName,
@@ -85,6 +88,11 @@ const successfulReg = () => {
   document.getElementById('regConfirmed').style.display = 'block';
   document.getElementById('happyFace').style.display = 'block';
   document.getElementById('profileMod').style.display = "none";
+  document.getElementById('welcomemsg').style.display ="none"; 
+  document.getElementById('Users').style.display ="block"; 
+  document.getElementById('Offline').style.display ="block"; 
+  document.getElementById('Online').style.display ="block"; 
+  document.getElementById('Messenger').style.display ="block"; 
 
 
   setTimeout(() => {
@@ -94,7 +102,6 @@ const successfulReg = () => {
   },2000);
 
   document.getElementById('postBlock').style.display = 'flex';
-
   document.getElementById('logout').style.display = 'block'
 }
 

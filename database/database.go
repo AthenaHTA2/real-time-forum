@@ -25,6 +25,7 @@ func CreateDB() {
 				"content" TEXT NOT NULL, 
 				"category" TEXT NOT NULL,
 				"creationDate" TIMESTAMP,
+				"cookieID" TEXT NOT NULL,
 				FOREIGN KEY(authorID)REFERENCES users(userID)
 				);`)
 	// category table TABLE NOT USED YET
@@ -50,23 +51,4 @@ func CreateDB() {
 				"cookieValue" STRING NOT NULL PRIMARY KEY, 
 				FOREIGN KEY(userID)REFERENCES Users(userID)
 				);`)
-	
-	// // lduserpost table
-	// sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "lduserpost" (
-	// 			"userID" INTEGER NOT NULL,
-	// 			"postID" INTEGER NOT NULL,
-	// 			"kind" INTEGER NOT NULL,
-	// 			FOREIGN KEY(userID)REFERENCES users(userID),
-	// 			FOREIGN KEY(postID)REFERENCES posts(postID)
-	// 			);`)
-	// // ldusercomment table
-	// sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "ldusercomment" (
-	// 			"commentID" INTEGER NOT NULL,
-	// 			"userID" INTEGER NOT NULL,
-	// 			"postID" INTEGER NOT NULL,
-	// 			"kind" INTEGER NOT NULL,
-	// 			FOREIGN KEY(commentID)REFERENCES comments(commentID),
-	// 			FOREIGN KEY(userID)REFERENCES users(userID),
-	// 			FOREIGN KEY(postID)REFERENCES posts(postID)
-	// 			);`)
 }

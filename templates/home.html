@@ -15,16 +15,30 @@
 
     <nav class="nav">
         <a id ="homePage" href = "/" class="nav__link">HomePage</a>
-        <a id ="register" onclick="openReg() ;"class="nav__link">Register</a>
-        <a id ="login" onclick="openLogin() ;"class="nav__link">Login</a>
+        <a id ="register" onclick="openReg() ;"class="nav__link" style="display:block">Register</a>
+        <a id ="login" onclick="openLogin() ;"class="nav__link" style="display:block">Login</a>
         <a id ="post" onclick="openPosts()" class="nav__link">Posts</a>
         <a id="profile" class="nav__link" style="display:none">Profile</a>    
         <a id="logout" class="nav__link" style="display:none">LogOut</a>    
 
     </nav>
 
+    
+
     <nav class="chat">
-        <a id ="Chat Here" href = "/chat" class="chat__link" data-link>Messsenger</a>
+        <a id="welcomemsg">𝕎𝔼𝕃ℂ𝕆𝕄𝔼 𝕋𝕆 ℝ𝔼𝔸𝕃 𝕋𝕀𝕄𝔼 𝔽𝕆ℝ𝕌𝕄 𝕃𝕆𝔾𝕀ℕ 𝕆ℝ ℝ𝔼𝔾𝕀𝕊𝕋𝔼ℝ!</a>
+        <a id ="Messenger" style="display:none">🅼🅴🆂🆂🅴🅽🅶🅴🆁</a>
+        <div id="log"></div>
+        <form class="modal-content animate" action="/chat" id="formChat">
+            <input type="submit" id="button" value="Send" />
+            <input type="text" id="msg" size="64" autofocus />
+        </form>
+
+        <a id="Users" class="loggedinUsers" style="display:none"><strong>🆄🆂🅴🆁🆂</strong></a>
+        <div id="usersLog"></div>
+        <a id="Online" class="OnlineUsers" style="display:none"><strong>🅾🅽🅻🅸🅽🅴</strong></a>
+        <a id="Offline" class="OfflineUsers" style="display:none"><strong>🅾🅵🅵🅻🅸🅽🅴</strong></a>
+
     </nav>
 
     <div id="postBlock" class="posts" >
@@ -34,11 +48,11 @@
         <textarea name="postinput" type="text" rows="4" cols="60" id="PostContent" name="Content" placeholder="Description..."></textarea>
         <label for="Post Cat">Catergory:</label>
         <input type="dropdown" id="PostCat" name="Category" placeholder="Choose Categories..">
-        <button class="button" id="addPost" type="submit">Create Post</button>
+        <button class="button" id="addPost" type="submit" style="display:none">Create Post</button>
     
     </div>
 
-    <div id="postedArticles" class="posts" >
+    <div id="postedArticles" class="posts" style="display:none">
         <label for="TitleCreated">Post Title:</label>
         <textarea name="postTitle" type="text" rows="1" cols="60" id="PostTitle" name="Title" placeholder="Enter Title..."></textarea>
         <label for="ContCreated"> Content:  </label>
@@ -59,10 +73,11 @@
       
 
        <div class="container" >
-        <h1>🅛🅞🅖🅘🅝</h1>
+        <h1>🅻🅾🅶🅸🅽</h1>
 
-        <label for="userName"><b>UserName</b></label>
-        <input type="text" id="LUserName" placeholder="Enter Username" name="UserName" required>
+        <label for="userEmail" for="userName"><b>Name Or Email</b></label>
+        <input type="text" id="LEmail" placeholder="Enter Username" name="UserName" required>
+        
         
         <label for="psw"><b>Password</b></label>
         <input type="password" id="LPassW" placeholder="Enter Password" name="psw" required>
@@ -91,7 +106,7 @@
        
 
        <div class="container" id="form"> 
-        <h2>🅡🅔🅖🅘🅢🅣🅔🅡</h2>
+        <h2>🆁🅴🅶🅸🆂🆃🅴🆁</h2>
         <label for="FirstName"><b>First Name</b></label>
         <input id="FirstName" type="text" placeholder="Enter First Name" name="FirstName" required>
 
@@ -175,6 +190,7 @@
     <div id="profileMod" class="modal">
         <form class="modal-content animate" action="/login">
         <img id="profilePic" src="/css/img/happy.gif" height="15%" width="15%">
+        <h2>🆄🆂🅴🆁-🅿🆁🅾🅵🅸🅻🅴</h2>
         <div id="firstName">
             <h5>First Name : </h5>
         </div>
@@ -197,9 +213,19 @@
 
 </body>
 
+<!-- <button onclick="refreshPosts()">Refresh Posts</button> -->
+    <div id="postList">
+    </div>
+    <!---->
+
+
 <!-- this script runs login modal -->
+<script src="/js/comment.js"></script>
+<script src="/js/post.js"></script>
 <script src="/js/register.js"></script>
 <script src="/js/login.js"></script>
 <script src="/js/buttons.js"></script>
+<script src="/js/chat.js"></script>
+
 
 </html>

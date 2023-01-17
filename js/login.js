@@ -1,17 +1,20 @@
+//send user input in the 'Login' form to the 'LoginData' struct in go
+// via the 'LoginHandler' handler function in go
 const LoginBtn = document.getElementById('loginBtn');
 LoginBtn.onclick = (e) => {
+    //stop browser refreshing
     e.preventDefault(); 
 
-    let LUserName = document.querySelector("#LUserName").value
+    let LEmail = document.querySelector("#LEmail").value
     let LPassW = document.querySelector("#LPassW").value
 
     let loginData = {
-        LUserName: LUserName,
+        LUserName: LEmail,
         LPassW: LPassW,
     }
 
-    console.log({loginData})
-
+    //Sending Login form's data with the Fetch API
+    //to the 'LoginData' struct in go
     let configLogin = {
         method: "POST",
         headers: {
@@ -27,8 +30,15 @@ LoginBtn.onclick = (e) => {
 
         if(response.status == 200) {
             successfulLogin()
+
+        response.text().then(function(data){//Here we get user profile data
+            let userDetails = JSON.parse(data);
+            console.log("posts:", userDetails);
+            //print user data
+            showProfile(userDetails)
+            });
         } else {
-            unsuccessfulLogin()
+            unsuccessfullLogin()
         }
     })
 
@@ -41,6 +51,16 @@ const successfulLogin = () => {
     document.getElementById('LoggedOn').style.display = 'block';
     document.getElementById('happyFace').style.display = 'block';
     document.getElementById('profileMod').style.display = "none";
+    document.getElementById('addPost').style.display = "block";
+    document.getElementById('login').style.display ="none"; 
+    document.getElementById('register').style.display ="none"; 
+    document.getElementById('welcomemsg').style.display ="none"; 
+    document.getElementById('Users').style.display ="block"; 
+    document.getElementById('Offline').style.display ="block"; 
+    document.getElementById('Online').style.display ="block"; 
+    document.getElementById('Messenger').style.display ="block"; 
+
+
 
     setTimeout(() => {
         document.getElementById('LoggedOn').style.display = 'none';
@@ -52,7 +72,7 @@ const successfulLogin = () => {
     document.getElementById('logout').style.display = 'block'
 }
 
-const unsuccessLogin = () => {
+const unsuccessfullLogin = () => {
     
     console.log("failed - not status 200")
 
