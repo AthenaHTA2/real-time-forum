@@ -112,7 +112,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		}
 
 		defer insertSession.Close()
-		insertSession.Exec(CurrentUser.UserID, cookieNm, sessionToken)
+		insertSession.Exec(userID, cookieNm, sessionToken)
 
 		CurrentUser.Password = LogPassword
 		CurrentUser.Access = 1

@@ -28,7 +28,7 @@ func CreateDB() {
 				"cookieID" TEXT NOT NULL,
 				FOREIGN KEY(authorID)REFERENCES users(userID)
 				);`)
-	// category table TABLE NOT USED YET
+	// category table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Category" (
 				"postID" INTEGER REFERENCES post(postID), 
 				"category" TEXT NOT NULL

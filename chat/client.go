@@ -5,11 +5,9 @@ import (
 	"log"
 	"net/http"
 	"rtforum/tools"
-
 	//"strings"
-	"time"
-
 	"github.com/gorilla/websocket"
+	"time"
 )
 
 const (
@@ -43,7 +41,6 @@ type Client struct {
 }
 
 //~~~~~~~~~~~~~~~~~~~Start of Show list of Users
-
 //sends the registeredUsers to the ws client as a byte slice.
 func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 	//put database query result in registeredUsers
@@ -71,7 +68,7 @@ func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 		return
 	}
 }
-
+//~~~~~~~~~~~End of Show list of Posts
 //msgToHub go routine reads messages from the webSocket connection
 //and sends them to the hub
 //

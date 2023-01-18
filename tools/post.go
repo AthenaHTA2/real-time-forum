@@ -27,7 +27,6 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 
 	var usr = GetUserByCookie(CookieID)
 
-	var nkName = usr.NickName
 	var usrID = usr.UserID
 
 	_, err = sqldb.DB.Exec(`INSERT INTO Posts ( 
@@ -38,7 +37,7 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 		category,
 		creationDate,
 		cookieID
-		) VALUES(?,?,?,?,?,?,?)`, usrID, nkName, thePost.Title, thePost.Content, thePost.Category, postTime, thePost.Cookie)
+		) VALUES(?,?,?,?,?,?,?)`, usrID, usr.NickName, thePost.Title, thePost.Content, thePost.Category, postTime, thePost.Cookie)
 	if err != nil {
 		fmt.Println("Error inserting into 'Posts' table: ", err)
 		return

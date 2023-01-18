@@ -35,7 +35,7 @@ LoginBtn.onclick = (e) => {
             let userDetails = JSON.parse(data);
             console.log("posts:", userDetails);
             //print user data
-            // showProfile(userDetails)
+            showProfile(userDetails)
             });
         } else {
             unsuccessfullLogin()

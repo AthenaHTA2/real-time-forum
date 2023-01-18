@@ -19,7 +19,7 @@ func main() {
 	DB := sqldb.ConnectDB()
 	database.CreateDB()
 	hub := chat.NewHub(DB)
-	// go hub.LogConns()
+	go hub.LogConns()
 	go hub.Run()
 
 	cssFolder := http.FileServer(http.Dir("css/"))

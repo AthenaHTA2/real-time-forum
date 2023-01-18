@@ -17,10 +17,10 @@ type comment struct {
 type post struct {
 	PostID      int       `json:"PostID"`
 	Author      string    // author
-	Cookie      string    `json:"PstCookieID"`
-	Title       string    `json:"PstTitle"`
-	Content     string    `json:"PstContent"`
-	Category    string    `json:"PstCateg"`
+	Cookie      string    `json:"PostCokID"`
+	Title       string    `json:"PostTitl"`
+	Content     string    `json:"PostCont"`
+	Category    string    `json:"PostCat"`
 	PostTime    time.Time `json:"PostTime"`
 	PostTimeStr string
 	Comments    []comment
