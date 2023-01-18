@@ -51,7 +51,7 @@ func InsertSession(u *User, session *http.Cookie) *Session {
 func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 	var cookieValue string
 	//if user is not found in "sessions" db table return err = nil
-	if err := sqldb.DB.QueryRow("SELECT sessionID FROM Sessions WHERE userID = ?", u.UserID).Scan(&cookieValue); err != nil {
+	if err := sqldb.DB.QueryRow("SELECT cookieValue FROM Sessions WHERE userID = ?", u.UserID).Scan(&cookieValue); err != nil {
 		return nil
 	}
 	if err := DeleteSession(w, cookieValue); err != nil {
@@ -102,9 +102,9 @@ func NewUser() *User {
 func FindByUserID(UID int64) *User {
 	u:= NewUser()
 
-	if err := sqldb.DB.QueryRow("SELECT * FROM Users WHERE userID = ?", UID).
+	if err := sqldb.DB.QueryRow("SELECT userID, firstName, lastNamme, nickName, age, gender, email, passwordhash FROM Users WHERE userID = ?", UID).
 			Scan(&u.UserID, &u.FirstName, &u.LastName, &u.NickName, &u.Age, &u.Gender, &u.Email,
-				 &u.Access, &u.LoggedIn, &u.Posts, &u.Comments, &u.Password); err != nil {
+				 &u.Password); err != nil {
 					fmt.Println("error finding user by ID line 93", err)
 					return nil
 				 }

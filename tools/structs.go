@@ -47,7 +47,6 @@ var CurrentUser User
 
 type LoginData struct {
 	UserName string `json:"LUserName"`
-	UserEmail string `json:"LEmail"`
 	Password string `json:"LPassW"`
 }
 

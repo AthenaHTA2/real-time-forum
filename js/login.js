@@ -5,11 +5,11 @@ LoginBtn.onclick = (e) => {
     //stop browser refreshing
     e.preventDefault(); 
 
-    let LEmail = document.querySelector("#LEmail").value
+    let LUserName = document.querySelector("#LUserName").value
     let LPassW = document.querySelector("#LPassW").value
 
     let loginData = {
-        LUserName: LEmail,
+        LUserName: LUserName,
         LPassW: LPassW,
     }
 
@@ -35,7 +35,7 @@ LoginBtn.onclick = (e) => {
             let userDetails = JSON.parse(data);
             console.log("posts:", userDetails);
             //print user data
-            showProfile(userDetails)
+            // showProfile(userDetails)
             });
         } else {
             unsuccessfullLogin()

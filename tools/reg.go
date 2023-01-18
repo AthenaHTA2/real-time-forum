@@ -79,3 +79,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	rows.Scan(&userID, &firstName, &lastName, &nickName, &age, &gender, &email, &hash)
 }
+
+func showProfile(User) {
+	
+}

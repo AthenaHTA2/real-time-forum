@@ -28,20 +28,19 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(loginD, &loginData)
 
-	LogUserEmail := loginData.UserEmail
+	LogUserName := loginData.UserName
 	LogPassword := loginData.Password
 
-	fmt.Println("Logged in User:", LogUserEmail)
 
 	// retrieve password from db to compare (hash) with user supplied password's hash
 	var hash string
 
-	stmt := "SELECT passwordhash FROM Users WHERE nickName = ? OR email = ?"
-	row := sqldb.DB.QueryRow(stmt, LogUserEmail)
+	stmt := "SELECT passwordhash FROM Users WHERE nickName = ?"
+	row := sqldb.DB.QueryRow(stmt, LogUserName)
 	err2 := row.Scan(&hash)
 	if err2 != nil {
-		fmt.Println("err with PASSWORD", LogUserEmail, LogPassword)
-		fmt.Println("check username or email and password")
+		fmt.Println("err with PASSWORD", LogUserName, LogPassword)
+		fmt.Println("check username or and password")
 		return
 	}
 
@@ -53,26 +52,22 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	//returns nil on success
 
 	if comparePass == nil {
-		stmtCurrentUser := "SELECT * FROM Users WHERE nickName = ? OR email = ?"
-		rowCurrentUser := sqldb.DB.QueryRow(stmtCurrentUser, LogUserEmail)
-
-		fmt.Println(stmtCurrentUser)
+		stmtCurrentUser := "SELECT * FROM Users WHERE nickName = ?"
+		rowCurrentUser := sqldb.DB.QueryRow(stmtCurrentUser, LogUserName)
 
 		var (
 			userID, age                                  int
 			firstName, lastName, nickName, gender, email string
 		)
 
-	
-
 		err3 := rowCurrentUser.Scan(&userID, &firstName, &lastName, &nickName, &age, &gender, &email, &LogPassword)
 
 		if err3 != nil {
-			fmt.Println("Error with currentUser", err3)
+			fmt.Println("Error with currentUser", err)
 			fmt.Println("error accessing DB")
 			return
-		}	
-		
+		}
+
 		//populate the CurrentUser struct (instance of 'User' struct) with values from 'Users' db table:
 		CurrentUser.UserID = userID
 		CurrentUser.FirstName = firstName
@@ -93,16 +88,16 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		sessionToken := uuid.NewV4().String()
 		expiresAT := time.Now().Add(60 * time.Minute)
 		//cookieNm := username + "_session" removing username in order to be able to get cookieID in JS
-		cookieNm := LogUserEmail + "_session"
+		cookieNm := LogUserName + "_session"
 
 		// Finally, we set the client cookie for "session_token" as the session token we just generated
 		// we also set an expiry time of 120 minutes
 
 		http.SetCookie(w, &http.Cookie{
-			Name:     cookieNm,
-			Value:    sessionToken,
-			MaxAge:   7200,
-			Expires:  expiresAT,
+			Name:    cookieNm,
+			Value:   sessionToken,
+			MaxAge:  7200,
+			Expires: expiresAT,
 		})
 
 		// storing the cookie values in struct to access on other pages.
@@ -115,7 +110,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Error with inserting session", err4)
 			return
 		}
-		
+
 		defer insertSession.Close()
 		insertSession.Exec(CurrentUser.UserID, cookieNm, sessionToken)
 

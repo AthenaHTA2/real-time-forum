@@ -10,6 +10,8 @@ body {
     overflow: hidden;
 }
 
+/* ------------------------------------------------------------------------- */
+/* Left Side Navigation */
 .nav {
     position: fixed;
     top: 0;
@@ -26,8 +28,8 @@ body {
     display: block;
     padding: 12px 18px;
     text-decoration: none;
-    color: #eeeeee;
-    font-weight: 500;
+    color:aqua;
+    font-weight: bolder;
 }
 
 .nav__link:hover {
@@ -35,11 +37,58 @@ body {
     color: black;
 }
 
+/* end of Nav */
 
+/* ----------------------------------------------------- */
+/* heading or names */
 
-a {
-    color:white;
+#welcomemsg{
+    text-shadow: 0.5cm;
+    text-indent: 50px;
+    text-align: justify;
+    color: aqua;
+    }
+
+#Header {
+    margin-left: 3.8cm;
+    color: whitesmoke;
+    font-size: 3rem;
+    font-family:cursive;
+    margin-bottom: 0.01cm;
 }
+
+a{
+    color:aqua;
+    font-weight:bolder;
+}
+
+h1 {
+    margin-top: 0cm;
+    margin-bottom: 0cm;
+    padding-right: 7cm;
+    font-size: 3rem;
+    color: white;
+    font-family: cursive;
+}
+
+h2 {
+    margin-top: 0cm;
+    margin-bottom: 0cm;
+    padding-right: 10cm;
+    font-size: 1.25em;
+    color: white;
+    font-family: cursive;
+}
+
+h6 {
+    padding-left: 3cm;
+}
+
+/* end */
+
+
+/* ------------------------------------------------------------------- */
+/* Right side Nav Bar */
 
 .chat {
     position: fixed;
@@ -69,15 +118,11 @@ a {
     color: black;
 }
 
+/* end */
 
-#Header {
-    margin-left: 3.8cm;
-    color: whitesmoke;
-    font-size: 3rem;
-    font-family:cursive;
-    margin-bottom: 0.01cm;
-}
 
+/* -------------------------------------------------------------------- */
+/* start of Modals */
 .modal {
     display: none;
     margin-left: .5cm;
@@ -110,7 +155,6 @@ a {
    
 }
 
-
 .animate {
     -webkit-animation: animate 1s;
     animation: animatezoom 1s;
@@ -126,96 +170,6 @@ a {
     to{-webkit-transform: scale(1);}
 }
 
-h1 {
-    margin-top: 0cm;
-    margin-bottom: 0cm;
-    padding-right: 7cm;
-    font-size: 3rem;
-    color: white;
-    font-family: cursive;
-}
-
-h2 {
-    margin-top: 0cm;
-    margin-bottom: 0cm;
-    padding-right: 10cm;
-    font-size: 1.25em;
-    color: white;
-    font-family: cursive;
-}
-
-#happyFace {
-    margin-bottom: 0;
-    padding-left: 5cm;
-}
-
-#byeFace {
-    margin-bottom: 0;
-    padding-left: 5cm;
-}
-
-#profilePic {
-    margin-bottom: 0;
-    padding-left: 5cm;
-}
-
-h6 {
-    padding-left: 3cm;
-}
-
-.posts{
-    border-radius: 25px;
-    background-image: url('/css/img/canvas.png');
-    background-size: 100%;
-    padding-top: .75cm;
-    padding-left: 1cm;
-    padding-right: 1cm;
-    margin-left: 2cm;
-    margin-right: 5cm;
-    margin-bottom: 2cm;
-    color:whitesmoke;
-    font-size: 1.5rem;
-    font-family:cursive;
-    height: 30vh;
-    width: 90vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 2px 2px 2px 2px white;
-}
-
-.post-content{
-    text-align: justify;
-    height: 5%;
-    margin: 1% auto;
-}
-
-.comment-content{
-    height: 15px;
-}
-
-.comment{
-    color: aqua;
-    font-size: 1.5rem;
-    font-family: cursive;
-    height: 5%;
-    width: 200px;
-}
-
-.container {
-    margin-right: 4cm;
-    padding-left: 320px;
-    padding-right: 2cm;
-    padding-bottom: .01cm;
-    display: flex;
-    flex-direction: column;
-}
-
-.imgcontainer {
-    margin-top: 0cm;
-    margin-bottom: 0cm;
-    padding-left: 7.8cm;
-}
-
 #loginModal{
     height: 100%;
     width: 100%;
@@ -225,57 +179,6 @@ h6 {
     height: 100%;
     width: 100%;
 }
-
-.button{
-    background-image: url('/css/img/canvas.png');
-    background-size: 105%;
-    background-repeat: no-repeat;
-    margin-top: .20cm;
-    margin-bottom: .20cm;
-    border-radius: 25px;
-    box-shadow: 1px 1px 1px 1px white;
-    border-color: white;
-    color: whitesmoke;
-    font-size: 1rem;
-    font-family:cursive;
-    font-weight: bolder;
-
-}
-
-
-.button:hover{
-  background-image: none;
-  background-color: rgb(136, 200, 176);
-  color: rgb(15, 15, 120);
-  font-weight: bolder;
-}
-
-.postBtn{
-    visibility: hidden;
-}
-
-.commentBtn{
-    visibility: visible;
-}
-
-.HideComment{
-    visibility: hidden;
-}
-
-.commentBlock{
-    height: 200px;
-    overflow: auto;
-    display: none;
-    z-index: 1;
-    background-color:cornflowerblue;
-    border-radius: 30px;
-}
-
-.comment-container p{
-    display: inline;
-    height: 150px;
-}
-
 
 
 #regConfirmed {
@@ -359,6 +262,175 @@ h6 {
     align-items: center;
 }
 
+
+/* end */
+
+
+/* -------------------------------------------------------------------- */
+/* Image contents of the page */
+
+#happyFace {
+    margin-bottom: 0;
+    padding-left: 5cm;
+}
+
+#byeFace {
+    margin-bottom: 0;
+    padding-left: 5cm;
+}
+
+#profilePic {
+    margin-bottom: 0;
+    padding-left: 5cm;
+}
+
+.imgcontainer {
+    margin-top: 0cm;
+    margin-bottom: 0cm;
+    padding-left: 7.8cm;
+}
+
+/* -------------------------------------------------------------------- */
+/* start of Posts */
+
+.posts{
+    border-radius: 25px;
+    background-image: url('/css/img/canvas.png');
+    background-size: 100%;
+    padding-top: .75cm;
+    padding-left: 1cm;
+    padding-right: 1cm;
+    margin-left: 2cm;
+    margin-right: 5cm;
+    margin-bottom: 2cm;
+    color:whitesmoke;
+    font-size: 1.5rem;
+    font-family:cursive;
+    height: 30vh;
+    width: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 2px 2px 2px white;
+}
+
+.post-content{
+    text-align: justify;
+    height: 5%;
+    margin: 1% auto;
+}
+/* end */
+
+
+/* ------------------------------------------------------------------------- */
+/* comments */
+.comment-content{
+    height: 15px;
+}
+
+.comment{
+    color: aqua;
+    font-size: 1.5rem;
+    font-family: cursive;
+    height: 5%;
+    width: 200px;
+}
+
+.commentBlock{
+    height: 200px;
+    overflow: auto;
+    display: none;
+    z-index: 1;
+    background-color:cornflowerblue;
+    border-radius: 30px;
+}
+
+.comment-container p{
+    display: inline;
+    height: 150px;
+}
+
+/* end */
+
+.container {
+    margin-right: 4cm;
+    padding-left: 320px;
+    padding-right: 2cm;
+    padding-bottom: .01cm;
+    display: flex;
+    flex-direction: column;
+}
+
+/* -------------------------------------------- */
+/* Buttons */
+
+.button{
+    background-image: url('/css/img/canvas.png');
+    background-size: 105%;
+    background-repeat: no-repeat;
+    margin-top: .20cm;
+    margin-bottom: .20cm;
+    border-radius: 25px;
+    box-shadow: 1px 1px 1px 1px white;
+    border-color: white;
+    color: whitesmoke;
+    font-size: 1rem;
+    font-family:cursive;
+    font-weight: bolder;
+
+}
+
+.button:hover{
+  background-image: none;
+  background-color: rgb(136, 200, 176);
+  color: rgb(15, 15, 120);
+  font-weight: bolder;
+}
+
+
+.button1{
+    display: inline-block;
+    background-image: url('/css/img/canvas.png');
+    background-size: 105%;
+    background-repeat: no-repeat;
+    margin-top: .20cm;
+    margin-bottom: .20cm;
+    margin-left: .1cm;
+    border-radius: 25px;
+    box-shadow: 1px 1px 1px 1px white;
+    border-color: white;
+    color: whitesmoke;
+    font-size: 1rem;
+    font-family:cursive;
+    font-weight: bolder;
+    width: 45%;
+
+}
+
+.button1:hover{
+  background-image: none;
+  background-color: rgb(136, 200, 176);
+  color: rgb(15, 15, 120);
+  font-weight: bolder;
+}
+
+.postBtn{
+    visibility: hidden;
+}
+
+.commentBtn{
+    visibility: visible;
+}
+
+.HideComment{
+    visibility: hidden;
+}
+
+/* end */
+
+
+/* --------------------------------------------------------- */
+
+
 /* css for chat */
 #log {
     margin: 0;
@@ -428,10 +500,3 @@ h6 {
 
 }
 /* end of logged in user */
-
-#welcomemsg{
-text-shadow: 0.5cm;
-text-indent: 50px;
-text-align: justify;
-color: aqua;
-}
