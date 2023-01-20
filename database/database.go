@@ -23,6 +23,7 @@ func CreateDB() {
 				"author" TEXT NOT NULL,
 				"title" TEXT NOT NULL, 
 				"content" TEXT NOT NULL, 
+				"category" TEXT NOT NULL, 
 				"creationDate" TIMESTAMP,
 				FOREIGN KEY(authorID)REFERENCES users(userID)
 				);`)
@@ -31,7 +32,7 @@ func CreateDB() {
 				"postID" INTEGER REFERENCES post(postID), 
 				"category" TEXT NOT NULL
 				);`)
-	// comments table
+	// Comments table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Comments" ( 
 				"commentID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
 				"postID" INTEGER NOT NULL,
@@ -42,13 +43,37 @@ func CreateDB() {
 				FOREIGN KEY(postID)REFERENCES posts(postID),
 				FOREIGN KEY(authorID)REFERENCES users(userID)
 				);`)
-	// sessions table
+	// Sessions table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Sessions" ( 
 				"userID" INTEGER NOT NULL,
 				"cookieName" TEXT NOT NULL,
 				"cookieValue" STRING NOT NULL PRIMARY KEY, 
 				FOREIGN KEY(userID)REFERENCES users(userID)
 				);`)
+
+	// Chats table
+	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Chats" ( 
+				"chatID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+				"user1" TEXT,
+				"user2" TEXT,
+				"creationDate" TIMESTAMP, 
+				FOREIGN KEY(user1)REFERENCES Users(nickName),
+				FOREIGN KEY(user2)REFERENCES Users(nickName)
+				);`)
+
+	// MessageHistory table
+	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "MessageHistory" ( 
+				"messageID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+				"chatID" INTEGER,
+				"chatMessage" STRING NOT NULL,
+				"sender" TEXT,
+				"recipient" TEXT,
+				"creationDate" TIMESTAMP, 
+				FOREIGN KEY(chatID)REFERENCES Chats(chatID),
+				FOREIGN KEY(sender)REFERENCES Users(nickName),
+				FOREIGN KEY(recipient)REFERENCES Users(nickName)
+				);`)
+
 	// // postlikedislike table
 	// sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "postlikedislike" (
 	// 			"postID" INTEGER NOT NULL,

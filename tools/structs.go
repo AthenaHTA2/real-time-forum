@@ -5,7 +5,7 @@ import (
 )
 
 type comment struct {
-	CommentID      int 
+	CommentID      int
 	Author         string
 	PostID         int
 	Content        string
@@ -16,9 +16,10 @@ type comment struct {
 type post struct {
 	PostID      int
 	Author      string // author
-	Title       string
-	Content     string
-	Category    string
+	Cookie      string `json:"PstCookieID"`
+	Title       string `json:"PstTitle"`
+	Content     string `json:"PstContent"`
+	Category    string `json:"PstCateg"`
 	PostTime    time.Time
 	PostTimeStr string
 	Comments    []comment
@@ -26,26 +27,39 @@ type post struct {
 }
 
 type User struct {
-	UserID  int	
-	FirstName string	`json:"FirstName"`
-	LastName  string	`json:"LastName"`
-	NickName  string	`json:"NickName"`
-	Age       string	`json:"Age"`
-	Gender    string	`json:"Gender"`
-	Email     string	`json:"Email"`
-	Access    int // 0 means no access, not logged in
+	UserID    int
+	FirstName string `json:"FirstName"`
+	LastName  string `json:"LastName"`
+	NickName  string `json:"NickName"`
+	Age       string `json:"Age"`
+	Gender    string `json:"Gender"`
+	Email     string `json:"Email"`
+	Access    int    // 0 means no access, not logged in
 	LoggedIn  bool
 	Posts     []post
 	Comments  []comment
-	Password  string	`json:"PassWord"`
+	Password  string `json:"PassWord"`
 }
 
 type LoginData struct {
-	UserName string		`json:"UserName"`
-	Password string 	`json:"PassWord"`
+	UserName string `json:"UserName"`
+	Password string `json:"LoginPw"`
 }
 
-// GO documentation - structure of a cookie:
+// each session contains the username of the user and the time at which it expires
+type Session struct {
+	UserID      int
+	sessionName string
+	sessionUUID string
+}
+
+type Cookie struct {
+	Name    string
+	Value   string
+	Expires time.Time
+}
+
+/* GO documentation - structure of a cookie:
 type Cookie struct {
 	Name string
 	Value string
@@ -61,4 +75,27 @@ type Cookie struct {
 	HttpOnly bool
 	Raw string
 	Unparsed []string //Raw text of unparsed attribute-value pairs
+}*/
+
+type Message struct {
+	MessageID int
+	ChatID int
+	Sender string
+	Recipient string
+	Content string
+	Type string
+	Date time.Time
+}
+
+type Chat struct {
+	ChatID int
+	User1 string
+	User2 string
+	Date time.Time
+}
+
+type ChatHistoryCheck struct {
+	ChatID int
+	ChatExists bool
+	// ChatHistory []Message
 }

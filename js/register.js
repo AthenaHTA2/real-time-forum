@@ -240,3 +240,43 @@ registerBtn.onclick = (e) => {
       return response;
     });
 };
+
+function unsuccessfulReg(response) {
+  if (response == "ERROR: This email already exists, please log in instead") {
+    console.log("error");
+    setErrorFor(email, "This Email already exists, please log in instead");
+  } else if (
+    response == "ERROR: This username already exists, please log in instead"
+  ) {
+    setErrorFor(
+      nickname,
+      "This NickName already exists, please log in instead"
+    );
+  }
+
+  // console.log("failed - not status 200")
+
+  // document.getElementById('loginModal').style.display = "none";
+  // document.getElementById('regRejected').style.display = 'block';
+
+  // setTimeout(() => {
+  //     document.getElementById('regRejected').style.display = 'none';
+
+  //   },2000);
+
+  // document.getElementById('postBlock').style.display = 'flex';
+}
+
+function successfulReg() {
+  console.log("Success:", response);
+  setTimeout(() => {
+    document.getElementById("regConfirmed").style.display = "none";
+  }, 2000);
+
+  document.getElementById("postBlock").style.display = "flex";
+
+  document.getElementById("logout").style.display = "block";
+  document.getElementById("regModal").style.display = "none";
+  document.getElementById("regConfirmed").style.display = "block";
+  return response;
+}
