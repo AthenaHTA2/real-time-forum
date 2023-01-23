@@ -7,14 +7,14 @@ const openLogin = () => {
   document.getElementById("loginModal").style.display = "block";
   document.getElementById("regModal").style.display = "none";
   document.getElementById("regConfirmed").style.display = "none";
-  document.getElementById("profileMod").style.display = "none";
+  // document.getElementById("profileMod").style.display = "none";
 };
 
 //this function open Registration Modal
 const openReg = () => {
   closePost();
   document.getElementById("postedArticles").style.display = "none";
-  document.getElementById("profileMod").style.display = "none";
+  // document.getElementById("profileMod").style.display = "none";
   document.getElementById("loginModal").style.display = "none";
   document.getElementById("regModal").style.display = "block";
   document.getElementById("regConfirmed").style.display = "none";
@@ -24,7 +24,7 @@ const openReg = () => {
 const closeBtn = () => {
   document.getElementById("postBlock").style.display = "flex";
   document.getElementById("regConfirmed").style.display = "none";
-  document.getElementById("profileMod").style.display = "none";
+  // document.getElementById("profileMod").style.display = "none";
   document.getElementById("postedArticles").style.display = "none";
 };
 
@@ -32,7 +32,7 @@ const closeBtn = () => {
 const closePost = () => {
   document.getElementById("postBlock").style.display = "none";
   document.getElementById("regConfirmed").style.display = "none";
-  document.getElementById("profileMod").style.display = "none";
+  // document.getElementById("profileMod").style.display = "none";
   document.getElementById("postedArticles").style.display = "none";
 };
 
@@ -42,7 +42,7 @@ const logOut = document.querySelector("#logout");
 logOut.onclick = (e) => {
   e.preventDefault();
   document.getElementById("postedArticles").style.display = "none";
-  document.getElementById("profileMod").style.display = "none";
+  // document.getElementById("profileMod").style.display = "none";
   document.getElementById("logout").style.display = "none";
   document.getElementById("LoggedOut").style.display = "block";
   document.getElementById("byeFace").style.display = "block";
@@ -62,66 +62,66 @@ logOut.onclick = (e) => {
 };
 
 //this function is to show the user profile
-const profileBtn = document.querySelector("#profile");
+// const profileBtn = document.querySelector("#profile");
 
-profileBtn.onclick = (e) => {
-  e.preventDefault();
-  const showProfile = (user) => {
+// profileBtn.onclick = (e) => {
+//   e.preventDefault();
+//   const showProfile = (user) => {
 
-    document.getElementById("profileMod").style.display = "block";
+//     document.getElementByclass("profileMod").style.display = "block";
 
-    profileMod.innerHTML = "";
+//     profileMod.innerHTML = "";
 
-    profileMod.innerHTML +=
-      `
+//     profileMod.innerHTML +=
+//       `
       
-      <div class="modal">
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <h2>🆄🆂🅴🆁-🅿🆁🅾🅵🅸🅻🅴</h2>
-          <p> ` +
-      "FirstName: " +
-      user.FirstName +
-      `</p>
-          <p> ` +
-      "LastName: " +
-      user.LastName +
-      `</p>
-          <p> ` +
-      "NickName: " +
-      user.NickName +
-      `</p>
-          <p> ` +
-      "Gender: " +
-      user.Gender +
-      `</p>
-          <p> ` +
-      "Email: " +
-      user.Email +
-      `</p>
-          <p> ` +
-      "Age: " +
-      user.Age +
-      `</p>
-      </div>
-      `;
-  };
+//       <div class="profModal">
+//           <br>
+//           <br>
+//           <br>
+//           <br>
+//           <br>
+//           <h2>🆄🆂🅴🆁-🅿🆁🅾🅵🅸🅻🅴</h2>
+//           <p> ` +
+//       "FirstName: " +
+//       user.FirstName +
+//       `</p>
+//           <p> ` +
+//       "LastName: " +
+//       user.LastName +
+//       `</p>
+//           <p> ` +
+//       "NickName: " +
+//       user.NickName +
+//       `</p>
+//           <p> ` +
+//       "Gender: " +
+//       user.Gender +
+//       `</p>
+//           <p> ` +
+//       "Email: " +
+//       user.Email +
+//       `</p>
+//           <p> ` +
+//       "Age: " +
+//       user.Age +
+//       `</p>
+//       </div>
+//       `;
+//   };
 
-  document.getElementById("postedArticles").style.display = "none";
-  document.getElementById("postBlock").style.display = "none";
-  document.getElementById("profileMod").style.display = "block";
-  document.getElementById("regModal").style.display = "none";
-  document.getElementById("loginModal").style.display = "none";
-};
+//   document.getElementById("postedArticles").style.display = "none";
+//   document.getElementById("postBlock").style.display = "none";
+//   document.getElementById("profileMod").style.display = "block";
+//   document.getElementById("regModal").style.display = "none";
+//   document.getElementById("loginModal").style.display = "none";
+// };
 
 //this function is for to open the post where needed
 const openPosts = () => {
   document.getElementById("postBlock").style.display = "block";
-  document.getElementById("profileMod").style.display = "none";
+  // document.getElementById("profileMod").style.display = "none";
   document.getElementById("regModal").style.display = "none";
   document.getElementById("loginModal").style.display = "none";
-  document.getElementById("postedAritcles").style.display = "block";
+  // document.getElementById("postedAritcles").style.display.visibility = "visible";
 };

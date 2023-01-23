@@ -35,7 +35,7 @@ AddPost.onclick = (e) => {
 
     fetch("http://localhost:8080/post", configPost).then(function(response) {
         //if(not the response.ok) throw response
-        console.log("RegDataSuccess:", response)
+        // console.log("RegDataSuccess:", response)
 
         if (!response.ok) {
             unsuccessfulPost()

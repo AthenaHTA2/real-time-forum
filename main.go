@@ -5,11 +5,10 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
-	"rtforum/database"
 	"rtforum/chat"
+	"rtforum/database"
 	"rtforum/sqldb"
 	"rtforum/tools"
-	rtforum "rtforum/tools"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -24,21 +23,23 @@ func main() {
 
 	cssFolder := http.FileServer(http.Dir("css/"))
 	http.Handle("/css/",
-		http.StripPrefix("/css/", cssFolder))	
+		http.StripPrefix("/css/", cssFolder))
 
 	jsFolder := http.FileServer(http.Dir("js/"))
 	http.Handle("/js/",
 		http.StripPrefix("/js/", jsFolder))
 
-
-	http.HandleFunc("/", rtforum.HomePage)
-	http.HandleFunc("/login", rtforum.Login)
-	http.HandleFunc("/register", rtforum.Register)
-	http.HandleFunc("/post", rtforum.Posts)
+	http.HandleFunc("/", tools.HomePage)
+	http.HandleFunc("/login", tools.Login)
+	http.HandleFunc("/register", tools.Register)
+	http.HandleFunc("/post", tools.Posts)
 	http.HandleFunc("/comment", tools.Comments)
 	http.HandleFunc("/getPosts", tools.SendLatestPosts)
 	http.HandleFunc("/getComments", tools.SendLatestComments)
 
+	//serveWs function is a HTTP handler that upgrades the HTTP connection
+	//to the WebSocket protocol, creates a Client type, registers the Client
+	//with the hub and schedules the Client to be unregistered
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		chat.ServeWs(hub, w, r)
 	})

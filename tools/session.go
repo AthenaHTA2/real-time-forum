@@ -52,9 +52,13 @@ func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 	var cookieValue string
 	//if user is not found in "sessions" db table return err = nil
 	if err := sqldb.DB.QueryRow("SELECT cookieValue FROM Sessions WHERE userID = ?", u.UserID).Scan(&cookieValue); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Println("checking sessions table err:     ", err)
 		return nil
 	}
 	if err := DeleteSession(w, cookieValue); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Println("inside delete sessions:     ", err)
 		return err
 	}
 	return nil
@@ -62,20 +66,15 @@ func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 
 // User's cookie expires when browser is closed, delete the cookie from the database.
 func DeleteSession(w http.ResponseWriter, cookieValue string) error {
-	cookie := &http.Cookie{
-		Name:     CurrentUser.NickName + "Session_token",
-		Value:    "",
-		MaxAge:   -1,
-		HttpOnly: true,
-	}
-	http.SetCookie(w, cookie)
 	//removing session record from 'sessions' table
 	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE sessionID = ?;")
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
+
 	defer stmt.Close()
 	stmt.Exec(cookieValue)
+
 	if err != nil {
 		fmt.Println("DeleteSession err: ", err)
 		return err
@@ -83,9 +82,25 @@ func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 	return nil
 }
 
+// logout handle
+func Logout(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/logout" {
+		c, err := r.Cookie("session_token")
+		if err != nil {
+			AddSession(w, "guest", nil)
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			fmt.Println("Logout error: ", err)
+		}
+		DeleteSession(w, c.Value)
+		fmt.Println("user logged out")
+		http.Redirect(w, r, "/", http.StatusFound)
+	}
+}
+
 // GetUserByCookie ...
 func GetUserByCookie(cookieValue string) *User {
 	var userID int64
+
 	if err := sqldb.DB.QueryRow("SELECT userID from Sessions WHERE cookieValue = ?", cookieValue).Scan(&userID); err != nil {
 		return nil
 	}
@@ -100,13 +115,11 @@ func NewUser() *User {
 
 //Find the user by their ID
 func FindByUserID(UID int64) *User {
-	u:= NewUser()
-
-	if err := sqldb.DB.QueryRow("SELECT userID, firstName, lastNamme, nickName, age, gender, email, passwordhash FROM Users WHERE userID = ?", UID).
-			Scan(&u.UserID, &u.FirstName, &u.LastName, &u.NickName, &u.Age, &u.Gender, &u.Email,
-				 &u.Password); err != nil {
-					fmt.Println("error finding user by ID line 93", err)
-					return nil
-				 }
-				 return u
+	u := NewUser()
+	if err := sqldb.DB.QueryRow("SELECT userID, firstName, lastName, nickName, age, gender, email, passwordhash FROM Users WHERE userID = ?", UID).
+		Scan(&u.UserID, &u.FirstName, &u.LastName, &u.NickName, &u.Age, &u.Gender, &u.Email, &u.Password); err != nil {
+		fmt.Println("error FindByUserID: ", err)
+		return nil
+	}
+	return u
 }

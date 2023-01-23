@@ -59,3 +59,24 @@ type Cookie struct {
 	Value   string
 	Expires time.Time
 }
+
+type Message struct {
+	MessageID int
+	ChatID    int
+	Sender    string
+	Recipient string
+	Content   string
+	Type      string
+	Date      time.Time
+}
+type Chat struct {
+	ChatID int
+	User1  string
+	User2  string
+	Date   time.Time
+}
+type ChatHistoryCheck struct {
+	ChatID     int
+	ChatExists bool
+	// ChatHistory []Message
+}
