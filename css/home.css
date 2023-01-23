@@ -619,9 +619,7 @@ h6 {
   }
 
 
-
-  
-/*  logout */
+/*  logout button */
 
 #logout-button {
     /* styles for logout button */
@@ -632,11 +630,11 @@ h6 {
     border: none;
     cursor: pointer;
     width: 100%;
-  }
+}
   
-  #logout-button:hover {
+#logout-button:hover {
     background-color: #0c2096;
-  }
+}
   
   
 
