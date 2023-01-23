@@ -7,9 +7,9 @@ import (
 	"log"
 	"net/http"
 	"rtforum/sqldb"
-	"strconv"
 	"time"
 
+	"github.com/gorilla/sessions"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -27,23 +27,25 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.Unmarshal(loginD, &loginData)
-
 	LogUserName := loginData.UserName
 	LogPassword := loginData.Password
-
 
 	// retrieve password from db to compare (hash) with user supplied password's hash
 	var hash string
 
-	stmt := "SELECT passwordhash FROM Users WHERE nickName = ?"
-	row := sqldb.DB.QueryRow(stmt, LogUserName)
+	stmt := "SELECT passwordhash FROM Users WHERE nickName = ? OR email = ?"
+	row := sqldb.DB.QueryRow(stmt, LogUserName, LogUserName)
 	err2 := row.Scan(&hash)
+	fmt.Println(err2)
 	if err2 != nil {
-		fmt.Println("err with PASSWORD", LogUserName, LogPassword)
-		fmt.Println("check username or and password")
-		return
+		fmt.Println("err2 selecting passwordhash in db by nickName or email:", err2)
+		if err2.Error() == "sql: no rows in result set" {
+			fmt.Println("on track1")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("ERROR: This username/email doesnt exist, please register to enter this forum"))
+			return
+		}
 	}
-
 	// func CompareHashAndPassword(hashed password, password []byte) error
 	comparePass := bcrypt.CompareHashAndPassword([]byte(hash), []byte(LogPassword))
 	fmt.Println("compare 'passwordhash' with user's pw: ", comparePass)
@@ -51,89 +53,79 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	//returns nil on success
 
+	if comparePass != nil {
+		if (comparePass.Error()) == "crypto/bcrypt: hashedPassword is not the hash of the given password" {
+			fmt.Println("on track2")
+			w.Write([]byte("ERROR: please enter correct password"))
+			return
+		}
+		// convey status to browser
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Println("Error from comparing 'passwordhash' with user's pw: ", comparePass)
+		return
+	}
+
 	if comparePass == nil {
-		stmtCurrentUser := "SELECT * FROM Users WHERE nickName = ?"
-		rowCurrentUser := sqldb.DB.QueryRow(stmtCurrentUser, LogUserName)
+		fmt.Println("user logged in : ", loginData.UserName)
+		stmtCurrentUer := "SELECT * FROM Users WHERE nickName = ? OR email = ?"
+		rowCurrentUser := sqldb.DB.QueryRow(stmtCurrentUer, LogUserName, LogUserName)
 
-		var (
-			userID, age                                  int
-			firstName, lastName, nickName, gender, email string
-		)
-
-		err3 := rowCurrentUser.Scan(&userID, &firstName, &lastName, &nickName, &age, &gender, &email, &LogPassword)
-
+		err3 := rowCurrentUser.Scan(&CurrentUser.UserID, &CurrentUser.FirstName, &CurrentUser.LastName, &CurrentUser.NickName, &CurrentUser.Age, &CurrentUser.Gender, &CurrentUser.Email, &CurrentUser.Password)
 		if err3 != nil {
-			fmt.Println("Error with currentUser", err)
-			fmt.Println("error accessing DB")
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Println("error with currentUser", err3)
+			// fmt.Println("error accessing DB")
 			return
 		}
 
-		//populate the CurrentUser struct (instance of 'User' struct) with values from 'Users' db table:
-		CurrentUser.UserID = userID
-		CurrentUser.FirstName = firstName
-		CurrentUser.LastName = lastName
-		CurrentUser.NickName = nickName
-		CurrentUser.Age = strconv.Itoa(age)
-		CurrentUser.Gender = gender
-		CurrentUser.Email = email
-
+		fmt.Println("CurrentUser", CurrentUser)
 		err3 = IsUserAuthenticated(w, &CurrentUser)
-		fmt.Println("user logged in is : ", err3)
+		fmt.Println("IsUserAuthenticated err3: ", err3)
 
+		// ERROR: 3. returns error if user already logged in elsewhere
 		if err3 != nil {
-			fmt.Println("user already logged In", err3)
+			// StatusBadRequest = 400
+			w.WriteHeader(http.StatusBadRequest)
+			// fmt.Println("You are already logged in 🧐")
+			fmt.Println("already logged in: ", err3)
 			return
 		}
-
 		sessionToken := uuid.NewV4().String()
-		expiresAT := time.Now().Add(60 * time.Minute)
-		//cookieNm := username + "_session" removing username in order to be able to get cookieID in JS
-		cookieNm := LogUserName + "_session"
-
-		// Finally, we set the client cookie for "session_token" as the session token we just generated
+		expiresAt := time.Now().Add(120 * time.Minute)
+		cookieNm := "user_session"
+		// Finally, we set the client cookie for "session_token = 'user_session' " as the session token we just generated
 		// we also set an expiry time of 120 minutes
-
 		http.SetCookie(w, &http.Cookie{
 			Name:    cookieNm,
 			Value:   sessionToken,
 			MaxAge:  7200,
-			Expires: expiresAT,
+			Expires: expiresAt,
+			// SameSite: true,
+			HttpOnly: true, //removed in order to allow Javascript to access cookie
 		})
 
-		// storing the cookie values in struct to access on other pages.
-		user_session := Cookie{cookieNm, sessionToken, expiresAT}
-		fmt.Println("user_session", user_session)
+		// storing the cookie values in struct
+		user_session := Cookie{cookieNm, sessionToken, expiresAt}
+		fmt.Println("Values in 'Cookie' struct :", user_session)
 
-		// Duplicates are ignored
-		insertSession, err4 := sqldb.DB.Prepare("INSERT OR IGNORE INTO Sessions (userID, cookieName, cookieValue) VALUES (?, ?, ?);")
+		insertsessStmt, err4 := sqldb.DB.Prepare("INSERT INTO Sessions (userID, cookieName, cookieValue) VALUES (?, ?, ?);")
 		if err4 != nil {
-			fmt.Println("Error with inserting session", err4)
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Println("err4 with inserting session:", err4)
 			return
 		}
 
-		defer insertSession.Close()
-		insertSession.Exec(userID, cookieNm, sessionToken)
-
-		CurrentUser.Password = LogPassword
-		CurrentUser.Access = 1
-		CurrentUser.LoggedIn = true
-
-		marshalledUser, err := json.Marshal(CurrentUser)
-		if err != nil {
-			log.Fatal(err)
-		}
-		w.WriteHeader(http.StatusOK) //alerts user
-		//Now we send user details back to the front-end
-		w.Write([]byte(marshalledUser))
-		w.WriteHeader(http.StatusOK)
-		GetAllUsers()
-
-	} else if comparePass != nil {
-		fmt.Println("PASSWORD INCORRECT")
+		defer insertsessStmt.Close()
+		insertsessStmt.Exec(CurrentUser.UserID, cookieNm, sessionToken)
+		fmt.Println("PASSWORD IS CORRECT")
+		fmt.Println("User successfully logged in")
 	}
 
-}
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(CurrentUser.NickName))
+	GetAllUsers()
 
+}
 func GetAllUsers() []byte {
 	//space at start of websocket message signals that this is the list of users
 	allUsers := " "
@@ -155,4 +147,63 @@ func GetAllUsers() []byte {
 		fmt.Println(string(user))
 	}
 	return []byte(allUsers)
+}
+
+//Retrieve from db all posts that will be shown on R-T-F front page
+func AllPosts() []byte {
+	var postData post
+	var postItem string
+	stmt := "SELECT author, category, title, content FROM Posts WHERE author = ?"
+	row := sqldb.DB.QueryRow(stmt, '*')
+	err := row.Scan(&postData.Author, &postData.Category, &postData.Title, &postData.Content)
+	if err != nil {
+		fmt.Println("err selecting postData in db", err)
+	}
+	fmt.Println("postData: ", postData)
+	postItem = postData.Author + " " + postData.Category + " " + postData.Title + " " + postData.Content + "\n"
+	fmt.Println("postItem: ", postItem)
+	onePost := []byte(postItem)
+	return onePost
+}
+
+func Logout(w http.ResponseWriter, r *http.Request) {
+	// Clear the CurrentUser variable
+	CurrentUser = User{}
+	// Send a message indicating that the user has been logged out
+	w.Write([]byte("User has been logged out"))
+}
+
+func main() {
+	http.HandleFunc("/logout", logoutHandler)
+	http.ListenAndServe(":8000", nil)
+}
+
+/*we use the Gorilla web toolkit's sessions package to create a global session store,
+and in the logoutHandler, we get the current session by calling the store.Get function,
+then we set the MaxAge attribute of session option to -1 so that the cookie will expire
+immediately, and we also set the session.Values to an empty map. In the end, we call the
+Save function to save the session and write the cookie to the client.
+*/
+
+var store = sessions.NewCookieStore([]byte("secret-key")) // configure the session store
+
+// Logout route handler
+func logoutHandler(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session-name") // get the session data
+	session.Options.MaxAge = -1                // set the max age of the session to -1 (expire the session)
+	store.Save(r, w, session)                  // save the session
+
+	// remove the session data from the database (if applicable)
+	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE userID = ?")
+	if err != nil {
+		fmt.Println("Error deleting session from database:", err)
+		return
+	}
+	_, err = stmt.Exec(CurrentUser.UserID)
+	if err != nil {
+		fmt.Println("Error deleting session from database:", err)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusSeeOther) // redirect the user to the login page
 }
