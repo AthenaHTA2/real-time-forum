@@ -42,9 +42,6 @@ type User struct {
 	Password  string `json:"PassWord"`
 }
 
-//used for Login handler
-var CurrentUser User
-
 type LoginData struct {
 	UserName string `json:"LUserName"`
 	Password string `json:"LPassW"`

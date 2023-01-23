@@ -1,7 +1,6 @@
 package tools
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -13,7 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var db *sql.DB
+// var db *sql.DB
 
 func HomePage(w http.ResponseWriter, r *http.Request) {
 
@@ -33,9 +32,9 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func Register(w http.ResponseWriter, r *http.Request) {
+var CurrentUser User
 
-	var regData User
+func Register(w http.ResponseWriter, r *http.Request) {
 
 	bytes, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -43,10 +42,10 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("Json from Regsister: ", string(bytes))
 
-	json.Unmarshal(bytes, &regData)
+	json.Unmarshal(bytes, &CurrentUser)
 
 	var hash []byte
-	password := regData.Password
+	password := CurrentUser.Password
 	// func GenerateFromPassword(password []byte, cost int) ([]byte, error)
 	hash, err4 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 
@@ -63,23 +62,10 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		gender,
 		email,
 		passwordhash
-		) VALUES(?,?,?,?,?,?,?)`, regData.FirstName, regData.LastName, regData.NickName, regData.Age, regData.Gender, regData.Email, hash)
+		) VALUES(?,?,?,?,?,?,?)`, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Email, hash)
 
 	if err != nil {
 		fmt.Println("Error inserting into 'Users' table: ", err)
 		return
 	}
-
-	rows, _ := sqldb.DB.Query("SELECT userID, firstName, lastName, nickName, age, gender, email, passwordhash from Users")
-
-	var (
-		userID, age                                  int
-		firstName, lastName, nickName, gender, email string
-	)
-
-	rows.Scan(&userID, &firstName, &lastName, &nickName, &age, &gender, &email, &hash)
-}
-
-func showProfile(User) {
-	
 }
