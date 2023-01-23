@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
-	"rtforum/database"
 	"rtforum/chat"
+	"rtforum/database"
 	"rtforum/sqldb"
 	"rtforum/tools"
 	rtforum "rtforum/tools"
@@ -16,6 +16,8 @@ import (
 
 func main() {
 
+	fmt.Println("hello")
+
 	DB := sqldb.ConnectDB()
 	database.CreateDB()
 	hub := chat.NewHub(DB)
@@ -24,12 +26,11 @@ func main() {
 
 	cssFolder := http.FileServer(http.Dir("css/"))
 	http.Handle("/css/",
-		http.StripPrefix("/css/", cssFolder))	
+		http.StripPrefix("/css/", cssFolder))
 
 	jsFolder := http.FileServer(http.Dir("js/"))
 	http.Handle("/js/",
 		http.StripPrefix("/js/", jsFolder))
-
 
 	http.HandleFunc("/", rtforum.HomePage)
 	http.HandleFunc("/login", rtforum.Login)
