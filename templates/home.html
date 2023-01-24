@@ -13,6 +13,7 @@
     <div id="Header">🅡🅔🅐🅛-🅣🅘🅜🅔-🅕🅞🅡🅤🅜</div>
 
     <nav class="nav">
+        <a id="current-user"></a>
         <a id ="homePage" href = "/" class="nav__link" data-link>HomePage</a>
         <a id ="register" onclick="openReg() ;"class="nav__link" data-link>Register</a>
         <a id ="login" onclick="openLogin() ;"class="nav__link" data-link>Login</a>
@@ -149,7 +150,7 @@
             You're are Logged in.
         </h4>
     </div>
-    <button onclick="refreshPosts()">Refresh Posts</button>
+    <!--<button onclick="refreshPosts()">Refresh Posts</button>-->
     <div id="postList">
     </div>
     <!---->
@@ -158,6 +159,7 @@
 <!--Adding JS for the chat here as js/chat.js not working-->
     <script type="text/javascript">
         window.onload = function () {
+            refreshPosts()
             var conn;
             var pst = document.getElementById("postList");
             var msg = document.getElementById("msg");

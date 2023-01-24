@@ -139,7 +139,7 @@
 
 
 
-  //Converts JS time stamp into a string, used when displaying posts
+  //Converts JS time stamp into a string, used when displaying posts and comments
   function ConvertDate(date) {
     // Seperate year, day, hour and minutes into vars
     let yyyy = date.slice(0, 4);

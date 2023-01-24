@@ -83,7 +83,7 @@ func GetPosts() []post {
 
 //To send all posts to front-end via http handle: "/getPosts"
 func SendLatestPosts(w http.ResponseWriter, r *http.Request) {
-	//Send user information back to client using JSON format
+	//Send posts history back to client using JSON format
 	posts := GetPosts()
 	js, err := json.Marshal(posts)
 	if err != nil {

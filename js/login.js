@@ -31,7 +31,7 @@ const LoginBtn=document.querySelector("#loginBtn")
 
         response.text().then(function(data){//Here we get user profile data
           let userDetails = JSON.parse(data);
-          console.log("posts:", userDetails);
+          console.log("The user's profile:", userDetails);
           //print user data
           showProfile(userDetails)
         });
@@ -48,10 +48,14 @@ const LoginBtn=document.querySelector("#loginBtn")
   //print profile data
   function showProfile(user) {
     console.log("showProfile called", user)
+    nameContainer = document.querySelector("#current-user")
+    nameContainer.innerHTML = "";
+    nameContainer.innerHTML = `<p>`+"Welcome " +user.NickName+"!"+ " &#128512"+`</p>`
+    
     profileContainer = document.querySelector("#userProfile")
     profileContainer.innerHTML = "";
 
-    profileContainer.innerHTML += `
+    profileContainer.innerHTML = `
       <div class ="profile">
       <br>
       <br>
