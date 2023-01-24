@@ -4,6 +4,7 @@ document.getElementById("addPost").onclick = (e) => {
     
     //grab the post data
     let theCookie = GetCookie("user_session")
+    postCookie = theCookie
     console.log("++++_+_+_+_+_+_+_+_====================",theCookie)
     let PostTitle = document.querySelector("#PostTitle").value
     let PostContent = document.querySelector("#PostContent").value
@@ -14,7 +15,7 @@ document.getElementById("addPost").onclick = (e) => {
 
     //populate JS object with the post Data
     let PostData = {
-        PostCokID: theCookie,
+        PostCokID: postCookie,
         PostTitl: PostTitle,
         PostCont: PostContent,
         PostCat: PostCategory,
@@ -106,7 +107,7 @@ const refreshPosts = () => {
 const displayPosts = (posts) => {
     postsContainer = document.querySelector('#postList')
     postsContainer.innerHTML = "";
-    for (let i = posts.length -1; i >= 0; i--) {
+    for (let i = (posts.length - 1); i >= 0; i--) {
         postsContainer.innerHTML += `
             <div class="posts" id=` + posts[i].PostID + `>
             <p class="post-content" >` + "Author: " + posts[i].Author + `</p>

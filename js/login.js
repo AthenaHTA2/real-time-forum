@@ -1,6 +1,7 @@
 let user;
 let currentUser;
 let receiver;
+let LoginData;
 
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
@@ -26,6 +27,7 @@ LoginBtn.onclick = (e) => {
   e.preventDefault();
   let UserName = document.querySelector("#LUserName").value;
   let LoginPw = document.querySelector("#LPassW").value;
+  
   //make JS object to store login data
   LoginData = {
     LUserName: UserName,
@@ -53,6 +55,7 @@ LoginBtn.onclick = (e) => {
         successfulLogin();
         response.text();
       } else {
+        // unsuccessfullLogin();
         response.text();
       }
     })
@@ -73,29 +76,25 @@ LoginBtn.onclick = (e) => {
         console.log(rsp);
         currentUser = rsp;
         var successlogin = document.getElementById("current-user");
-        successlogin.innerHTML = " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼" + currentUser + " &#128512";
-        successfulLogin();
+        successlogin.innerHTML = " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼 " + currentUser + " &#128512";
         // if (user) {
         //   var successlogin = document.getElementById("current-user");
         //   successlogin.innerHTML = " Welcome " + currentUser;
         // }
       }
-    
     });
 };
 
-
 const successfulLogin = () => {
+  console.log("STATUS 200 OK");
+  console.log("WERE ARE GETTING TO SUCCEDDFUL LOGIN FUNCTION")
     document.getElementById('loginModal').style.display ="none"; 
-    // document.getElementById('profile').style.display ="block"; 
     document.getElementById('LoggedOn').style.display = 'block';
     document.getElementById('happyFace').style.display = 'block';
-    // document.getElementById('profileMod').style.display = "none";
     document.getElementById('addPost').style.display = "block";
     document.getElementById('login').style.display ="none"; 
     document.getElementById('register').style.display ="none"; 
     document.getElementById('welcomemsg').style.display ="none"; 
-    // document.getElementById('Users').style.display ="block"; 
     document.getElementById('Offline').style.display ="block"; 
     document.getElementById('Online').style.display ="block"; 
     document.getElementById('Messenger').style.display ="block"; 
@@ -104,7 +103,7 @@ const successfulLogin = () => {
     document.getElementById('postBlock').style.display = 'flex';
     
     setTimeout(() => {
-        console.log("got here -=-=-=-=-=")
+        console.log("WERE ARE GETTING TO TIMEOUT LOGIN SIDE")
         document.getElementById('LoggedOn').style.display = 'none';
         document.getElementById('happyFace').style.display = 'none';
       },1500);
@@ -119,12 +118,11 @@ const successfulLogin = () => {
 const unsuccessfullLogin = () => {
     
     console.log("failed - not status 200")
-    // document.getElementById('postedArticles').style.display ="none"; 
-    // document.getElementById('profileMod').style.display = "none";
+
     document.getElementById('loginModal').style.display = "none";
-    document.getElementById('regRejected').style.display = 'block';
+    document.getElementById('logRejected').style.display = 'block';
     setTimeout(() => {
-        document.getElementById('regRejected').style.display = 'none';
+        document.getElementById('logRejected').style.display = 'none';
       },1500);
     document.getElementById('postBlock').style.display = 'flex';
 }
@@ -141,7 +139,7 @@ const Logout = () => {
 // ====================================================
 window.onload = function () {
   var conn;
-  var pst = document.getElementById("postList");
+  // var pst = document.getElementById("postList");
   var log = document.getElementById("log");
   var usersLog = document.getElementById("usersLog");
 
