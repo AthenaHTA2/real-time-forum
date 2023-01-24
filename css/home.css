@@ -531,12 +531,12 @@ Chat
 .messages {
   flex: 1 1 auto;
   color: rgba(255, 255, 255, 0.5);
-  overflow: hidden;
+  overflow: auto;
   position: relative;
   width: 100%;
 }
 .messages .messages-content {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   height: 101%;

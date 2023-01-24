@@ -20,7 +20,8 @@ function closePost() {
   document.getElementById("regConfirmed").style.display = "none";
 }
 
-
 function ChatReturn() {
-  document.querySelector(".chat-private").style.visibility = "hidden";
+  let chat = document.querySelector(".chat-private");
+  chat.style.visibility = "hidden";
+  document.querySelector(".messages-content").innerHTML = "";
 }

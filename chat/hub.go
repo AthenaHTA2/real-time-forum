@@ -55,13 +55,14 @@ func (h *Hub) Run() {
 			fmt.Println(directmsg)
 			chatHistoryVal := tools.CheckForChatHistory(directmsg)
 		
-
+			//stores a new chat
 			if !chatHistoryVal.ChatExists{
 				tools.StoreChat(directmsg)
 			}
 
 			msgHistroryVal := tools.CheckForChatHistory(directmsg)
 
+			//stores new messages
 			if msgHistroryVal.ChatExists{
 				directmsg.ChatID = msgHistroryVal.ChatID
 				tools.StoreMessage(directmsg)

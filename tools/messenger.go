@@ -1,7 +1,9 @@
 package tools
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"rtforum/sqldb"
 	"time"
 )
@@ -70,7 +72,7 @@ func StoreChat(dm Message) {
 }
 
 // get all conversation between 2users by ChatID f
-func GetAllMsgsByChatID(cid int) []*Message {
+func GetAllMsgHistoryByChatID(cid int) []*Message {
 	var AllMsgs []*Message
 	msg := NewMessage()
 	if err := sqldb.DB.QueryRow("SELECT messageID, chatMessage, sender, recipient, creationDate FROM MessageHistory WHERE chatID = ?", cid).Scan(&msg.MessageID, &msg.Content, &msg.Sender, &msg.Recipient, &msg.Date); err != nil {
@@ -108,4 +110,60 @@ func NewMessage() *Message {
 
 func NewChat() *Chat{
 	return &Chat{}
+}
+
+
+func GetMessages(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == "GET" {
+		w.Write([]byte("No."))
+		return
+	}
+	
+	jsn := ExecuteSQL("SELECT * FROM MessageHistory")
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsn)
+
+}
+
+// https://stackoverflow.com/questions/43367505/function-in-go-to-execute-select-query-on-database-and-return-json-output
+func ExecuteSQL(queryStr string) []byte {
+
+    rows, err := sqldb.DB.Query(queryStr)
+    if err != nil {
+        fmt.Print(err.Error())
+    }
+    defer rows.Close()
+
+    columns, _ := rows.Columns()
+    count := len(columns)
+
+    var v struct {
+        Data []interface{} // json:"data"
+    }
+
+    for rows.Next() {
+        values := make([]interface{}, count)
+        valuePtrs := make([]interface{}, count)
+        for i := range columns {
+            valuePtrs[i] = &values[i]
+        }
+        if err := rows.Scan(valuePtrs...); err != nil {
+            fmt.Println(err)
+        }
+
+        //Created a map to handle the issue
+        var m map[string]interface{}
+        m = make(map[string]interface{})
+        for i := range columns {
+            m[columns[i]] = values[i]
+        }
+        v.Data = append(v.Data, m)
+    }
+
+    // Put into list.
+    data := v.Data
+    jsonMsg, err := json.Marshal(data)
+    return jsonMsg
 }

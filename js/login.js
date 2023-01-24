@@ -8,7 +8,7 @@ let userName = logform.querySelector("#LUserName");
 let Lpassword = logform.querySelector("#LPassW");
 
 function setLoginErrorFor(input, message) {
-  const loginFormControl = input.parentElement; // .reg-form-control
+  const loginFormControl = input.parentElement; // .login-form-control
   const small = loginFormControl.querySelector("small");
 
   // add the error class
@@ -51,6 +51,7 @@ LoginBtn.onclick = (e) => {
       if (response.status == 200) {
         console.log("successful login");
         successfulLogin();
+        chatEventHandler();
         return response.text();
       } else {
         return response.text();
@@ -83,7 +84,6 @@ LoginBtn.onclick = (e) => {
       return;
     });
 };
-
 
 function successfulLogin() {
   console.log("success - status 200");
@@ -127,13 +127,16 @@ function Logout() {
 //
 // ====================================================
 
-window.onload = function () {
+// TODO: change from window.onload to start after logging in and exit on log-out
+async function chatEventHandler() {
   var conn;
-  var pst = document.getElementById("postList");
+  // var pst = document.getElementById("postList");
 
+  // TODO: change to fit in new details
   var log = document.getElementById("log");
   var usersLog = document.getElementById("usersLog");
 
+  // TODO:
   function appendLog(item) {
     var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
     log.appendChild(item);
@@ -142,6 +145,19 @@ window.onload = function () {
     }
   }
 
+  let configMsg = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  };
+
+  // fetch messages from back end
+  let messages = await fetch("/messagesAPI", configMsg);
+  messages = await messages.json();
+
+  // TODO: change section to display online and offline users
   function AppendUser(item) {
     /*if(item.innerText == "UsersList"){
             item.innerText = " "
@@ -157,14 +173,41 @@ window.onload = function () {
     if (doScroll) {
       usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
     }
+    // opening private chat window on clicking on selected users
     item.onclick = () => {
-      console.log(item.innerHTML);
       receiver = item.innerHTML;
-      document.querySelector(".chat-private").style.visibility = "visible";
+
+      console.log(receiver);
+      console.log(currentUser);
+      // Show messages in console for convenience. (optional)
+      console.log(messages);
+
+      // Show main chat window
+      let chat = document.querySelector(".chat-private");
+      chat.style.visibility = "visible";
+
+      // **filter** and append correct messages to chat window
+      messages.forEach((message) => {
+        if (
+          (message.sender === currentUser && message.recipient === receiver) ||
+          (message.recipient === currentUser && message.sender === receiver)
+        ) {
+          // create new div for message
+          let messageBubble = document.createElement("div");
+
+          // append message to div and style to white
+          messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
+          messageBubble.style.color = "white";
+
+          // append to child div of main chat window
+          document.querySelector(".messages-content").append(messageBubble);
+        }
+      });
     };
   }
 
-  document.getElementById("chat-private-btn").onclick = function () {
+  // function to send message to backend to be stored into DB
+  document.getElementById("msg-send-btn").onclick = function () {
     var msg = document.getElementById("msg");
     console.log("checking send button");
     console.log(msg);
@@ -177,6 +220,7 @@ window.onload = function () {
       return false;
     }
 
+    // object to message to send to front end
     let message = {
       Sender: currentUser,
       Recipient: receiver,
@@ -188,6 +232,7 @@ window.onload = function () {
     return false;
   };
 
+  // websocket activity for chats
   if (window["WebSocket"]) {
     conn = new WebSocket("ws://" + document.location.host + "/ws");
     conn.onclose = function (evt) {
@@ -227,4 +272,4 @@ window.onload = function () {
     item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
     appendLog(item);
   }
-};
+}
