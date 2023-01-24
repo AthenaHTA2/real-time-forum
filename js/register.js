@@ -262,7 +262,7 @@ const unsuccessfulReg = () => {
   document.getElementById('regModal').style.display = "none";
   document.getElementById('regRejected').style.display = 'block';
   // document.getElementById('profileMod').style.display = "none";
-  document.getElementById('postedArticles').style.display ="none"; 
+  // document.getElementById('postedArticles').style.display ="none"; 
 
   setTimeout(() => {
       document.getElementById('regRejected').style.display = 'none';

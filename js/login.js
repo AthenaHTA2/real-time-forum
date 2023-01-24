@@ -1,4 +1,3 @@
-let LoginData;
 let user;
 let currentUser;
 let receiver;
@@ -52,9 +51,9 @@ LoginBtn.onclick = (e) => {
       if (response.status == 200) {
         console.log("successful login");
         successfulLogin();
-        return response.text();
+        response.text();
       } else {
-        return response.text();
+        response.text();
       }
     })
     .then((rsp) => {
@@ -81,14 +80,12 @@ LoginBtn.onclick = (e) => {
         //   successlogin.innerHTML = " Welcome " + currentUser;
         // }
       }
-      return;
+    
     });
 };
 
 
 const successfulLogin = () => {
-
-    document.getElementById('postedArticles').style.display ="none"; 
     document.getElementById('loginModal').style.display ="none"; 
     // document.getElementById('profile').style.display ="block"; 
     document.getElementById('LoggedOn').style.display = 'block';
@@ -111,6 +108,10 @@ const successfulLogin = () => {
         document.getElementById('LoggedOn').style.display = 'none';
         document.getElementById('happyFace').style.display = 'none';
       },1500);
+    
+    postBtn = document.querySelector("#postBlock > button");
+    postBtn.style.visibility = "visible";  
+    document.querySelector(".loggedInUsers").style.display = "block";
 
    
     
@@ -118,7 +119,7 @@ const successfulLogin = () => {
 const unsuccessfullLogin = () => {
     
     console.log("failed - not status 200")
-    document.getElementById('postedArticles').style.display ="none"; 
+    // document.getElementById('postedArticles').style.display ="none"; 
     // document.getElementById('profileMod').style.display = "none";
     document.getElementById('loginModal').style.display = "none";
     document.getElementById('regRejected').style.display = 'block';

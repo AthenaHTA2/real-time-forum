@@ -52,6 +52,7 @@ func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 	var cookieValue string
 	//if user is not found in "sessions" db table return err = nil
 	if err := sqldb.DB.QueryRow("SELECT cookieValue FROM Sessions WHERE userID = ?", u.UserID).Scan(&cookieValue); err != nil {
+		fmt.Println("WERE ARE GETTING IT HERE _______________++++===============", cookieValue)
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Println("checking sessions table err:     ", err)
 		return nil
@@ -67,7 +68,7 @@ func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 // User's cookie expires when browser is closed, delete the cookie from the database.
 func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 	//removing session record from 'sessions' table
-	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE sessionID = ?;")
+	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE cookieValue = ?;")
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
@@ -102,6 +103,7 @@ func GetUserByCookie(cookieValue string) *User {
 	var userID int64
 
 	if err := sqldb.DB.QueryRow("SELECT userID from Sessions WHERE cookieValue = ?", cookieValue).Scan(&userID); err != nil {
+		fmt.Println("++++++++++++++++++++++++___________________________===",cookieValue)
 		return nil
 	}
 	u := FindByUserID(userID)
@@ -118,7 +120,7 @@ func FindByUserID(UID int64) *User {
 	u := NewUser()
 	if err := sqldb.DB.QueryRow("SELECT userID, firstName, lastName, nickName, age, gender, email, passwordhash FROM Users WHERE userID = ?", UID).
 		Scan(&u.UserID, &u.FirstName, &u.LastName, &u.NickName, &u.Age, &u.Gender, &u.Email, &u.Password); err != nil {
-		fmt.Println("error FindByUserID: ", err)
+		fmt.Println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++error FindByUserID: ", err)
 		return nil
 	}
 	return u

@@ -22,7 +22,7 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.Unmarshal(bytes, &thePost)
-
+	fmt.Println(thePost, "WERE ARE GETTING HERE-=-=-=-=-=-=-=-=")
 	CookieID := thePost.Cookie
 
 	var usr = GetUserByCookie(CookieID)

@@ -28,10 +28,10 @@
 
     <nav class="nav">
         <a id="current-user"></a>
-        <a id ="homePage" href = "/" class="nav__link">ℍ𝕠𝕞𝕖ℙ𝕒𝕘𝕖</a>
+        <a id ="homePage" href = "/" onclick="e.preventDefault();" class="nav__link">ℍ𝕠𝕞𝕖ℙ𝕒𝕘𝕖</a>
         <a id ="register" onclick="openReg() ;"class="nav__link" style="display:block">ℝ𝕖𝕘𝕚𝕤𝕥𝕖𝕣</a>
         <a id ="login" onclick="openLogin() ;"class="nav__link" style="display:block">𝕃𝕠𝕘𝕀𝕟</a>
-        <a id ="post" onclick="openPosts()" class="nav__link">ℙ𝕠𝕤𝕥𝕤</a>
+        <a id ="post" onclick="openPosts() ;" class="nav__link">ℙ𝕠𝕤𝕥𝕤</a>
         <!-- <a id="profile" class="nav__link" style="display:none">ℙ𝕣𝕠𝕗𝕚𝕝𝕖</a>     -->
         <a id="logout" href="/" onclick="Logout() ;" class="nav__link" style="display:none">𝕃𝕠𝕘𝕆𝕦𝕥</a>    
 
@@ -61,7 +61,6 @@
         <div class="chat-modal" class="modal">
           <!-- <div class="modal-content animate" action="/chat" id="formChat"> -->
             <div class="chat-title-box">
-              <h3>𝕄𝔼𝕊𝕊𝔼ℕ𝔾𝔼ℝ</h3>
               <button type="close-msg" class="button" value="closeBtn" onclick="ChatReturn()">
                   Back
               </button>
@@ -112,15 +111,8 @@
 ===========================================================================================================
  -->
 
-    <div id="postedArticles" class="posts" style="display:none">
-        <label for="TitleCreated">Post Title:</label>
-        <textarea name="postTitle" type="text" rows="1" cols="60" id="PostTitle" name="Title" placeholder="Enter Title..."></textarea>
-        <label for="ContCreated"> Content:  </label>
-        <textarea name="postinput" type="text" rows="4" cols="60" id="PostContent" name="Content" placeholder="Description..."></textarea>
-        <label for="ChosenCat">Catergory:</label>
-        <input type="dropdown" id="PostCat" name="Category" placeholder="Choose Categories..">
-        <button class="button" id="addPost" type="submit">See Comments Here</button>
-    
+    <div id="postList">
+      
     </div>
 
         <!-- 
@@ -139,7 +131,7 @@
                 </div> 
                
          
-                <div class="container" >
+                <div class="login-form-control">
                  <h1>🅻🅾🅶🅸🅽</h1>
          
                  <label for="userName"><b>Userame Or Email</b></label>
@@ -337,12 +329,6 @@
     </div> -->
     
     
-    <!-- <button onclick="refreshPosts()">Refresh Posts</button> -->
-    <div id="postList">
-    </div>
-    <!---->
-    
-    <!-- <script src="text/javascript"></script> -->
 
 </body>
 
@@ -350,13 +336,12 @@
 
 
 <!-- this script runs login modal -->
-
-<script src="/js/comment.js"></script>
-<script src="/js/post.js"></script>
+<script src="/js/buttons.js"></script>
 <script src="/js/register.js"></script>
 <script src="/js/login.js"></script>
-<script src="/js/buttons.js"></script>
-<script src="/js/messenger.js"></script>
+<script src="/js/post.js"></script>
+<script src="/js/comment.js"></script>
+<!-- <script src="/js/messenger.js"></script> -->
 
 
 </html>

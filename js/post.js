@@ -1,21 +1,20 @@
-//Put post data into a JS object if user clicks 'Create Post' button
-const AddPost = document.querySelector("#addPost")
-AddPost.onclick = (e) => {
+document.getElementById("addPost").onclick = (e) => {
     //stop the browser from refreshing 
     e.preventDefault();
     
     //grab the post data
     let theCookie = GetCookie("user_session")
-    let PostCookieID = theCookie
+    console.log("++++_+_+_+_+_+_+_+_====================",theCookie)
     let PostTitle = document.querySelector("#PostTitle").value
     let PostContent = document.querySelector("#PostContent").value
     let PostCategory = document.querySelector("#PostCat").value
+
 
     console.log(PostTitle, PostContent,PostCategory)
 
     //populate JS object with the post Data
     let PostData = {
-        PostCokID: PostCookieID,
+        PostCokID: theCookie,
         PostTitl: PostTitle,
         PostCont: PostContent,
         PostCat: PostCategory,
@@ -33,15 +32,17 @@ AddPost.onclick = (e) => {
         body: JSON.stringify(PostData)
     };
 
-    fetch("http://localhost:8080/post", configPost).then(function(response) {
-        //if(not the response.ok) throw response
-        // console.log("RegDataSuccess:", response)
-
-        if (!response.ok) {
-            unsuccessfulPost()
-        }else {
-            successfulPost()
-        }
+    fetch("/post", configPost)
+    .then(function (response) {
+      console.log(response);
+      if (response.status == 200) {
+        console.log("successful Post");
+        successfulPost();
+        response.text();
+      } else {
+        unsuccessfulPost();
+        response.text();
+      }
     })
 }
 
@@ -61,13 +62,16 @@ const GetCookie = (name) => {
   //split cookie string
   //name equals to value pairs in an array
   var CookieArr = document.cookie.split(';');
+  console.log(CookieArr)
   
   //loop through array elements
   for(var i=0; i < CookieArr.length; i++) {
     var cookiePair = CookieArr[i].split('=');
-
+    console.log(cookiePair)
     //removing unnecessary spaces
     if(name == cookiePair[0].trim()){
+     
+      console.log(cookiePair[1]) 
       return cookiePair[1];
     }
   }

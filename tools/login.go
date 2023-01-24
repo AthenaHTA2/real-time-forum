@@ -100,17 +100,16 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			MaxAge:  7200,
 			Expires: expiresAt,
 			// SameSite: true,
-			HttpOnly: true, //removed in order to allow Javascript to access cookie
+			//HttpOnly: true, //removed in order to allow Javascript to access cookie
 		})
 
 		// storing the cookie values in struct
 		user_session := Cookie{cookieNm, sessionToken, expiresAt}
-		fmt.Println("Values in 'Cookie' struct :", user_session)
-
+		fmt.Println("++++++++++===========================Values in 'Cookie' struct :", user_session)
 		insertsessStmt, err4 := sqldb.DB.Prepare("INSERT INTO Sessions (userID, cookieName, cookieValue) VALUES (?, ?, ?);")
 		if err4 != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Println("err4 with inserting session:", err4)
+			fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!err4 with inserting session:", err4)
 			return
 		}
 
