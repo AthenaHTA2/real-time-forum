@@ -1,10 +1,8 @@
 package tools
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"io"
 	"log"
 	"net/http"
@@ -13,73 +11,51 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var db *sql.DB
+//instance of 'User' struct
+var CurrentUser User
 
-func HomePage(w http.ResponseWriter, r *http.Request) {
-
-	if r.URL.Path != "/" {
-		http.Error(w, "404 Page Not Found", 404)
-		return
-	}
-
-	templ, err := template.ParseFiles("templates/home.html")
-
-	err = templ.Execute(w, "")
-
-	if err != nil {
-		http.Error(w, "Error with parsing home.html", http.StatusInternalServerError)
-		return
-	}
-
-}
-
+//Populate the User struct and upload into database table 'Users'
 func Register(w http.ResponseWriter, r *http.Request) {
-
-	var regData User
 
 	bytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	fmt.Println("Json from Regsister: ", string(bytes))
 
-	json.Unmarshal(bytes, &regData)
+	json.Unmarshal(bytes, &CurrentUser)
 
 	var hash []byte
-	password := regData.Password
+	password := CurrentUser.Password
+
 	// func GenerateFromPassword(password []byte, cost int) ([]byte, error)
 	hash, err4 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 
 	if err4 != nil {
+		// StatusNotAcceptable = 406
+		w.WriteHeader(http.StatusNotAcceptable)
 		fmt.Println("bcrypt err4:", err4)
 		return
 	}
 
-	_, err = sqldb.DB.Exec(`INSERT INTO Users ( 
-		firstName,
-		lastName,
-		nickName,
-		age,
-		gender,
-		email,
-		passwordhash
-		) VALUES(?,?,?,?,?,?,?)`, regData.FirstName, regData.LastName, regData.NickName, regData.Age, regData.Gender, regData.Email, hash)
+	_, err = sqldb.DB.Exec(`INSERT INTO Users ( firstName,lastName,nickName,age,gender,email,passwordhash) VALUES(?,?,?,?,?,?,?)`, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Email, hash)
 
 	if err != nil {
+		// Convey StatusBadRequest = 400 to browser
+		w.WriteHeader(http.StatusBadRequest)
+
 		fmt.Println("Error inserting into 'Users' table: ", err)
+
+		// convey exact error message to be displayed at browser end
+		if err.Error() == "UNIQUE constraint failed: Users.email" {
+			w.Write([]byte("ERROR: This email already exists, please log in instead"))
+		} else if err.Error() == "UNIQUE constraint failed: Users.nickName" {
+			w.Write([]byte("ERROR: This username already exists, please log in instead"))
+		}
+		// w.Write([]byte(err.Error()))
 		return
 	}
-
-	rows, _ := sqldb.DB.Query("SELECT userID, firstName, lastName, nickName, age, gender, email, passwordhash from Users")
-
-	var (
-		userID, age                                  int
-		firstName, lastName, nickName, gender, email string
-	)
-
-	rows.Scan(&userID, &firstName, &lastName, &nickName, &age, &gender, &email, &hash)
-}
-
-func showProfile(User) {
-	
+	// StatusCreated = 201
+	w.WriteHeader(http.StatusCreated)
 }

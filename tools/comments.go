@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+//instantiate a comment struct
 var theComment comment
 
 func Comments(w http.ResponseWriter, r *http.Request) {
@@ -19,17 +20,16 @@ func Comments(w http.ResponseWriter, r *http.Request) {
 	//input comment data into Comments table
 	bytes, err := io.ReadAll(r.Body)
 	if err != nil {
-		log.Fatal(err, "error with reading BODY from comment.go line 17")
+		log.Fatal(err)
 	}
-
-	// wrtie comment data into 'theComment' struct pointer
+	//write comment data into 'theComment' struct pointer
 	json.Unmarshal(bytes, &theComment)
-
-	CookieId := theComment.Cookie
-
-	var usr = GetUserByCookie(CookieId)
-
-	//get username and user ID
+	fmt.Println("comment struct values", theComment)
+	CookieID := theComment.Cookie
+	fmt.Println("CookieID:", CookieID)
+	var usr = GetUserByCookie(CookieID)
+	fmt.Println("the user data:", usr)
+	//get user name and user ID
 	var nkName = usr.NickName
 	var usrID = usr.UserID
 
@@ -40,37 +40,40 @@ func Comments(w http.ResponseWriter, r *http.Request) {
 		content,
 		creationDate
 		) VALUES(?,?,?,?,?)`, &theComment.PostID, usrID, nkName, &theComment.Content, commentTime)
+
 	if err != nil {
-		fmt.Println("Error inserting into 'Comments' table: comments.go line 39 ", err)
+		fmt.Println("Error inserting into 'Comments' table: ", err)
 		return
 	}
-
 }
-
 
 //Get all comments from database
 func GetDBComments() []comment {
 	var allComments []comment
+
 	rows, errComment := sqldb.DB.Query("SELECT commentID, postID, author, content, creationDate FROM Comments ORDER BY creationDate ASC;")
 	if errComment != nil {
 		fmt.Println("Error retrieving comments from database: \n", errComment)
 		return nil
 	}
 	for rows.Next() {
+
 		//copy selected columns in a row into corresponding struct variables
-		err := rows.Scan(&theComment.CommentID, &theComment.PostID, &theComment.Author, 
-			&theComment.Content, &theComment.CommentTime)
+		err := rows.Scan(&theComment.CommentID, &theComment.PostID, &theComment.Author, &theComment.Content, &theComment.CommentTime)
 		if err != nil {
 			fmt.Println("error copying post data: ", err)
 		}
+
 		//append each comment into a slice of comments
 		allComments = append(allComments, theComment)
 	}
 	rows.Close()
+	/*for _, comment := range allComments {
+		fmt.Println(string(comment))
+	}*/
 
 	return allComments
 }
-
 
 //Send comments to front-end via http handle: "/getComments"
 func SendLatestComments(w http.ResponseWriter, r *http.Request) {
@@ -83,4 +86,3 @@ func SendLatestComments(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK) //alerts user
 	w.Write([]byte(jsComm))
 }
-

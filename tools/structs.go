@@ -17,10 +17,12 @@ type comment struct {
 type post struct {
 	PostID      int       `json:"PostID"`
 	Author      string    // author
-	Cookie      string    `json:"PostCokID"`
-	Title       string    `json:"PostTitl"`
-	Content     string    `json:"PostCont"`
-	Category    string    `json:"PostCat"`
+	Cookie      string    `json:"PstCookieID"`
+	Title       string    `json:"PstTitle"`
+	Content     string    `json:"PstContent"`
+	Category    string    `json:"PstCateg"`
+	Category_1  string    `json:"category_1"`
+	Category_2  string    `json:"category_2"`
 	PostTime    time.Time `json:"PostTime"`
 	PostTimeStr string
 	Comments    []comment
@@ -42,12 +44,9 @@ type User struct {
 	Password  string `json:"PassWord"`
 }
 
-//used for Login handler
-var CurrentUser User
-
 type LoginData struct {
-	UserName string `json:"LUserName"`
-	Password string `json:"LPassW"`
+	UserName string `json:"UserName"`
+	Password string `json:"LoginPw"`
 }
 
 // each session contains the username of the user and the time at which it expires
