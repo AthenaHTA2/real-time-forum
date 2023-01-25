@@ -127,8 +127,9 @@
         <p class='post-content'>`+ "Title: " + posts[i].PstTitle + `</p>
         <p class='post-content'>`+ "Content: " + posts[i].PstContent + `</p>
         <p class='post-content'>`+ "Creation Time: " + ConvertDate(posts[i].PostTime) + `</p>
-        
-        <p class='post-content'>`+ "Comment: " + `<input type="text" class='comment-content' id="commentTxt${posts[i].PostID}" placeholder="Write a comment.." ; >&nbsp; &nbsp;<button class="button commentBtn" id="addComment"  onclick= 'DisplayComments(${posts[i].PostID})'> ` + "Send comment" + `</button></p>
+        <div style="display:flex; flex-direction: row; column-gap: 15px; justify-content: left; align-items: center">
+        <p class='post-content'>`+`<h2 class="commentLabel">`+"Comment: " +`</h2>`+`<input type="text" class='comment-content' id="commentTxt${posts[i].PostID}" placeholder="Write a comment.." ; >`+`<button class="button commentBtn" id="addComment"  onclick= 'DisplayComments(${posts[i].PostID})'> ` + "Send comment" + `</button></p>
+        </div>
         </div>
         <div id="c${posts[i].PostID}" class="commentBlock" style='height: 400px;'>
         <button class="button hideCommentBtn" id="btn${posts[i].PostID}"  onclick= 'CloseComments(${posts[i].PostID})'> ` + "Close" + `</button>

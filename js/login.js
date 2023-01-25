@@ -27,7 +27,9 @@ const LoginBtn=document.querySelector("#loginBtn")
   fetch("http://localhost:8080/login", configLogin)
     .then(function(response) {
       if (response.status == 200) {
-        successfulLogin()
+        successfulLogin();
+
+
 
         response.text().then(function(data){//Here we get user profile data
           let userDetails = JSON.parse(data);
@@ -72,6 +74,22 @@ const LoginBtn=document.querySelector("#loginBtn")
     
 }
 
+function showAddComment(){
+  console.log("called showAddComment---->")
+  let commentLable = document.querySelector(".commentLabel");
+  //let addCommentBtnID = document.querySelector("#addComment");
+  let addCommentField = document.querySelector(".comment-content");
+  let addCommentBtnClass = document.querySelector(".commentBtn");
+  console.log("commentLable selected? ---->", commentLable)
+  //console.log("addCommentBtnID selected? ---->", addCommentBtnID)
+  console.log("addCommentField selected? ---->", addCommentField)
+  console.log("addCommentBtnClass selected? ---->", addCommentBtnClass)
+  commentLable.style.display = "block";
+  //addCommentBtnID.style.display = "block";
+  addCommentBtnClass.style.display = "block";
+  addCommentField.style.display = "block";
+}
+
   //show list of registered users
   /*function ReadUsers(){
     let configUsersList = {
@@ -113,10 +131,13 @@ const LoginBtn=document.querySelector("#loginBtn")
 
     document.getElementById('logout').style.display = 'block'
 
+
     postBtn = document.querySelector("#postBlock > button")
     postBtn.style.visibility = "visible"
     document.querySelector('.loggedInUsers').style.display = "block"
     document.querySelector('#formChat').style.visibility = "visible"
+    //refreshPosts();
+    showAddComment();
   }
 
   function unsuccessfulLogin() {

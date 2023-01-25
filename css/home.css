@@ -160,8 +160,22 @@ h2 {
     margin: 1% auto;
 }
 
+/*start of comment section within post and on its own*/
+
+.commentLabel{
+    display:none;
+    padding-right: 0cm;
+}
+
 .comment-content{
-    height: 25px;
+    height: 30px;
+    width: 350px;
+    display:none;
+}
+
+#addComment{
+    display:none;
+    width: 300px;
 }
 
 .comment{
@@ -171,6 +185,32 @@ h2 {
     height: 30vh;
     width: 90vh;
 }
+
+.commentBtn{
+    display:none;
+    width: 300px;
+}
+
+.hideCommentBtn{
+    visibility: hidden;
+
+}
+
+.commentBlock{
+    height: 400px;
+    overflow: auto;
+    display: none;
+    z-index: 1;
+    background-color:lightskyblue;
+    border-radius: 30px;
+    /* position: absolute; */
+}
+/*not used anymore
+/*.comment-container p {
+    display: inline;
+    height: 350px;
+}*/
+/*end of comment section */
 
 .container {
     margin-right: 7cm;
@@ -217,29 +257,7 @@ h2 {
     visibility: hidden;
 }
 
-.commentBtn{
-    visibility:visible;
-}
 
-.hideCommentBtn{
-    visibility: hidden;
-
-}
-
-.commentBlock{
-    height: 400px;
-    overflow: auto;
-    display: none;
-    z-index: 1;
-    background-color:lightskyblue;
-    border-radius: 30px;
-    /* position: absolute; */
-}
-
-.comment-container p {
-    display: inline;
-    height: 350px;
-}
 
 .profile{
     color: whitesmoke;
