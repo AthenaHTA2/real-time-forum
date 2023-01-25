@@ -100,7 +100,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			MaxAge:  7200,
 			Expires: expiresAt,
 			// SameSite: true,
-			//HttpOnly: true, //removed in order to allow Javascript to access cookie
+			// HttpOnly: true, //removed in order to allow Javascript to access cookie
 		})
 
 		// storing the cookie values in struct

@@ -83,12 +83,7 @@ window.onload = function () {
       var messages = evt.data.split("\n");
       //a space at the start of msg signals that this is the list of registered users
       //that needs to be printed in a different place than normal websocket messages
-      if (string(messages[0]) == " ") {
-        //UserList = messages.slice(1)
-        User = true;
-        //double space at start of message means this is the list of posts
-      } else if (string(messages[0]) == "  ") {
-        postFlag = true;
+
       }
       for (var i = 0; i < messages.length; i++) {
         var item = document.createElement("div");
@@ -107,8 +102,7 @@ window.onload = function () {
           appendLog(item);
         }
       }
-    };
-  } else {
+    } else {
     var item = document.createElement("div");
     item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
     appendLog(item);

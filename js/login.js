@@ -2,6 +2,7 @@ let user;
 let currentUser;
 let receiver;
 let LoginData;
+let expandPost
 
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
@@ -47,16 +48,19 @@ LoginBtn.onclick = (e) => {
     body: JSON.stringify(LoginData),
   };
   
+  
+
   fetch("/login", configLogin)
     .then(function (response) {
       console.log(response);
       if (response.status == 200) {
         console.log("successful login");
-        successfulLogin();
-        response.text();
+        successfulLogin()
+        // HS removed this // refreshPosts();
+       return response.text();
       } else {
-        // unsuccessfullLogin();
-        response.text();
+        unsuccessfullLogin();
+       return response.text();
       }
     })
     .then((rsp) => {
@@ -85,36 +89,89 @@ LoginBtn.onclick = (e) => {
     });
 };
 
+/*const refreshPostsAfterLogin = () => {
+  const displayPostsAfterLog = (posts) => {
+    console.log("##############################WE ARE NOW IN AFTERLOGING DISPLAYPOST")
+    postsContainer = document.querySelector('#postList')
+    postsContainer.innerHTML = "";
+    for (let i = (posts.length - 1); i >= 0; i--) {
+        postsContainer.innerHTML += `
+            <div class="posts" style.display ="block" id=` + posts[i].PostID + `>
+            
+            <p class="post-content" >` + "Author: " + posts[i].Author + `</p>
+            <p class="post-content" >` + "Category: " + posts[i].PostCat + `</p>
+            <p class="post-content" >` + "Title: " + posts[i].PostTitl + `&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <button class="button" id="ShowComments" onclick="displayExpandedPosts() ;">` + "Show Comments" + `</button> </p>
+            <p class="post-content" >` + "Content: " + posts[i].PostCont + `</p>
+            <p class="post-content" >` + "Created: " + ConvertDate(posts[i].PostTime) + `</p>         
+            </div>
+            </div>            
+        `  
+    }
+  
+  
+  }
+  fetch("/getPosts", {
+    headers : {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  })
+  .then((response)=> {
+    response.text().then(function(data){
+      let posts = JSON.parse(data);
+      console.log("posts:", posts);
+      //post shows all latest posts from database
+      displayPostsAfterLog(posts);
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+};*/
+
+
+
 const successfulLogin = () => {
   console.log("STATUS 200 OK");
-  console.log("WERE ARE GETTING TO SUCCEDDFUL LOGIN FUNCTION")
-    document.getElementById('loginModal').style.display ="none"; 
-    document.getElementById('LoggedOn').style.display = 'block';
-    document.getElementById('happyFace').style.display = 'block';
-    document.getElementById('addPost').style.display = "block";
-    document.getElementById('login').style.display ="none"; 
-    document.getElementById('register').style.display ="none"; 
-    document.getElementById('welcomemsg').style.display ="none"; 
-    document.getElementById('Offline').style.display ="block"; 
-    document.getElementById('Online').style.display ="block"; 
-    document.getElementById('Messenger').style.display ="block"; 
-    document.getElementById('current-user').style.display ="block"; 
-    document.getElementById('logout').style.display = 'block' 
-    document.getElementById('postBlock').style.display = 'flex';
-    
-    setTimeout(() => {
-        console.log("WERE ARE GETTING TO TIMEOUT LOGIN SIDE")
-        document.getElementById('LoggedOn').style.display = 'none';
-        document.getElementById('happyFace').style.display = 'none';
-      },1500);
-    
-    postBtn = document.querySelector("#postBlock > button");
-    postBtn.style.visibility = "visible";  
-    document.querySelector(".loggedInUsers").style.display = "block";
+  console.log("WERE ARE GETTING TO SUCCEDDFUL LOGIN FUNCTION");
+  document.getElementById("loginModal").style.display = "none";
+  document.getElementById("LoggedOn").style.display = "block";
+  document.getElementById("happyFace").style.display = "block";
+  document.getElementById("addPost").style.display = "block";
+  document.getElementById("login").style.display = "none";
+  document.getElementById("register").style.display = "none";
+  document.getElementById("welcomemsg").style.display = "none";
+  document.getElementById("Offline").style.display = "block";
+  document.getElementById("Online").style.display = "block";
+  document.getElementById("Messenger").style.display = "block";
+  document.getElementById("current-user").style.display = "block";
+  document.getElementById("logout").style.display = "block";
+  document.getElementById("postBlock").style.display = "block";
+  //document.getElementById("postList").style.display = "none";
+  document.getElementById("usersLog").style.display = "block";
 
-   
-    
-}
+  setTimeout(() => {
+    console.log("WERE ARE GETTING TO TIMEOUT LOGIN SIDE");
+    document.getElementById("LoggedOn").style.display = "none";
+    document.getElementById("happyFace").style.display = "none";
+  }, 1500);
+
+  postBtn = document.querySelector("#postBlock > button");
+  postBtn.style.visibility = "visible";
+  document.querySelector(".loggedInUsers").style.display = "block";
+  // document.getElementsByClassName('ShowComments').style.display = "none";
+  // document.getElementsByClassName('commentBlock').style.display = "block";
+
+  //HTA taken out this //refreshPostsAfterLogin();
+  showPost();
+  showAddComment()//HTA added. This displays post comment fields and buttons
+
+};
+
 const unsuccessfullLogin = () => {
     
     console.log("failed - not status 200")
@@ -138,6 +195,7 @@ const Logout = () => {
 //
 // ====================================================
 window.onload = function () {
+  refreshPosts();//HTA: this is the equivalent of my command in file home.html line 162.
   var conn;
   // var pst = document.getElementById("postList");
   var log = document.getElementById("log");
@@ -234,3 +292,20 @@ window.onload = function () {
     appendLog(item);
   }
 };
+
+//HTA: to show comments' input texts and buttons
+function showAddComment(){
+  //console.log("called showAddComment---->")
+  let commentLable = document.getElementsByClassName("commentLabel");
+  let addCommentField = document.getElementsByClassName("comment-content");
+  let addCommentBtnClass = document.getElementsByClassName("commentBtn");
+  console.log("commentLable selected? ---->", commentLable)
+  console.log("addCommentField selected? ---->", addCommentField)
+  console.log("addCommentBtnClass selected? ---->", addCommentBtnClass)
+  for(let i = 0; i< commentLable.length; i++){
+    commentLable[i].style.display = "block";
+    addCommentBtnClass[i].style.display = "block";
+    addCommentField[i].style.display = "block";
+  }
+
+}
