@@ -75,19 +75,19 @@ const LoginBtn=document.querySelector("#loginBtn")
 }
 
 function showAddComment(){
-  console.log("called showAddComment---->")
-  let commentLable = document.querySelector(".commentLabel");
-  //let addCommentBtnID = document.querySelector("#addComment");
-  let addCommentField = document.querySelector(".comment-content");
-  let addCommentBtnClass = document.querySelector(".commentBtn");
+  //console.log("called showAddComment---->")
+  let commentLable = document.getElementsByClassName("commentLabel");
+  let addCommentField = document.getElementsByClassName("comment-content");
+  let addCommentBtnClass = document.getElementsByClassName("commentBtn");
   console.log("commentLable selected? ---->", commentLable)
-  //console.log("addCommentBtnID selected? ---->", addCommentBtnID)
   console.log("addCommentField selected? ---->", addCommentField)
   console.log("addCommentBtnClass selected? ---->", addCommentBtnClass)
-  commentLable.style.display = "block";
-  //addCommentBtnID.style.display = "block";
-  addCommentBtnClass.style.display = "block";
-  addCommentField.style.display = "block";
+  for(let i = 0; i< commentLable.length; i++){
+    commentLable[i].style.display = "block";
+    addCommentBtnClass[i].style.display = "block";
+    addCommentField[i].style.display = "block";
+  }
+
 }
 
   //show list of registered users
