@@ -242,46 +242,63 @@ we handle the logout button click event by sending an
  data and delete it. This logs the user out of the real time forum.
 
 */
+
 const logoutBtn = function logoutUser() {
+  // Declare a variable "cookie" and assign it the value of the current cookie
   let cookie = document.cookie;
+  
+  // Declare a variable "username" and assign it the first element of the array returned by splitting the cookie string at the "=" character
   let username = cookie.split("=")[0];
-
+  
+  // Log the value of the "username" variable to the console
   console.log(username);
-
+  
+  // Declare an object "logoutData" with a property "ok" set to an empty string
   let logoutData = {
-    ok: ""
+  ok: ""
   };
-
+  
+  // Set the value of the "ok" property of the "logoutData" object to the value of the "username" variable
   logoutData.ok = username;
-
+  
+  // Declare an object "options" with properties "method", "headers" and "body"
   let options = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(logoutData)
+  method: "POST",
+  headers: {
+  "Content-Type": "application/json"
+  },
+  body: JSON.stringify(logoutData)
   };
-
+  
+  // Declare a variable "fetchRes" and assign it the result of a fetch call to the "/logout" endpoint with the "options" object passed as options
   let fetchRes = fetch("http://localhost:8080/logout", options);
+  
+  // Handle the response of the fetch call
   fetchRes
-    .then((response) => {
-      if (response.status === 200) {
-        console.log("ok");
-      }
-      return response.json();
-    })
-    .then(function (data) {
-      if (data.User.LoggedIn === "false") {
-        document.querySelector("main").style.display = "none";
-        document.querySelector(".auth-container").style.display = "flex";
-
-        // showRegistrationUI()
-        notyf.success("Succesfully logged out.");
-      }
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
-  socket.close();
+  .then((response) => {
+  // Check if the response status is 200
+  if (response.status === 200) {
+  console.log("ok");
+  }
+  // Parse the response as json
+  return response.json();
+  })
+  .then(function (data) {
+  // Check if the "LoggedIn" property of the "User" object in the data is equal to "false"
+  if (data.User.LoggedIn === "false") {
+  // hide main section of the page
+  document.querySelector("main").style.display = "none";
+  // show login section of the page
+  document.querySelector(".auth-container").style.display = "flex";
+  
+      // showRegistrationUI()
+      notyf.success("Succesfully logged out.");
+    }
+  })
+  .catch(function (err) {
+    console.log(err);
+  });
+// Close the socket connection
+socket.close();
 };
 
