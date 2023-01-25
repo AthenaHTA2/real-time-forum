@@ -5,9 +5,11 @@ import (
 	"log"
 	"net/http"
 	"rtforum/tools"
+
 	//"strings"
-	"github.com/gorilla/websocket"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
 const (
@@ -68,6 +70,7 @@ func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 		return
 	}
 }
+
 //~~~~~~~~~~~End of Show list of Posts
 //msgToHub go routine reads messages from the webSocket connection
 //and sends them to the hub

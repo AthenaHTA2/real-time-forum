@@ -16,7 +16,7 @@ import (
 
 func main() {
 
-	fmt.Println("hello")
+	//fmt.Println("hello")
 
 	DB := sqldb.ConnectDB()
 	database.CreateDB()
@@ -34,6 +34,7 @@ func main() {
 
 	http.HandleFunc("/", rtforum.HomePage)
 	http.HandleFunc("/login", rtforum.Login)
+	http.HandleFunc("/logout", rtforum.Login)
 	http.HandleFunc("/register", rtforum.Register)
 	http.HandleFunc("/post", rtforum.Posts)
 	http.HandleFunc("/comment", tools.Comments)

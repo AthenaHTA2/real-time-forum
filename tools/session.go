@@ -87,10 +87,9 @@ func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 */
 //corrected
 /*
-"DeleteSession" 	function takes in two parameters: a http.ResponseWriter and a string named "cookieValue".
+"DeleteSession" function takes in two parameters: a http.ResponseWriter and a string named "cookieValue".
 
-This function is doing the following tasks:
-
+deletesession function is doing the following:
 Creating a new cookie with the name of CurrentUser.NickName + "Session_token" and value "",
 setting its MaxAge to -1, and setting HttpOnly to true, which means that the cookie can only
  be accessed by the server and not by client-side scripts.
@@ -99,9 +98,9 @@ Prepare a SQL statement to delete a session record from the 'sessions' table in 
 with the session ID equals to the cookieValue.
 Executing the prepared statement and handling any errors that may occur.
 Returning nil if there are no errors.
-Here are the few things that can be corrected:
 
-It is better practice to check if the error returned from the Prepare statement and stmt.Exec
+few things that can be corrected:
+ to check if the error returned from the Prepare statement and stmt.Exec
 is not nil and return it instead of logging it and continue the execution.
 The function is returning an error type but no error is returned. It is better to return an error
 if there's any occurred.

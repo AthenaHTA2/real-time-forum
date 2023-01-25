@@ -24,6 +24,7 @@ func CreateDB() {
 				"title" TEXT NOT NULL, 
 				"content" TEXT NOT NULL, 
 				"category" TEXT NOT NULL,
+				"category_2" TEXT NOT NULL,
 				"creationDate" TIMESTAMP,
 				"cookieID" TEXT NOT NULL,
 				FOREIGN KEY(authorID)REFERENCES users(userID)
@@ -51,4 +52,26 @@ func CreateDB() {
 				"cookieValue" STRING NOT NULL PRIMARY KEY, 
 				FOREIGN KEY(userID)REFERENCES Users(userID)
 				);`)
+
+	// Chats table
+	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Chats" ( 
+		"chatID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		"user1" TEXT,
+		"user2" TEXT,
+		"creationDate" TIMESTAMP, 
+		FOREIGN KEY(user1)REFERENCES Users(nickName),
+		FOREIGN KEY(user2)REFERENCES Users(nickName)
+		);`)
+	// MessageHistory table
+	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "MessageHistory" ( 
+		"messageID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		"chatID" INTEGER,
+		"chatMessage" STRING NOT NULL,
+		"sender" TEXT,
+		"recipient" TEXT,
+		"creationDate" TIMESTAMP, 
+		FOREIGN KEY(chatID)REFERENCES Chats(chatID),
+		FOREIGN KEY(sender)REFERENCES Users(nickName),
+		FOREIGN KEY(recipient)REFERENCES Users(nickName)
+		);`)
 }

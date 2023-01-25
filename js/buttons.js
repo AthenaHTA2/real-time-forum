@@ -1,3 +1,4 @@
+
 //This is our functions to open the links for our buttons
 
 //This function opens Login Modal
