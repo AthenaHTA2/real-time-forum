@@ -205,11 +205,11 @@ h2 {
     border-radius: 30px;
     /* position: absolute; */
 }
-/*not used anymore
-/*.comment-container p {
+
+.comment-container p {
     display: inline;
     height: 350px;
-}*/
+}
 /*end of comment section */
 
 .container {
