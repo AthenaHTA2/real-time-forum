@@ -8,7 +8,7 @@ document.getElementById("addPost").onclick = (e) => {
     console.log("++++_+_+_+_+_+_+_+_====================",theCookie)
     let PostTitle = document.querySelector("#PostTitle").value
     let PostContent = document.querySelector("#PostContent").value
-    let PostCategory = document.querySelector("#PostCat").value
+    let PostCategory = document.querySelector("#cars").value
 
 
     console.log(PostTitle, PostContent,PostCategory)
@@ -51,7 +51,7 @@ const successfulPost = () => {
     console.log("POST WAS SUCCESFUL --- STATUS 200")
     PostTitle.value = ""
     PostContent.value = ""
-    document.querySelector("#PostCat").value = ""
+    document.querySelector("#cars").value = "Weather"
 };
 
 const unsuccessfulPost = () => {

@@ -185,11 +185,14 @@ const unsuccessfullLogin = () => {
 }
 
 const Logout = () => {
+  console.log("===== Logout called ======")
   document.querySelector(".loggedInUsers").style.visibility = "hidden";
   document.querySelector(".chat-private").style.visibility = "hidden";
   document.getElementById('current-user').style.display ="none"; 
-
+  hideAddComment();
   console.log(document.cookie);
+  //show posts without comments
+  
 }
 //
 //
@@ -306,6 +309,23 @@ function showAddComment(){
     commentLable[i].style.display = "block";
     addCommentBtnClass[i].style.display = "block";
     addCommentField[i].style.display = "block";
+  }
+
+}
+
+//HTA: to hide comments' input texts and buttons after logout
+function hideAddComment(){
+  console.log("called hideAddComment---->")
+  let commentLable = document.getElementsByClassName("commentLabel");
+  let addCommentField = document.getElementsByClassName("comment-content");
+  let addCommentBtnClass = document.getElementsByClassName("commentBtn");
+  for(let i = 0; i< commentLable.length; i++){
+    commentLable[i].style.display = "none";
+    console.log("commentlable.style", commentLable[i].style)
+    addCommentBtnClass[i].style.display = "none";
+    console.log("addCommentBtnClass[i].style", addCommentBtnClass[i].style)
+    addCommentField[i].style.display = "none";
+    console.log("addCommentField[i].style", addCommentField[i].style)
   }
 
 }

@@ -54,7 +54,7 @@ document.getElementById('logout').onclick = (e) => {
   document.getElementById("Offline").style.display = "none";
   document.getElementById("welcomemsg").style.display = "block";
   //HTA removed as returned error in browser //expandPost.style.display = "none";
-
+  Logout() //added here as it did not get called from home.html line 35
 
   setTimeout(() => {
     console.log('SETTIMEOUT WORKS WITH LOGOUT BUTTON WE ARE GETTING HERE')
@@ -65,4 +65,6 @@ document.getElementById('logout').onclick = (e) => {
 
 function ChatReturn() {
   document.querySelector(".chat-private").style.visibility = "hidden";
+  //hide comment lable, input text and button from posts
+  hideAddComment()
 }
