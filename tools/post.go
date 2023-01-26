@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"rtforum/sqldb"
 	"time"
-	//"github.com/satori/go.uuid"
 )
 
 /*
