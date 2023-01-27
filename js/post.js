@@ -123,6 +123,7 @@ const refreshPosts = () => {
             </div>
             <div id="c${posts[i].PostID}" class="commentBlock" style='height: 400px;'>
             <button class="button hideCommentBtn" id="btn${posts[i].PostID}"  onclick= 'CloseComments(${posts[i].PostID})'> ` + "Close" + `</button>
+            </div>
             </div>          
         `  
     }

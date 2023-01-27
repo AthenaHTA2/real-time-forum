@@ -91,12 +91,30 @@
       console.log(error);
     });
   }
+
   //To display comments history in front-end
   function displayCommentsHist(comments, id) {
-    console.log("called", comments)
-    console.log(id)
-    let commentsContainer = document.querySelector(`#c${id}`)
-    commentsContainer.innerHTML = `<button class="button" id="btn${id}"  onclick= 'CloseComments(${id})'> ` + "Close" + `</button>`;
+    //console.log("called", comments)
+    //console.log(id)
+    let commentsContainer = document.querySelector(`#c${id}`);
+    commentsContainer.innerHTML = `
+    <button class="button" id="btn${id}"  onclick= 'CloseComments(${id})'> ` + "Close" + `</button>
+    <br>
+    <div style="display:flex; flex-direction: row; column-gap: 15px; justify-content: left; align-items: center">
+      <p class="commentBlock" >`+`<h2 class="cCommentLabel">`+"Comment: " +`</h2>`+`<input type="text" class='cComment-content' id="cCommentTxt${id}" placeholder="Write a comment.." ; >`+`<button class="button cCommentBtn" id="cCommentBtn${id}" onclick= 'AppendComments(${id})'> ` + "Send comment" + `</button></p>
+      </div>
+    <br>
+     
+    `
+    let addCommentClass = document.querySelector(".commentBlock");
+    let addCommentLable = document.querySelector(".cCommentLabel");
+    let addCommentText = document.querySelector(`#cCommentTxt${id}`);
+    let addCommentButton = document.querySelector(".cCommentBtn");
+    addCommentClass.style.desplay = "block";
+    addCommentLable.style.display = "block";
+    addCommentText.style.display = "block";
+    addCommentButton.style.display = "block";
+    
     for (let i = comments.length - 1; i >= 0; i--) {
         if (comments[i].PstID !== id) {
             continue
@@ -106,4 +124,73 @@
       `
     }
 }
+
+
+//send new comment to database from the comment block
+ function AppendComments(id) {
+  //console.log(id)
+  //select the comment input for a particular post 
+  let commentText = document.querySelector("#cCommentTxt"+id).value
+  addCommentToDB(commentText, id)
+  //show comments section, including the cancel button
+  //HTA removed as not needed here //refreshComments(id)
+}
+
+  //From the comment block, send comment, post ID, and session cookie to the database
+  function addCommentToDB(comment, id){
+    let commentText = document.querySelector("#cCommentTxt"+id)
+    //clear the comment from text input
+    commentText.value = ""
+    
+    let commentBlock = document.querySelector("#c"+id)
+      //To improve user experience
+      //we add the latest comment to the comments section stright away
+      let cAuthor = document.querySelector("#current-user");
+      let item = document.createElement('p');
+      let date_time = new Date().toLocaleString();
+      
+
+      item.innerHTML = `
+      <p>`+"Author: " + cAuthor.value + `
+      </p>&nbsp;&nbsp;<p>` + "Comment: "+ comment + `
+      </p>&nbsp;&nbsp;<p>` + "Time: " + date_time + `
+      </p>
+      `
+      commentBlock.insertBefore(item,commentBlock.firstChild)
+     
+        let theCookie = GetCookie("user_session")
+        //console.log({theCookie})
+        let CommentContent = comment
+        let PostID = id
+        let CommentCookie = theCookie
+     
+      //console.log(CommentContent, PostID, CommentCookie)
+      //populate JS object with comment data
+      let CommentData = {
+        CommContent: CommentContent,
+        PstID: PostID,
+        CommCookie: CommentCookie,
+      }
+      //send user comment to the 'comment' struct in go
+      // via the '/comment' handler function in go
+  let configComment = {
+    method: "POST",
+    headers: {
+     "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+    body: JSON.stringify(CommentData)
+  };
+  fetch("http://localhost:8080/comment", configComment)
+  .then(function(response) {
+    //console.log('PostDataSuccess:', response)
+    if(!response.ok){
+      unsuccessfulComment() 
+    }else{
+      successfulComment() 
+    }
+  })
+  }
+
+
 

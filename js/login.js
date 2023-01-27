@@ -198,7 +198,7 @@ const Logout = () => {
 //
 // ====================================================
 window.onload = function () {
-  refreshPosts();//HTA: this is the equivalent of my command in file home.html line 162.
+  refreshPosts();//HTA: this is the equivalent of the command in my file home.html line 162.
   var conn;
   // var pst = document.getElementById("postList");
   var log = document.getElementById("log");
@@ -302,8 +302,8 @@ function showAddComment(){
   let commentLable = document.getElementsByClassName("commentLabel");
   let addCommentField = document.getElementsByClassName("comment-content");
   let addCommentBtnClass = document.getElementsByClassName("commentBtn");
-  console.log("commentLable selected? ---->", commentLable)
-  console.log("addCommentField selected? ---->", addCommentField)
+  //console.log("commentLable selected? ---->", commentLable)
+  //console.log("addCommentField selected? ---->", addCommentField)
   console.log("addCommentBtnClass selected? ---->", addCommentBtnClass)
   for(let i = 0; i< commentLable.length; i++){
     commentLable[i].style.display = "block";
@@ -315,17 +315,17 @@ function showAddComment(){
 
 //HTA: to hide comments' input texts and buttons after logout
 function hideAddComment(){
-  console.log("called hideAddComment---->")
+  //console.log("called hideAddComment---->")
   let commentLable = document.getElementsByClassName("commentLabel");
   let addCommentField = document.getElementsByClassName("comment-content");
   let addCommentBtnClass = document.getElementsByClassName("commentBtn");
   for(let i = 0; i< commentLable.length; i++){
     commentLable[i].style.display = "none";
-    console.log("commentlable.style", commentLable[i].style)
+    //console.log("commentlable.style", commentLable[i].style)
     addCommentBtnClass[i].style.display = "none";
-    console.log("addCommentBtnClass[i].style", addCommentBtnClass[i].style)
+    //console.log("addCommentBtnClass[i].style", addCommentBtnClass[i].style)
     addCommentField[i].style.display = "none";
-    console.log("addCommentField[i].style", addCommentField[i].style)
+    //console.log("addCommentField[i].style", addCommentField[i].style)
   }
 
 }
