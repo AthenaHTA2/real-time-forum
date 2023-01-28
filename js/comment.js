@@ -101,14 +101,14 @@
     <button class="button" id="btn${id}"  onclick= 'CloseComments(${id})'> ` + "Close" + `</button>
     <br>
     <div style="display:flex; flex-direction: row; column-gap: 15px; justify-content: left; align-items: center">
-      <p class="commentBlock" ><h2 class="cCommentLabel">`+"Comment: " +`</h2><input type="text" class="cComment-content" id='cCommentTxt${id}' placeholder="Write a comment.." ; ><button class="button cCommentBtn" id='cCommentBtn${id}' onclick= 'AppendComments(${id})'> ` + "Send comment" + `</button></p>
-      </div>
-    <br>
+      <p class="commentBlock" ><h2 class="cCommentLabel" id='cCommentLabel${id}'>`+"Comment: " +`</h2><input type="text" class="cComment-content" id='cCommentTxt${id}' placeholder="Write a comment.." ; ><button class="button cCommentBtn" id='cCommentBtn${id}' onclick= 'AppendComments(${id})'> ` + "Send comment" + `</button></p>
+    </div>
+    <br id='refNode${id}'>
     `
     let addCommentClass = document.querySelector(".commentBlock");
-    let addCommentLable = document.querySelector(".cCommentLabel");
+    let addCommentLable = document.querySelector(`#cCommentLabel${id}`);
     let addCommentText = document.querySelector(`#cCommentTxt${id}`);
-    let addCommentButton = document.querySelector(".cCommentBtn");
+    let addCommentButton = document.querySelector(`#cCommentBtn${id}`);
     addCommentClass.style.desplay = "block";
     addCommentLable.style.display = "block";
     addCommentText.style.display = "block";
@@ -141,21 +141,21 @@
     //clear the comment from text input
     commentText.value = ""
     
-    let commentBlock = document.querySelector("#c"+id)
+    //let commentBlock = document.querySelector("#c"+id)
       //To improve user experience
       //we add the latest comment to the comments section stright away
-      let cAuthor = document.querySelector("#current-user");
+      //let cAuthor = document.querySelector("#current-user");
       let item = document.createElement('p');
       let date_time = new Date().toLocaleString();
-      
+      //new comment will be appended after the referenceNode
+      let referenceNode = document.querySelector("#refNode"+id);
+      //let parentNode = document.querySelector("#c"+id);
 
       item.innerHTML = `
-      <p>`+"Author: " + cAuthor.value + `
-      </p>&nbsp;&nbsp;<p>` + "Comment: "+ comment + `
-      </p>&nbsp;&nbsp;<p>` + "Time: " + date_time + `
-      </p>
+      <div class="comment-container"><p >`+ "Author: " + UserNickName + `</p>&nbsp;&nbsp;<p >`+ "Comment: " + comment  + `</p>&nbsp;&nbsp;<p >`+ "Time: " + date_time + `</p></div>
       `
-      commentBlock.insertBefore(item,commentBlock.firstChild)
+
+      referenceNode.parentNode.insertBefore(item, referenceNode.nextSibling);
      
         let theCookie = GetCookie("user_session")
         //console.log({theCookie})

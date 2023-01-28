@@ -1,3 +1,4 @@
+let UserNickName;
 let user;
 let currentUser;
 let receiver;
@@ -81,6 +82,8 @@ LoginBtn.onclick = (e) => {
         console.log("The user's profile: ----->", userDetails);
         showProfile(userDetails)
         currentUser = userDetails.NickName;
+        //Current user name to show in comment box 
+        UserNickName = userDetails.NickName;
         var successlogin = document.getElementById("current-user");
         successlogin.innerHTML = " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼 " + currentUser + " &#128512";
         // if (user) {
