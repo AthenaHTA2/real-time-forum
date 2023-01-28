@@ -62,7 +62,7 @@ document.getElementById('logout').onclick = (e) => {
     document.getElementById("byeFace").style.display = "none";
   }, 1500);
   //hide user's profile data and the profile link
-  showHideUserProfile();
+  document.querySelector(".loggedUserProfile").style.display = "none";
   document.getElementById("profile").style.display = "none";
 };
 

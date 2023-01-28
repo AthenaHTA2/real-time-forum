@@ -101,10 +101,9 @@
     <button class="button" id="btn${id}"  onclick= 'CloseComments(${id})'> ` + "Close" + `</button>
     <br>
     <div style="display:flex; flex-direction: row; column-gap: 15px; justify-content: left; align-items: center">
-      <p class="commentBlock" >`+`<h2 class="cCommentLabel">`+"Comment: " +`</h2>`+`<input type="text" class='cComment-content' id="cCommentTxt${id}" placeholder="Write a comment.." ; >`+`<button class="button cCommentBtn" id="cCommentBtn${id}" onclick= 'AppendComments(${id})'> ` + "Send comment" + `</button></p>
+      <p class="commentBlock" ><h2 class="cCommentLabel">`+"Comment: " +`</h2><input type="text" class="cComment-content" id='cCommentTxt${id}' placeholder="Write a comment.." ; ><button class="button cCommentBtn" id='cCommentBtn${id}' onclick= 'AppendComments(${id})'> ` + "Send comment" + `</button></p>
       </div>
     <br>
-     
     `
     let addCommentClass = document.querySelector(".commentBlock");
     let addCommentLable = document.querySelector(".cCommentLabel");
