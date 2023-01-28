@@ -77,8 +77,10 @@ LoginBtn.onclick = (e) => {
         console.log("on track 2");
         setLoginErrorFor(Lpassword, "Please enter correct password");
       } else {
-        console.log(rsp);
-        currentUser = rsp;
+        let userDetails = JSON.parse(rsp);
+        console.log("The user's profile: ----->", userDetails);
+        showProfile(userDetails)
+        currentUser = userDetails.NickName;
         var successlogin = document.getElementById("current-user");
         successlogin.innerHTML = " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼 " + currentUser + " &#128512";
         // if (user) {
@@ -89,49 +91,42 @@ LoginBtn.onclick = (e) => {
     });
 };
 
-/*const refreshPostsAfterLogin = () => {
-  const displayPostsAfterLog = (posts) => {
-    console.log("##############################WE ARE NOW IN AFTERLOGING DISPLAYPOST")
-    postsContainer = document.querySelector('#postList')
-    postsContainer.innerHTML = "";
-    for (let i = (posts.length - 1); i >= 0; i--) {
-        postsContainer.innerHTML += `
-            <div class="posts" style.display ="block" id=` + posts[i].PostID + `>
-            
-            <p class="post-content" >` + "Author: " + posts[i].Author + `</p>
-            <p class="post-content" >` + "Category: " + posts[i].PostCat + `</p>
-            <p class="post-content" >` + "Title: " + posts[i].PostTitl + `&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            <button class="button" id="ShowComments" onclick="displayExpandedPosts() ;">` + "Show Comments" + `</button> </p>
-            <p class="post-content" >` + "Content: " + posts[i].PostCont + `</p>
-            <p class="post-content" >` + "Created: " + ConvertDate(posts[i].PostTime) + `</p>         
-            </div>
-            </div>            
-        `  
-    }
-  
-  
+//print profile data in the left side navigation
+function showProfile(user) {
+  console.log("showProfile called", user)
+  nameContainer = document.querySelector("#current-user")
+  nameContainer.innerHTML = "";
+  nameContainer.innerHTML = `<p>`+"Welcome " +user.NickName+"!"+ " &#128512"+`</p>`
+  profileContainer = document.querySelector("#userProfile")
+  profileContainer.innerHTML = "";
+
+  profileContainer.innerHTML = `
+    <div class ="loggedUserProfile" style="display: none;">
+    <br>
+    <br>
+    <br>
+    <h2 ><u>Profile</u></h2>
+    <p >`+ "First Name: " + user.FirstName + `</p>
+    <p >`+ "Last Name: " + user.LastName + `</p>
+    <p >`+ "Nickname: " + user.NickName + `</p>
+    <p >`+ "Gender: " + user.Gender + `</p>
+    <p >`+ "Email: " + user.Email + `</p>
+    <p >`+ "Age: " + user.Age + `</p>
+    </div>
+    `
+}
+
+//unhide the user profile aftert clicking the 'Profile' hyperlink
+//in the left-hand-side navigation
+function showHideUserProfile(){
+  let profileBlock = document.querySelector(".loggedUserProfile");
+  if (profileBlock.style.display === "none") {
+    profileBlock.style.display = "block";
+  } else {
+    profileBlock.style.display = "none";
   }
-  fetch("/getPosts", {
-    headers : {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-  })
-  .then((response)=> {
-    response.text().then(function(data){
-      let posts = JSON.parse(data);
-      console.log("posts:", posts);
-      //post shows all latest posts from database
-      displayPostsAfterLog(posts);
-    });
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-};*/
+}
+
 
 
 
@@ -153,6 +148,7 @@ const successfulLogin = () => {
   document.getElementById("postBlock").style.display = "block";
   //document.getElementById("postList").style.display = "none";
   document.getElementById("usersLog").style.display = "block";
+  document.getElementById("profile").style.display = "block";
 
   setTimeout(() => {
     console.log("WERE ARE GETTING TO TIMEOUT LOGIN SIDE");

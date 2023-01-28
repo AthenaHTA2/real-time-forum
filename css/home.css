@@ -39,6 +39,14 @@ body {
     color: black;
 }
 
+.loggedUserProfile{
+  display: none;
+  color: whitesmoke;
+  font-size: 1.2rem;
+  font-family:cursive;
+  font-weight: bolder;
+}
+
 /* end of Nav */
 
 /* ----------------------------------------------------- */
@@ -265,6 +273,11 @@ h6 {
     width: 100%;
     align-items: center;
 }
+
+#profile{
+  display: none;
+}
+
 
 
 /* end */

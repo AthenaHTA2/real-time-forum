@@ -61,6 +61,9 @@ document.getElementById('logout').onclick = (e) => {
     document.getElementById("LoggedOut").style.display = "none";
     document.getElementById("byeFace").style.display = "none";
   }, 1500);
+  //hide user's profile data and the profile link
+  showHideUserProfile();
+  document.getElementById("profile").style.display = "none";
 };
 
 function ChatReturn() {
