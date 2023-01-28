@@ -151,7 +151,7 @@
       let referenceNode = document.querySelector("#refNode"+id);
       //let parentNode = document.querySelector("#c"+id);
 
-      item.innerHTML = `
+      item.outerHTML = `
       <div class="comment-container"><p >`+ "Author: " + UserNickName + `</p>&nbsp;&nbsp;<p >`+ "Comment: " + comment  + `</p>&nbsp;&nbsp;<p >`+ "Time: " + date_time + `</p></div>
       `
 
