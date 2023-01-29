@@ -1,4 +1,4 @@
- //Unhides a post's comments section
+ //Unhides a post's comments section and sends comment to DB
  function DisplayComments(id) {
     //console.log(id)
     //select the comment input for a particular post 
@@ -11,6 +11,18 @@
     clearCommentBtn.style.visibility = "visible"
     refreshComments(id)
   }
+
+ //Show comments after clicking a post
+ function ShowCommentsBlock(id) {
+  //select the comment block for a particular post 
+  let commentBlock = document.querySelector("#c"+id)
+  let clearCommentBtn = document.querySelector("#btn"+id)
+  commentBlock.style.display = "block"
+  //show comments section, including the cancel button
+  clearCommentBtn.style.visibility = "visible"
+  refreshComments(id)
+}
+
   //hides a post's comments section
   function CloseComments(id){
     let commentBlock = document.querySelector("#c"+id)

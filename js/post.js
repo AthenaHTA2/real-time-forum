@@ -109,9 +109,17 @@ const refreshPosts = () => {
     document.getElementById("loginModal").style.display = "none";
     postsContainer = document.querySelector('#postList')
     postsContainer.innerHTML = "";
+    //show comments after clicking post if user logged in
+    let theCookie = GetCookie("user_session")
+    console.log({theCookie});
     for (let i = (posts.length - 1); i >= 0; i--) {
+      if(theCookie === null){
+        anyoneLoggedIn = ""
+      }else{
+        anyoneLoggedIn = `onclick= ShowCommentsBlock(${posts[i].PostID}) id= ${posts[i].PostID}`
+      }
         postsContainer.innerHTML += `
-            <div class="posts" onclick= 'DisplayComments(${posts[i].PostID})' id=` + posts[i].PostID + `>
+            <div class="posts"` + anyoneLoggedIn + `>
             <p class="post-content" >` + "Author: " + posts[i].Author + `</p>
             <p class="post-content" >` + "Category: " + posts[i].PostCat + `</p>
             <p class="post-content" >` + "Title: " + posts[i].PostTitl + `</p>

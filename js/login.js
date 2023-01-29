@@ -82,7 +82,8 @@ LoginBtn.onclick = (e) => {
         console.log("The user's profile: ----->", userDetails);
         showProfile(userDetails)
         currentUser = userDetails.NickName;
-        //Current user name to show in comment box 
+        //to show current user name in comment box, 
+        //and to determine if posts should show comments when clicked
         UserNickName = userDetails.NickName;
         var successlogin = document.getElementById("current-user");
         successlogin.innerHTML = " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼 " + currentUser + " &#128512";
@@ -167,6 +168,7 @@ const successfulLogin = () => {
   // document.getElementsByClassName('commentBlock').style.display = "block";
 
   //HTA taken out this //refreshPostsAfterLogin();
+  refreshPosts()
   showPost();
   showAddComment()//HTA added. This displays post comment fields and buttons
 
@@ -189,6 +191,7 @@ const Logout = () => {
   document.querySelector(".loggedInUsers").style.visibility = "hidden";
   document.querySelector(".chat-private").style.visibility = "hidden";
   document.getElementById('current-user').style.display ="none"; 
+  refreshPosts()
   hideAddComment();
   console.log(document.cookie);
   //show posts without comments
