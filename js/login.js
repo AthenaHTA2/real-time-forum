@@ -321,11 +321,8 @@ function hideAddComment(){
   let addCommentBtnClass = document.getElementsByClassName("commentBtn");
   for(let i = 0; i< commentLable.length; i++){
     commentLable[i].style.display = "none";
-    //console.log("commentlable.style", commentLable[i].style)
     addCommentBtnClass[i].style.display = "none";
-    //console.log("addCommentBtnClass[i].style", addCommentBtnClass[i].style)
     addCommentField[i].style.display = "none";
-    //console.log("addCommentField[i].style", addCommentField[i].style)
   }
 
 }

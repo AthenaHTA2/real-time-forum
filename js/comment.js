@@ -145,14 +145,15 @@
       //To improve user experience
       //we add the latest comment to the comments section stright away
       //let cAuthor = document.querySelector("#current-user");
-      let item = document.createElement('p');
+      let item = document.createElement('div');
+      item.classList.add("comment-container")
       let date_time = new Date().toLocaleString();
       //new comment will be appended after the referenceNode
       let referenceNode = document.querySelector("#refNode"+id);
       //let parentNode = document.querySelector("#c"+id);
 
-      item.outerHTML = `
-      <div class="comment-container"><p >`+ "Author: " + UserNickName + `</p>&nbsp;&nbsp;<p >`+ "Comment: " + comment  + `</p>&nbsp;&nbsp;<p >`+ "Time: " + date_time + `</p></div>
+      item.innerHTML = `
+      <p >`+ "Author: " + UserNickName + `</p>&nbsp;&nbsp;<p >`+ "Comment: " + comment  + `</p>&nbsp;&nbsp;<p >`+ "Time: " + date_time + `</p>
       `
 
       referenceNode.parentNode.insertBefore(item, referenceNode.nextSibling);
