@@ -56,7 +56,7 @@ type Session struct {
 
 type Cookie struct {
 	Name    string
-	Value   string
+	Value   string `json: "deleteCookie"`
 	Expires time.Time
 }
 

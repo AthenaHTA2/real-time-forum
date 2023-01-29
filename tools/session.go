@@ -67,15 +67,26 @@ func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 
 // User's cookie expires when browser is closed, delete the cookie from the database.
 func DeleteSession(w http.ResponseWriter, cookieValue string) error {
-	//removing session record from 'sessions' table
-	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE cookieValue = ?;")
+	var cookieName string
+	//if cookieName is not found in 'Sessions' db table return err = nil
+	if err := sqldb.DB.QueryRow("SELECT cookieName FROM Sessions WHERE cookieValue = ?", cookieValue).Scan(&cookieName); err != nil {
+		return nil
+	}
+	//removing cookie from browser
+	cookie := &http.Cookie{
+		Name:   cookieName,
+		Value:  "",
+		MaxAge: -1,
+		//HttpOnly: true,
+	}
+	http.SetCookie(w, cookie)
+	//removing session record from 'Sessions' table
+	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE cookieValue=?;")
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
-
 	defer stmt.Close()
 	stmt.Exec(cookieValue)
-
 	if err != nil {
 		fmt.Println("DeleteSession err: ", err)
 		return err
@@ -85,16 +96,28 @@ func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 
 // logout handle
 func Logout(w http.ResponseWriter, r *http.Request) {
+	//var cooky Cookie
 	if r.URL.Path == "/logout" {
 		c, err := r.Cookie("session_token")
 		if err != nil {
-			AddSession(w, "guest", nil)
-			http.Redirect(w, r, "/", http.StatusSeeOther)
+			//AddSession(w, "guest", nil)
+			//http.Redirect(w, r, "/", http.StatusSeeOther)
 			fmt.Println("Logout error: ", err)
 		}
 		DeleteSession(w, c.Value)
+		/*======================================================
+
+		cookieVal, err := io.ReadAll(r.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+		//fmt.Println("Json from Login: ", string(loginD))
+
+		json.Unmarshal(cookieVal, &cooky.Value)
+		DeleteSession(w, cooky.Value)
+		=========================================================*/
 		fmt.Println("user logged out")
-		http.Redirect(w, r, "/", http.StatusFound)
+		//http.Redirect(w, r, "/", http.StatusFound)
 	}
 }
 
@@ -103,7 +126,7 @@ func GetUserByCookie(cookieValue string) *User {
 	var userID int64
 
 	if err := sqldb.DB.QueryRow("SELECT userID from Sessions WHERE cookieValue = ?", cookieValue).Scan(&userID); err != nil {
-		fmt.Println("++++++++++++++++++++++++___________________________===",cookieValue)
+		fmt.Println("++++++++++++++++++++++++___________________________===", cookieValue)
 		return nil
 	}
 	u := FindByUserID(userID)

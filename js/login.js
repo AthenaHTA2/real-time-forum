@@ -197,6 +197,31 @@ const Logout = () => {
   //show posts without comments
   
 }
+
+//remove cookie from browser when logout
+function LogoutDeleteCookie(){
+	let deleteCookie = GetCookie("user_session");
+  let configLogout = {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    },
+    body: JSON.stringify(deleteCookie)
+};
+
+fetch("/logout", configLogout)
+.then(function (response) {
+  console.log(response);
+  if (response.status == 200) {
+    console.log("successful logout");
+    response.text();
+  } else {
+    console.log("unccessful logout");
+    response.text();
+  }
+})
+}
 //
 //
 // ====================================================

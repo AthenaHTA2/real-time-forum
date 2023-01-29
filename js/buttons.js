@@ -69,5 +69,7 @@ document.getElementById('logout').onclick = (e) => {
 function ChatReturn() {
   document.querySelector(".chat-private").style.visibility = "hidden";
   //hide comment lable, input text and button from posts
+  Logout ()
+  LogoutDeleteCookie()
   hideAddComment()
 }

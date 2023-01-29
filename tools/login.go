@@ -169,3 +169,4 @@ func AllPosts() []byte {
 	onePost := []byte(postItem)
 	return onePost
 }
+
