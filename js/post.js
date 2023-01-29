@@ -111,7 +111,7 @@ const refreshPosts = () => {
     postsContainer.innerHTML = "";
     for (let i = (posts.length - 1); i >= 0; i--) {
         postsContainer.innerHTML += `
-            <div class="posts" id=` + posts[i].PostID + `>
+            <div class="posts" onclick= 'DisplayComments(${posts[i].PostID})' id=` + posts[i].PostID + `>
             <p class="post-content" >` + "Author: " + posts[i].Author + `</p>
             <p class="post-content" >` + "Category: " + posts[i].PostCat + `</p>
             <p class="post-content" >` + "Title: " + posts[i].PostTitl + `</p>
@@ -125,7 +125,7 @@ const refreshPosts = () => {
             <button class="button hideCommentBtn" id="btn${posts[i].PostID}"  onclick= 'CloseComments(${posts[i].PostID})'> ` + "Close" + `</button>
             </div>
             </div>          
-        `  
+        ` 
     }
   }
 }
