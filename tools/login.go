@@ -145,6 +145,7 @@ func GetAllUsers() []byte {
 			fmt.Println("err: ", err)
 		}
 		allUsers = allUsers + "\n" + tempUser
+		fmt.Println("the 'allUsers' string -->:", allUsers)
 	}
 	rows.Close()
 	for _, user := range allUsers {
@@ -169,4 +170,3 @@ func AllPosts() []byte {
 	onePost := []byte(postItem)
 	return onePost
 }
-

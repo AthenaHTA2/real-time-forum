@@ -1,11 +1,15 @@
 package tools
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"rtforum/sqldb"
+	"strings"
 	"time"
+	"unicode/utf8"
 
 	uuid "github.com/satori/go.uuid"
 )
@@ -67,9 +71,11 @@ func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 
 // User's cookie expires when browser is closed, delete the cookie from the database.
 func DeleteSession(w http.ResponseWriter, cookieValue string) error {
+	fmt.Println("-----> DeleteSession called")
 	var cookieName string
 	//if cookieName is not found in 'Sessions' db table return err = nil
 	if err := sqldb.DB.QueryRow("SELECT cookieName FROM Sessions WHERE cookieValue = ?", cookieValue).Scan(&cookieName); err != nil {
+		fmt.Println("there was an error selecting ", cookieValue)
 		return nil
 	}
 	//removing cookie from browser
@@ -79,6 +85,8 @@ func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 		MaxAge: -1,
 		//HttpOnly: true,
 	}
+
+	fmt.Println("the cookie after changing its values -->", cookie)
 	http.SetCookie(w, cookie)
 	//removing session record from 'Sessions' table
 	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE cookieValue=?;")
@@ -96,8 +104,10 @@ func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 
 // logout handle
 func Logout(w http.ResponseWriter, r *http.Request) {
-	//var cooky Cookie
+	var cooky Cookie
+
 	if r.URL.Path == "/logout" {
+		/*=========================================================
 		c, err := r.Cookie("session_token")
 		if err != nil {
 			//AddSession(w, "guest", nil)
@@ -105,17 +115,30 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Logout error: ", err)
 		}
 		DeleteSession(w, c.Value)
-		/*======================================================
+		======================================================*/
 
 		cookieVal, err := io.ReadAll(r.Body)
+		fmt.Println("cookieVal before unmarshalled", cookieVal)
 		if err != nil {
 			log.Fatal(err)
 		}
-		//fmt.Println("Json from Login: ", string(loginD))
+		cookieStringBefore := string(cookieVal[:])
+		//l := cookieStringBefore.slice(1)
+		cValue := strings.Split(cookieStringBefore, ":")
+		cookieStringAfter := (cValue[1])
+		numRunes := utf8.RuneCountInString(cookieStringAfter)
+		fmt.Println("the number of runes in cookie: ", numRunes)
+		cookieStringByte := []byte(cookieStringAfter)
+		cookieStringAfter = string(cookieStringByte[0 : numRunes-1])
+		fmt.Println("the correct cookie: --->", cookieStringAfter)
 
-		json.Unmarshal(cookieVal, &cooky.Value)
-		DeleteSession(w, cooky.Value)
-		=========================================================*/
+		json.Unmarshal([]byte(cookieStringAfter), &cooky.Value)
+
+		fmt.Println("cookie value before unmarshal: ", cookieStringBefore)
+		fmt.Println("cookie value after unmarshal: ", string(cookieStringAfter))
+
+		DeleteSession(w, string(cooky.Value))
+
 		fmt.Println("user logged out")
 		//http.Redirect(w, r, "/", http.StatusFound)
 	}

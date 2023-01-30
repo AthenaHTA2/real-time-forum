@@ -201,13 +201,19 @@ const Logout = () => {
 //remove cookie from browser when logout
 function LogoutDeleteCookie(){
 	let deleteCookie = GetCookie("user_session");
+  console.log({deleteCookie})
+  let objDeleteCookie = {
+    toDelete: deleteCookie,
+  }
+  console.log({objDeleteCookie})
   let configLogout = {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
     },
-    body: JSON.stringify(deleteCookie)
+   body: JSON.stringify(objDeleteCookie)
+
 };
 
 fetch("/logout", configLogout)
@@ -215,10 +221,10 @@ fetch("/logout", configLogout)
   console.log(response);
   if (response.status == 200) {
     console.log("successful logout");
-    response.text();
+
   } else {
     console.log("unccessful logout");
-    response.text();
+
   }
 })
 }

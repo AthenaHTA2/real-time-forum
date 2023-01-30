@@ -64,12 +64,12 @@ document.getElementById('logout').onclick = (e) => {
   //hide user's profile data and the profile link
   document.querySelector(".loggedUserProfile").style.display = "none";
   document.getElementById("profile").style.display = "none";
+  LogoutDeleteCookie()
+  hideAddComment()
 };
 
 function ChatReturn() {
   document.querySelector(".chat-private").style.visibility = "hidden";
   //hide comment lable, input text and button from posts
   Logout ()
-  LogoutDeleteCookie()
-  hideAddComment()
 }
