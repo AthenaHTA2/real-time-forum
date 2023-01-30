@@ -2,6 +2,7 @@ let user;
 let currentUser;
 let receiver;
 let LoginData;
+let expandPost
 
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
@@ -47,16 +48,19 @@ LoginBtn.onclick = (e) => {
     body: JSON.stringify(LoginData),
   };
   
+  
+
   fetch("/login", configLogin)
     .then(function (response) {
       console.log(response);
       if (response.status == 200) {
         console.log("successful login");
-        successfulLogin();
-        response.text();
+        successfulLogin()
+        // refreshPosts();
+       return response.text();
       } else {
-        // unsuccessfullLogin();
-        response.text();
+        unsuccessfullLogin();
+       return response.text();
       }
     })
     .then((rsp) => {
@@ -75,8 +79,9 @@ LoginBtn.onclick = (e) => {
       } else {
         console.log(rsp);
         currentUser = rsp;
+  
         var successlogin = document.getElementById("current-user");
-        successlogin.innerHTML = " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼 " + currentUser + " &#128512";
+        successlogin.innerHTML = " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼 " + currentUser.nickname + " &#128512";
         // if (user) {
         //   var successlogin = document.getElementById("current-user");
         //   successlogin.innerHTML = " Welcome " + currentUser;
@@ -85,36 +90,132 @@ LoginBtn.onclick = (e) => {
     });
 };
 
+//print profile data in the left side navigation
+// function showProfile(user) {
+//   console.log("showProfile called", user)
+//   nameContainer = document.querySelector("#current-user")
+//   nameContainer.innerHTML = "";
+//   nameContainer.innerHTML = `<p>`+"Welcome " +user.NickName+"!"+ " &#128512"+`</p>`
+//   profileContainer = document.querySelector("#userProfile")
+//   profileContainer.innerHTML = "";
+//   profileContainer.innerHTML = `
+//     <div id="loggedUserProfile" style="display: none;">
+//     <br>
+//     <br>
+//     <br>
+//     <h1 ><u>`+ user.NickName +`Profile</u></h1>
+//     <p >`+ "First Name: " + user.FirstName + `</p>
+//     <p >`+ "Last Name: " + user.LastName + `</p>
+//     <p >`+ "Nickname: " + user.NickName + `</p>
+//     <p >`+ "Gender: " + user.Gender + `</p>
+//     <p >`+ "Email: " + user.Email + `</p>
+//     <p >`+ "Age: " + user.Age + `</p>
+//     </div>
+//     `
+// }
+
+// //unhide the user profile aftert clicking the 'Profile' hyperlink
+// //in the left-hand-side navigation
+// function showHideUserProfile(){
+//   let profileBlock = document.querySelector(".loggedUserProfile");
+//   if (profileBlock.style.display === "none") {
+//     profileBlock.style.display = "block";
+//   } else {
+//     profileBlock.style.display = "none";
+//   }
+// }
+
+const refreshPostsAfterLogin = () => {
+  fetch("/getPosts", {
+    headers : {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  })
+  .then((response)=> {
+    response.text().then(function(data){
+      let posts = JSON.parse(data);
+      console.log("posts:", posts);
+      //post shows all latest posts from database
+      displayPostsAfterLog(posts);
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+  const displayPostsAfterLog = (posts) => {
+    console.log("##############################WE ARE NOW IN AFTERLOGING DISPLAYPOST")
+    postsContainer = document.querySelector('#postListAfterLogin')
+    postsContainer.innerHTML = "";
+    for (let i = (posts.length - 1); i >= 0; i--) {
+        postsContainer.innerHTML += `
+            <div class="posts" style.display ="inline-block" id=` + posts[i].PostID + `>
+            <div  style.display="inline-block" &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <button class="button" id="ShowComments" onclick="displayExpandedPosts() ;" style.text-align="center">` + 
+            " &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;" + " &nbsp; &nbsp; &nbsp; &nbsp;" +
+            " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  Show Comments" + `</button>
+            </div>
+            
+            <p class="post-content" >` + "Author: " + posts[i].Author + `</p>
+            <p class="post-content" >` + "Category: " + posts[i].PostCat + `</p>
+            <p class="post-content" >` + "Title: " + posts[i].PostTitl + ` </p>
+            <p class="post-content" >` + "Content: " + posts[i].PostCont + `</p>
+            <p class="post-content" >` + "Created: " + ConvertDate(posts[i].PostTime) + `</p> 
+            <br>  
+           
+            <br>  
+            </div>
+            </div>            
+        `  
+    }
+  }
+
+  
+};
+
+
+
 const successfulLogin = () => {
   console.log("STATUS 200 OK");
-  console.log("WERE ARE GETTING TO SUCCEDDFUL LOGIN FUNCTION")
-    document.getElementById('loginModal').style.display ="none"; 
-    document.getElementById('LoggedOn').style.display = 'block';
-    document.getElementById('happyFace').style.display = 'block';
-    document.getElementById('addPost').style.display = "block";
-    document.getElementById('login').style.display ="none"; 
-    document.getElementById('register').style.display ="none"; 
-    document.getElementById('welcomemsg').style.display ="none"; 
-    document.getElementById('Offline').style.display ="block"; 
-    document.getElementById('Online').style.display ="block"; 
-    document.getElementById('Messenger').style.display ="block"; 
-    document.getElementById('current-user').style.display ="block"; 
-    document.getElementById('logout').style.display = 'block' 
-    document.getElementById('postBlock').style.display = 'flex';
-    
-    setTimeout(() => {
-        console.log("WERE ARE GETTING TO TIMEOUT LOGIN SIDE")
-        document.getElementById('LoggedOn').style.display = 'none';
-        document.getElementById('happyFace').style.display = 'none';
-      },1500);
-    
-    postBtn = document.querySelector("#postBlock > button");
-    postBtn.style.visibility = "visible";  
-    document.querySelector(".loggedInUsers").style.display = "block";
+  console.log("WERE ARE GETTING TO SUCCEDDFUL LOGIN FUNCTION");
+  document.getElementById("loginModal").style.display = "none";
+  document.getElementById("LoggedOn").style.display = "block";
+  document.getElementById("happyFace").style.display = "block";
+  document.getElementById("addPost").style.display = "block";
+  document.getElementById("login").style.display = "none";
+  document.getElementById("register").style.display = "none";
+  document.getElementById("welcomemsg").style.display = "none";
+  document.getElementById("Offline").style.display = "block";
+  document.getElementById("Online").style.display = "block";
+  document.getElementById("Messenger").style.display = "block";
+  document.getElementById("current-user").style.display = "block";
+  document.getElementById("logout").style.display = "block";
+  document.getElementById("postBlock").style.display = "block";
+  document.getElementById("postList").style.display = "none";
+  document.getElementById("usersLog").style.display = "block";
+  // document.getElementById("profile").style.display = "block";
 
-   
-    
-}
+
+  setTimeout(() => {
+    console.log("WERE ARE GETTING TO TIMEOUT LOGIN SIDE");
+    document.getElementById("LoggedOn").style.display = "none";
+    document.getElementById("happyFace").style.display = "none";
+  }, 1500);
+
+  postBtn = document.querySelector("#postBlock > button");
+  postBtn.style.visibility = "visible";
+  document.querySelector(".loggedInUsers").style.display = "block";
+  // document.getElementsByClassName('ShowComments').style.display = "none";
+  // document.getElementsByClassName('commentBlock').style.display = "block";
+
+  refreshPostsAfterLogin();
+
+};
+
 const unsuccessfullLogin = () => {
     
     console.log("failed - not status 200")
@@ -138,6 +239,7 @@ const Logout = () => {
 //
 // ====================================================
 window.onload = function () {
+  refreshPosts();
   var conn;
   // var pst = document.getElementById("postList");
   var log = document.getElementById("log");

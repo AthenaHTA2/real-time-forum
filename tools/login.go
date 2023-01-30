@@ -100,7 +100,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			MaxAge:  7200,
 			Expires: expiresAt,
 			// SameSite: true,
-			//HttpOnly: true, //removed in order to allow Javascript to access cookie
+			// HttpOnly: true, //removed in order to allow Javascript to access cookie
 		})
 
 		// storing the cookie values in struct
@@ -119,8 +119,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("User successfully logged in")
 	}
 
+	marshalledUser, err := json.Marshal(CurrentUser)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(CurrentUser.NickName))
+	w.Write([]byte(marshalledUser))
 	GetAllUsers()
 
 }

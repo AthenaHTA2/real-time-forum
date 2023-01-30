@@ -31,9 +31,17 @@
         <a id ="homePage" href = "/" onclick="e.preventDefault();" class="nav__link">ℍ𝕠𝕞𝕖ℙ𝕒𝕘𝕖</a>
         <a id ="register" onclick="openReg() ;"class="nav__link" style="display:block">ℝ𝕖𝕘𝕚𝕤𝕥𝕖𝕣</a>
         <a id ="login" onclick="openLogin() ;"class="nav__link" style="display:block">𝕃𝕠𝕘𝕀𝕟</a>
-        <a id ="post" onclick="openPosts() ;" class="nav__link">ℙ𝕠𝕤𝕥𝕤</a>
-        <!-- <a id="profile" class="nav__link" style="display:none">ℙ𝕣𝕠𝕗𝕚𝕝𝕖</a>     -->
-        <a id="logout" href="/" onclick="Logout() ;" class="nav__link" style="display:none">𝕃𝕠𝕘𝕆𝕦𝕥</a>    
+        <a id ="post" onclick="refreshPosts() ;" class="nav__link">ℙ𝕠𝕤𝕥𝕤</a>
+        <a id="logout" href="/" onclick="Logout() ;" class="nav__link" style="display:none">𝕃𝕠𝕘𝕆𝕦𝕥</a>   
+         <!-- happy face emoji's -->
+    <a id="happyFace" style="display:none">
+        <img src="/css/img/thumbsup.gif" height="100%" width="100%" margin-left="20%">
+    </a>
+
+    <a id="byeFace" style="display:none">
+        <img id="byeFace" src="/css/img/bye.gif" height="90%" width="90%" margin-left="20%">
+    </a>
+        <!-- <a id="profile" class="nav__link" onclick="showProfile() ;" style="display:none">ℙ𝕣𝕠𝕗𝕚𝕝𝕖</a>     -->
 
     </nav>
 
@@ -94,15 +102,25 @@
 ===========================================================================================================
 -->
 
-    <div id="postBlock" class="posts" >
+    <div id="postBlock" class="posts" style="display:none">
         <label for="PostTitle">Post Title:</label>
-        <textarea name="postTitle" type="text" rows="1" cols="60" id="PostTitle" name="Title" placeholder="Enter Title..."></textarea>
-        <label for="Post Content"> Content:  </label>
-        <textarea name="postinput" type="text" rows="4" cols="60" id="PostContent" name="Content" placeholder="Description..."></textarea>
+        <br>
+        <textarea name="postTitle" type="text" rows="1" cols="80" id="PostTitle" name="Title" placeholder="Enter Title..."></textarea>
+        <br>
         <label for="Post Cat">Catergory:</label>
-        <input type="dropdown" id="PostCat" name="Category" placeholder="Choose Categories..">
+        <br>
+        <select id="PostCat">
+            <option value="0" selected>-- Select --</option>
+            <option value="1">Sports</option>
+            <option value="2">Weather</option>
+            <option value="3">Social</option>
+            <option value="4">Other</option>
+          </select>
+          <br>
+        <label for="Post Content"> Content:  </label>
+        <br>
+        <textarea name="postinput" type="text" rows="4" cols="80" id="PostContent" name="Content" placeholder="Description..."></textarea>
         <button class="button" id="addPost" type="submit" style="display:none">Create Post</button>
-    
     </div>
 
        <!-- 
@@ -114,6 +132,28 @@
     <div id="postList">
       
     </div>
+
+            <!-- 
+
+===========================================================================================================
+                                       POST FEED DISPLAY MODAL                                                         
+===========================================================================================================
+ -->
+
+ <div id="postListAfterLogin">
+      
+ </div>
+
+         <!-- 
+
+===========================================================================================================
+                                       EXPANDED POSTS FEED WITH COMMENTS                                                         
+===========================================================================================================
+ -->
+
+ <div id="postListExpanded">
+  
+ </div>
 
         <!-- 
 ===========================================================================================================
@@ -131,21 +171,26 @@
                 </div> 
                
          
-                <div class="login-form-control">
+                <div class="container">
                  <h1>🅻🅾🅶🅸🅽</h1>
-         
-                 <label for="userName"><b>Userame Or Email</b></label>
-                 <input type="text" id="LUserName" placeholder="Enter Username" name="UserName" required>
-                 <i class="fa-regular fa-circle-check"></i>
-                 <i class="fa-regular fa-exclamation"></i>
-                 <small>Error Message</small>
+                
+                 <div class="login-form-control">
+                    <label for="userName"><b>UserName Or Email</b></label>
+                    <input type="text" id="LUserName" placeholder="Enter Username" name="UserName" required>
+                    <i class="fa-regular fa-circle-check"></i>
+                    <i class="fa-regular fa-exclamation"></i>
+                    <small>Error Message</small>
+                 </div>
+                
                  
-                 
-                 <label for="psw"><b>Password</b></label>
-                 <input type="password" id="LPassW" placeholder="Enter Password" name="psw" required>
-                 <i class="fa-regular fa-circle-check"></i>
-                 <i class="fa-regular fa-exclamation"></i>
-                 <small>Error Message</small>
+                <div class="login-form-control">    
+                    <label for="psw"><b>Password</b></label>
+                    <input type="password" id="LPassW" placeholder="Enter Password" name="psw" required>
+                    <i class="fa-regular fa-circle-check"></i>
+                    <i class="fa-regular fa-exclamation"></i>
+                    <small>Error Message</small>
+                </div>
+             
          
                  <button class="button" id="loginBtn" type="submit">Login</button>
          
@@ -185,61 +230,74 @@
        </div> 
        
 
-       <div class="reg-form-control" id="form"> 
+       <div class="container" id="form"> 
         <h2>🆁🅴🅶🅸🆂🆃🅴🆁</h2>
-        <label for="FirstName"><b>First Name</b></label>
-        <input id="FirstName" type="text" placeholder="Enter First Name" name="FirstName" required>
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
 
-        <label for="LastName"><b>Last Name</b></label>
-        <input id="LastName" type="text" placeholder="Enter Last Name" name="Last Name" required>
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
+        <div class="reg-form-control">
+            <label for="FirstName"><b>First Name</b></label>
+            <input id="FirstName" type="text" placeholder="Enter First Name" name="FirstName" required>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+       
 
-        <label for="NickName"><b>NickName</b></label>
-        <input id="NickName" type="text" placeholder="This will be your userName" name="Nick Name" required  minlength="4" maxlength="10">
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
+        <div class="reg-form-control">
+            <label for="LastName"><b>Last Name</b></label>
+            <input id="LastName" type="text" placeholder="Enter Last Name" name="Last Name" required>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
 
-        <label for="Age"><b>Age</b></label>
-        <input id="Age" type="number" placeholder="Enter Age" name="Age" required>
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
+        </div>
+        
 
-        <label  for="Gender"><b>Gender</b></label>
-        <input id="Gender" type="text" placeholder="Enter Gender" name="Gender" required>
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
-    
-        <label for="Email"><b>Email</b></label>
-        <input id="Email" type="email" onkeydown="validation()" size="30" placeholder="Enter Email Address" name="Email" required>
-        <span id="text"></span>
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
+        <div class="reg-form-control">
+            <label for="NickName"><b>NickName</b></label>
+            <input id="NickName" type="text" placeholder="This will be your userName" name="Nick Name" required  minlength="4" maxlength="10">
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+        
 
-        <label for="psw"><b>Password</b></label>
-        <input id="PassWord" type="password" placeholder="Enter Password" name="psw" required>
-        <i
-        class="far fa-eye"
-        id="togglePassword"
-        style="
-          cursor: pointer;
-          visibility: visible;
-          color: rgb(220, 2, 2);
-          top: 40px;
-          right: 40px;
-        "
-      ></i>
-      <i class="fa-regular fa-circle-check"></i>
-      <i class="fa-regular fa-exclamation"></i>
-      <small>Error Message</small>
+        <div class="reg-form-control">
+             <label for="Age"><b>Age</b></label>
+            <input id="Age" type="number" placeholder="Enter Age" name="Age" required>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+       
+
+        <div class="reg-form-control">
+             <label  for="Gender"><b>Gender</b></label>
+            <input id="Gender" type="text" placeholder="Enter Gender" name="Gender" required>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+       
+        
+        <div class="reg-form-control">
+             <label for="Email"><b>Email</b></label>
+            <input id="Email" type="email" onkeydown="validation()" size="30" placeholder="Enter Email Address" name="Email" required>
+            <span id="text"></span>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+       
+        <div class="reg-form-control">
+             <label for="psw"><b>Password</b></label>
+            <input id="PassWord" type="password" placeholder="Enter Password" name="psw" required>
+            <i class="far fa-eye" id="togglePassword" style="cursor: pointer; visibility: visible; color: rgb(220, 2, 2); top: 40px;
+          right: 40px;"></i>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+       
 
         
       <span>
@@ -261,14 +319,8 @@
 -->
 
 
-    <!-- happy face emoji's -->
-    <div id="happyFace" style="display:none">
-        <img id="happyFace" src="/css/img/thumbsup.gif" height="15%" width="15%">
-    </div>
+   
 
-    <div id="byeFace" style="display:none">
-        <img id="byeFace" src="/css/img/bye.gif" height="15%" width="15%">
-    </div>
 
 
     <!-- registration confirmed pop-up -->
@@ -312,31 +364,16 @@
             </h4><img src="/css/img/sad.gif" alt="" srcset="" height="25%" width="25%">
         </div>
 
-<!-- 
-    <div id="profileMod" class="modal">
-        <form class="modal-content animate" action="/login">
-        <img id="profilePic" src="/css/img/happy.gif" height="15%" width="15%">
-        <h2>🆄🆂🅴🆁-🅿🆁🅾🅵🅸🅻🅴</h2>
-        <div id="firstName">
-            <h5>First Name : </h5>
-        </div>
-        <div id="lastName">
-            <h5>Last Name : </h5>
-        </div>
-        <div id="NickName">
-            <h5>Nick Name : </h5>
-        </div>
-        <div id="Age">
-            <h5>Age : </h5>
-        </div>
-        <div id="Gender">
-            <h5>Gender : </h5>
-        </div>
-        <div id="Email">
-            <h5>Email : </h5>
-        </div>
-    </div> -->
+        <!-- 
+===========================================================================================================
+                                           PROFILE MOD                                                    
+===========================================================================================================
+-->
+
+    <!-- <div id="loggedUserProfile" class="modal">
     
+    </div>
+     -->
     
 
 </body>
