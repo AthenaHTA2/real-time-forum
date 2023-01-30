@@ -44,18 +44,19 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		age,
 		gender,
 		email,
-		passwordhash
-		) VALUES(?,?,?,?,?,?,?)`, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Email, hash)
+		passwordhash,
+		LoggedIn
+		) VALUES(?,?,?,?,?,?,?,?)`, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Email, hash, "false")
 
 	if err != nil {
 		// Convey StatusBadRequest = 400 to browser
 		w.WriteHeader(http.StatusBadRequest)
-		
+
 		fmt.Println("Error inserting into 'Users' table: ", err)
 		// convey exact error message to be displayed at browser end
-		if(err.Error() =="UNIQUE constraint failed: Users.email"){
+		if err.Error() == "UNIQUE constraint failed: Users.email" {
 			w.Write([]byte("ERROR: This email already exists, please log in instead"))
-		} else if (err.Error() == "UNIQUE constraint failed: Users.nickName"){
+		} else if err.Error() == "UNIQUE constraint failed: Users.nickName" {
 			w.Write([]byte("ERROR: This username already exists, please log in instead"))
 		}
 		// w.Write([]byte(err.Error()))

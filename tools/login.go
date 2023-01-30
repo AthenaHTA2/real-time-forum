@@ -69,7 +69,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		stmtCurrentUer := "SELECT * FROM Users WHERE nickName = ? OR email = ?"
 		rowCurrentUser := sqldb.DB.QueryRow(stmtCurrentUer, LogUserName, LogUserName)
 
-		err3 := rowCurrentUser.Scan(&CurrentUser.UserID, &CurrentUser.FirstName, &CurrentUser.LastName, &CurrentUser.NickName, &CurrentUser.Age, &CurrentUser.Gender, &CurrentUser.Email, &CurrentUser.Password)
+		err3 := rowCurrentUser.Scan(&CurrentUser.UserID, &CurrentUser.FirstName, &CurrentUser.LastName, &CurrentUser.NickName, &CurrentUser.Age, &CurrentUser.Gender, &CurrentUser.Email, &CurrentUser.Password, &CurrentUser.LoggedIn)
 		if err3 != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Println("error with currentUser", err3)
@@ -89,6 +89,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("already logged in: ", err3)
 			return
 		}
+		//setting 'LoggedIn' field to true
+		updateLogInStatus(LogUserName)
+
 		sessionToken := uuid.NewV4().String()
 		expiresAt := time.Now().Add(120 * time.Minute)
 		cookieNm := "user_session"
@@ -169,4 +172,31 @@ func AllPosts() []byte {
 	fmt.Println("postItem: ", postItem)
 	onePost := []byte(postItem)
 	return onePost
+}
+
+//set the 'LoggedIn' field in Users database table to 'true'
+func updateLogInStatus(LogUserName string) {
+	var value string
+
+	stmtLoggedIn := "SELECT LoggedIn FROM Users WHERE nickName = ? OR email = ?"
+	rowLoggedIn := sqldb.DB.QueryRow(stmtLoggedIn, LogUserName, LogUserName)
+	err5 := rowLoggedIn.Scan(&value)
+	if err5 != nil {
+		fmt.Println("err selecting LoggedIn in db", err5)
+	}
+
+	insertLoggedInTrue, err6 := sqldb.DB.Prepare("UPDATE Users SET LoggedIn= ? WHERE nickName = ? OR email = ?")
+	if err6 != nil {
+		fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!err with inserting LoggedIn:", err6)
+		return
+	}
+	defer insertLoggedInTrue.Close()
+
+	if value == "false" {
+		insertLoggedInTrue.Exec("true", LogUserName, LogUserName)
+
+	} else {
+		insertLoggedInTrue.Exec("false", LogUserName, LogUserName)
+	}
+	fmt.Println(value)
 }
