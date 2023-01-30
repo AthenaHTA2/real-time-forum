@@ -1,58 +1,76 @@
 //This is our functions to open the links for our buttons
-function openLogin() {
+
+//This function opens Login Modal
+const openLogin = () => {
   closePost();
   document.getElementById("loginModal").style.display = "block";
   document.getElementById("regModal").style.display = "none";
+  document.getElementById("postList").style.display = "none";
   document.getElementById("regConfirmed").style.display = "none";
-}
-function openReg() {
+};
+
+//this function open Registration Modal
+const openReg = () => {
   closePost();
+  document.getElementById("postList").style.display = "none";
   document.getElementById("loginModal").style.display = "none";
   document.getElementById("regModal").style.display = "block";
   document.getElementById("regConfirmed").style.display = "none";
-}
-function closeBtn() {
-  document.getElementById("postBlock").style.display = "flex";
+};
+
+//this function is for the cancel buttons
+const closeBtn = () => {
+  document.getElementById("postList").style.display = "block";
   document.getElementById("regConfirmed").style.display = "none";
-}
-function closePost() {
+};
+
+//this function is to make posts not visible where needed
+const closePost = () => {
+  document.getElementById("postList").style.display = "none";
+  document.getElementById("regConfirmed").style.display = "none";
+};
+
+//this function is to show posts after login
+const showPost = () => {
+  document.getElementById("postList").style.display = "block";
+  
+};
+
+//this function is for the log out button
+// const logOut = document.querySelector("#logout");
+
+document.getElementById('logout').onclick = (e) => {
+  e.preventDefault();
   document.getElementById("postBlock").style.display = "none";
-  document.getElementById("regConfirmed").style.display = "none";
-}
+  document.getElementById("logout").style.display = "none";
+  document.getElementById("LoggedOut").style.display = "block";
+  document.getElementById("byeFace").style.display = "block";
+  document.getElementById("addPost").style.display = "none";
+  document.getElementById("login").style.display = "block";
+  document.getElementById("register").style.display = "block";
+  document.getElementById("Messenger").style.display = "none";
+  document.getElementById("usersLog").style.display = "none";
+  document.getElementById("Online").style.display = "none";
+  document.getElementById("Offline").style.display = "none";
+  document.getElementById("welcomemsg").style.display = "block";
+  //HTA removed as returned error in browser //expandPost.style.display = "none";
+  
+
+  setTimeout(() => {
+    console.log('SETTIMEOUT WORKS WITH LOGOUT BUTTON WE ARE GETTING HERE')
+    document.getElementById("LoggedOut").style.display = "none";
+    document.getElementById("byeFace").style.display = "none";
+  }, 1500);
+  //hide user's profile data and the profile link
+  document.querySelector(".loggedUserProfile").style.display = "none";
+  document.getElementById("profile").style.display = "none";
+};
 
 function ChatReturn() {
-  let chat = document.querySelector(".chat-private");
-  chat.style.visibility = "hidden";
-  document.querySelector(".messages-content").innerHTML = "";
+  document.querySelector(".chat-private").style.visibility = "hidden";
+  //hide comment lable, input text and button from posts
+  Logout ()
+  LogoutDeleteCookie()
+  hideAddComment()
 }
 
-profileBtn.onclick = (e) => {
-e.preventDefault();
-//hide other elements
-document.querySelector("#postedArticles").classList.add('hidden');
-document.querySelector("#postBlock").classList.add('hidden');
-document.querySelector("#regModal").classList.add('hidden');
-document.querySelector("#loginModal").classList.add('hidden');
-
-//show the profile modal
-document.querySelector("#profileMod").classList.remove('hidden');
-// update the text content of the placeholders in the template
-document.querySelector("#FirstName").textContent = user.FirstName;
-document.querySelector("#LastName").textContent = user.LastName;
-document.querySelector("#NickName").textContent = user.NickName;
-document.querySelector("#Gender").textContent = user.Gender;
-document.querySelector("#Email").textContent = user.Email;
-document.querySelector("#Age").textContent = user.Age;
-};
-
-//this function is for to open the post where needed
-const openPosts = () => {
-//hide other elements
-document.querySelector("#profileMod").classList.add('hidden');
-document.querySelector("#regModal").classList.add('hidden');
-document.getElementById("postBlock").style.display = "block";
-document.getElementById("profileMod").style.display = "none";
-document.getElementById("regModal").style.display = "none";
-document.getElementById("loginModal").style.display = "none";
-document.getElementById("postedAritcles").style.display = "block";
-};
