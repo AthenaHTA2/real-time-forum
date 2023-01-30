@@ -45,8 +45,8 @@ type User struct {
 }
 
 type LoginData struct {
-	UserName string `json:"UserName"`
-	Password string `json:"LoginPw"`
+	UserName string `json:"LUserName"`
+	Password string `json:"LPassW"`
 }
 
 // each session contains the username of the user and the time at which it expires
@@ -58,6 +58,27 @@ type Session struct {
 
 type Cookie struct {
 	Name    string
-	Value   string
+	Value   string `json: "deleteCookie"`
 	Expires time.Time
+}
+
+type Message struct {
+	MessageID int
+	ChatID    int
+	Sender    string
+	Recipient string
+	Content   string
+	Type      string
+	Date      time.Time
+}
+type Chat struct {
+	ChatID int
+	User1  string
+	User2  string
+	Date   time.Time
+}
+type ChatHistoryCheck struct {
+	ChatID     int
+	ChatExists bool
+	// ChatHistory []Message
 }

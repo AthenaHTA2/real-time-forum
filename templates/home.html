@@ -28,13 +28,14 @@
 
     <nav class="nav">
         <a id="current-user"></a>
+        <a id="profile" onclick="showHideUserProfile() ;" class="nav__link">ℙ𝕣𝕠𝕗𝕚𝕝𝕖</a>
         <a id ="homePage" href = "/" onclick="e.preventDefault();" class="nav__link">ℍ𝕠𝕞𝕖ℙ𝕒𝕘𝕖</a>
         <a id ="register" onclick="openReg() ;"class="nav__link" style="display:block">ℝ𝕖𝕘𝕚𝕤𝕥𝕖𝕣</a>
         <a id ="login" onclick="openLogin() ;"class="nav__link" style="display:block">𝕃𝕠𝕘𝕀𝕟</a>
-        <a id ="post" onclick="openPosts() ;" class="nav__link">ℙ𝕠𝕤𝕥𝕤</a>
-        <!-- <a id="profile" class="nav__link" style="display:none">ℙ𝕣𝕠𝕗𝕚𝕝𝕖</a>     -->
-        <a id="logout" href="/" onclick="Logout() ;" class="nav__link" style="display:none">𝕃𝕠𝕘𝕆𝕦𝕥</a>    
-
+        <a id ="post" onclick="refreshPosts() ;" class="nav__link">ℙ𝕠𝕤𝕥𝕤</a>
+        <!--HTA moved Logout() to buttons as it was not being called from here <a id="logout" href="/" onclick="Logout() ;" class="nav__link" style="display:none">𝕃𝕠𝕘𝕆𝕦𝕥</a>-->   
+        <a id="logout" href="/" class="nav__link" style="display:none">𝕃𝕠𝕘𝕆𝕦𝕥</a>       
+        <div id="userProfile"> 
     </nav>
 
        <!-- 
@@ -94,15 +95,19 @@
 ===========================================================================================================
 -->
 
-    <div id="postBlock" class="posts" >
+    <div id="postBlock" class="posts" style="display:none">
         <label for="PostTitle">Post Title:</label>
         <textarea name="postTitle" type="text" rows="1" cols="60" id="PostTitle" name="Title" placeholder="Enter Title..."></textarea>
+        <label for="Post Cat">Catergory:</label>
+        <select name="cars" id="cars">
+            <option value="Weather">Weather</option>
+            <option value="Sports">Sports</option>
+            <option value="Social">Social</option>
+            <option value="Other">Other</option>
+          </select>
         <label for="Post Content"> Content:  </label>
         <textarea name="postinput" type="text" rows="4" cols="60" id="PostContent" name="Content" placeholder="Description..."></textarea>
-        <label for="Post Cat">Catergory:</label>
-        <input type="dropdown" id="PostCat" name="Category" placeholder="Choose Categories..">
         <button class="button" id="addPost" type="submit" style="display:none">Create Post</button>
-    
     </div>
 
        <!-- 
@@ -114,6 +119,28 @@
     <div id="postList">
       
     </div>
+
+            <!-- 
+
+===========================================================================================================
+                                       POST FEED DISPLAY MODAL                                                         
+===========================================================================================================
+ -->
+
+ <div id="postListAfterLogin">
+      
+ </div>
+
+         <!-- 
+
+===========================================================================================================
+                                       EXPANDED POSTS FEED WITH COMMENTS                                                         
+===========================================================================================================
+ -->
+
+ <div id="postListExpanded" style="display:none">
+  
+ </div>
 
         <!-- 
 ===========================================================================================================
@@ -131,21 +158,26 @@
                 </div> 
                
          
-                <div class="login-form-control">
+                <div class="container">
                  <h1>🅻🅾🅶🅸🅽</h1>
-         
-                 <label for="userName"><b>Userame Or Email</b></label>
-                 <input type="text" id="LUserName" placeholder="Enter Username" name="UserName" required>
-                 <i class="fa-regular fa-circle-check"></i>
-                 <i class="fa-regular fa-exclamation"></i>
-                 <small>Error Message</small>
+                
+                 <div class="login-form-control">
+                    <label for="userName"><b>UserName Or Email</b></label>
+                    <input type="text" id="LUserName" placeholder="Enter Username" name="UserName" required>
+                    <i class="fa-regular fa-circle-check"></i>
+                    <i class="fa-regular fa-exclamation"></i>
+                    <small>Error Message</small>
+                 </div>
+                
                  
-                 
-                 <label for="psw"><b>Password</b></label>
-                 <input type="password" id="LPassW" placeholder="Enter Password" name="psw" required>
-                 <i class="fa-regular fa-circle-check"></i>
-                 <i class="fa-regular fa-exclamation"></i>
-                 <small>Error Message</small>
+                <div class="login-form-control">    
+                    <label for="psw"><b>Password</b></label>
+                    <input type="password" id="LPassW" placeholder="Enter Password" name="psw" required>
+                    <i class="fa-regular fa-circle-check"></i>
+                    <i class="fa-regular fa-exclamation"></i>
+                    <small>Error Message</small>
+                </div>
+             
          
                  <button class="button" id="loginBtn" type="submit">Login</button>
          
@@ -185,61 +217,75 @@
        </div> 
        
 
-       <div class="reg-form-control" id="form"> 
+       <div class="container" id="form"> 
         <h2>🆁🅴🅶🅸🆂🆃🅴🆁</h2>
-        <label for="FirstName"><b>First Name</b></label>
-        <input id="FirstName" type="text" placeholder="Enter First Name" name="FirstName" required>
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
 
-        <label for="LastName"><b>Last Name</b></label>
-        <input id="LastName" type="text" placeholder="Enter Last Name" name="Last Name" required>
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
+        <div class="reg-form-control">
+            <label for="FirstName"><b>First Name</b></label>
+            <input id="FirstName" type="text" placeholder="Enter First Name" name="FirstName" required>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+       
 
-        <label for="NickName"><b>NickName</b></label>
-        <input id="NickName" type="text" placeholder="This will be your userName" name="Nick Name" required  minlength="4" maxlength="10">
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
+        <div class="reg-form-control">
+            <label for="LastName"><b>Last Name</b></label>
+            <input id="LastName" type="text" placeholder="Enter Last Name" name="Last Name" required>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
 
-        <label for="Age"><b>Age</b></label>
-        <input id="Age" type="number" placeholder="Enter Age" name="Age" required>
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
+        </div>
+        
 
-        <label  for="Gender"><b>Gender</b></label>
-        <input id="Gender" type="text" placeholder="Enter Gender" name="Gender" required>
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
-    
-        <label for="Email"><b>Email</b></label>
-        <input id="Email" type="email" onkeydown="validation()" size="30" placeholder="Enter Email Address" name="Email" required>
-        <span id="text"></span>
-        <i class="fa-regular fa-circle-check"></i>
-        <i class="fa-regular fa-exclamation"></i>
-        <small>Error Message</small>
+        <div class="reg-form-control">
+            <label for="NickName"><b>NickName</b></label>
+            <input id="NickName" type="text" placeholder="This will be your userName" name="Nick Name" required  minlength="4" maxlength="10">
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+        
 
-        <label for="psw"><b>Password</b></label>
-        <input id="PassWord" type="password" placeholder="Enter Password" name="psw" required>
-        <i
-        class="far fa-eye"
-        id="togglePassword"
-        style="
-          cursor: pointer;
-          visibility: visible;
-          color: rgb(220, 2, 2);
-          top: 40px;
-          right: 40px;
-        "
-      ></i>
-      <i class="fa-regular fa-circle-check"></i>
-      <i class="fa-regular fa-exclamation"></i>
-      <small>Error Message</small>
+        <div class="reg-form-control">
+             <label for="Age"><b>Age</b></label>
+            <input id="Age" type="number" placeholder="Enter Age" name="Age" required>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+       
+
+        <div class="reg-form-control">
+             <label  for="Gender"><b>Gender</b></label>
+            <input id="Gender" type="text" placeholder="Enter Gender" name="Gender" required>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+       
+        
+        <div class="reg-form-control">
+             <label for="Email"><b>Email</b></label>
+            <!--<input id="Email" type="email" onkeydown="validation()" size="30" placeholder="Enter Email Address" name="Email" required>-->
+            <input id="Email" type="email" size="30" placeholder="Enter Email Address" name="Email" required>
+            <span id="text"></span>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+       
+        <div class="reg-form-control">
+             <label for="psw"><b>Password</b></label>
+            <input id="PassWord" type="password" placeholder="Enter Password" name="psw" required>
+            <i class="far fa-eye" id="togglePassword" style="cursor: pointer; visibility: visible; color: rgb(220, 2, 2); top: 40px;
+          right: 40px;"></i>
+            <i class="fa-regular fa-circle-check"></i>
+            <i class="fa-regular fa-exclamation"></i>
+            <small>Error Message</small>
+        </div>
+       
 
         
       <span>

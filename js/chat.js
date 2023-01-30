@@ -1,4 +1,4 @@
-import LoginData from "./login.js";
+//import LoginData from "./login.js";
 
 let chatSender = LoginData.UserName;
 let chatRecipient = getElementById(usersLog);
