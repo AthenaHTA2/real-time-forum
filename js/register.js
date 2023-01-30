@@ -273,6 +273,7 @@ const unsuccessfulReg = () => {
   return response;
 }
 
+
 /*
 function validation() {
     let form = document.getElementById('form')
