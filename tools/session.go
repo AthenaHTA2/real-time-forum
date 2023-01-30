@@ -87,6 +87,7 @@ func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 	}
 
 	fmt.Println("the cookie after changing its values -->", cookie)
+	//to delete the cookie in the browser
 	http.SetCookie(w, cookie)
 	//removing session record from 'Sessions' table
 	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE cookieValue=?;")
@@ -129,6 +130,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		numRunes := utf8.RuneCountInString(cookieStringAfter)
 		fmt.Println("the number of runes in cookie: ", numRunes)
 		cookieStringByte := []byte(cookieStringAfter)
+		//to remove the curly bracket at end of cookie value
 		cookieStringAfter = string(cookieStringByte[0 : numRunes-1])
 		fmt.Println("the correct cookie: --->", cookieStringAfter)
 
