@@ -177,31 +177,65 @@ async function chatEventHandler() {
     item.onclick = () => {
       receiver = item.innerHTML;
 
-      console.log(receiver);
-      console.log(currentUser);
+      // console.log(receiver);
+      // console.log(currentUser);
       // Show messages in console for convenience. (optional)
-      console.log(messages);
+      // console.log(messages);
 
       // Show main chat window
       let chat = document.querySelector(".chat-private");
       chat.style.visibility = "visible";
 
+      let chatfriend = document.querySelector(".chat-title");
+
+      chatfriend.innerHTML = receiver;
+      // console.log("receiver: ", receiver);
+
       // **filter** and append correct messages to chat window
       messages.forEach((message) => {
-        if (
-          (message.sender === currentUser && message.recipient === receiver) ||
-          (message.recipient === currentUser && message.sender === receiver)
-        ) {
-          // create new div for message
-          let messageBubble = document.createElement("div");
+        // create new div for message
+        let messageBubble = document.createElement("div");
+        // messageBubble.className = "messages-content message"
 
-          // append message to div and style to white
+        // 1. when current user is sender
+        if (message.sender === currentUser && message.recipient === receiver) {
+          // add class of sender
+          messageBubble.className = "messages-content sender";
+
+          // append message to div
+          messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
+
+          // append to child div of main chat window
+          document.querySelector(".messages-content").append(messageBubble);
+        } else if (
+          message.recipient === currentUser &&
+          message.sender === receiver
+        ) {
+          // 2. when current user is recipient
+          // add class of recipient
+          messageBubble.className = "messages-content recipient";
+
+          // append message to div
           messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
-          messageBubble.style.color = "white";
 
           // append to child div of main chat window
           document.querySelector(".messages-content").append(messageBubble);
         }
+
+        // if (
+        //   (message.sender === currentUser && message.recipient === receiver) ||
+        //   (message.recipient === currentUser && message.sender === receiver)
+        // ) {
+        //   // create new div for message
+        //   let messageBubble = document.createElement("div");
+
+        //   // append message to div and style to white
+        //   messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
+        //   messageBubble.style.color = "white";
+
+        //   // append to child div of main chat window
+        //   document.querySelector(".messages-content").append(messageBubble);
+        // }
       });
     };
   }
