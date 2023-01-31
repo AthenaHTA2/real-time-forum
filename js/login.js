@@ -138,8 +138,12 @@ async function chatEventHandler() {
 
   // TODO:
   function appendLog(item) {
-    var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
-    log.appendChild(item);
+    let doScroll;
+    console.log(item);
+    if (log && log.scrollTop) {
+      doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
+      log.appendChild(item);
+    }
     if (doScroll) {
       log.scrollTop = log.scrollHeight - log.clientHeight;
     }
@@ -168,6 +172,11 @@ async function chatEventHandler() {
       usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
     item.style.color = "white";
     console.log(item);
+
+    // if current user, do not display. (return) because AppendUser() is called in a loop.
+    if (item.innerHTML === currentUser) {
+      return;
+    }
 
     usersLog.appendChild(item);
     if (doScroll) {
@@ -200,20 +209,23 @@ async function chatEventHandler() {
         // 1. when current user is sender
         if (message.sender === currentUser && message.recipient === receiver) {
           // add class of sender
-          messageBubble.className = "messages-content sender";
+          messageBubble.className = "sender";
 
           // append message to div
           messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
 
+          let bubbleWrapper = document.createElement("div");
+          bubbleWrapper.className = "messageWrapper";
+          bubbleWrapper.append(messageBubble);
           // append to child div of main chat window
-          document.querySelector(".messages-content").append(messageBubble);
+          document.querySelector(".messages-content").append(bubbleWrapper);
         } else if (
           message.recipient === currentUser &&
           message.sender === receiver
         ) {
           // 2. when current user is recipient
           // add class of recipient
-          messageBubble.className = "messages-content recipient";
+          messageBubble.className = "recipient";
 
           // append message to div
           messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
@@ -276,6 +288,32 @@ async function chatEventHandler() {
     };
 
     conn.onmessage = function (evt) {
+      let msg = evt.data;
+
+      if (IsJsonString(msg)) {
+        msg = JSON.parse(msg);
+      }
+      console.log("CURRENT USER!!!!", currentUser, msg);
+
+      // formatting message for recipient
+      if (currentUser === msg.Sender) {
+        let messageWrapper = document.createElement("div");
+        messageWrapper.className = "messageWrapper";
+        let newMessage = document.createElement("div");
+        newMessage.innerHTML = `${"You"}: ${msg.Content}`;
+        newMessage.className = "sender";
+
+        messageWrapper.append(newMessage);
+        document.querySelector(".messages-content").append(messageWrapper);
+      } else if (currentUser !== msg.Sender) {
+        // formatting message for sender
+        let newMessage = document.createElement("div");
+        newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
+        newMessage.className = "recipient";
+        // newMessage.style.backgroundColor = "red";
+        document.querySelector(".messages-content").append(newMessage);
+      }
+
       var messages = evt.data.split("\n");
       for (var i = 0; i < messages.length; i++) {
         var item = document.createElement("div");
@@ -297,7 +335,7 @@ async function chatEventHandler() {
           AppendPosts(item);
         } else {
           //print list inside 'log' div
-          appendLog(item);
+          // appendLog(item);
         }
       }
     };
@@ -306,4 +344,13 @@ async function chatEventHandler() {
     item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
     appendLog(item);
   }
+}
+
+function IsJsonString(str) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
 }

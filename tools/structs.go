@@ -80,9 +80,9 @@ type Cookie struct {
 type Message struct {
 	MessageID int
 	ChatID int
-	Sender string
-	Recipient string
-	Content string
+	Sender string `json:"sender"`
+	Recipient string `json:"recipient"`
+	Content string `json:"content"`
 	Type string
 	Date time.Time
 }
