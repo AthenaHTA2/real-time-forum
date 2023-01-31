@@ -49,6 +49,8 @@ document.getElementById('logout').onclick = (e) => {
   document.getElementById("Online").style.display = "none";
   document.getElementById("Offline").style.display = "none";
   document.getElementById("welcomemsg").style.display = "block";
+  document.getElementById("profile").style.display = "none";
+
 
 
   setTimeout(() => {

@@ -2,7 +2,15 @@ let user;
 let currentUser;
 let receiver;
 let LoginData;
-let expandPost
+let ShowComments
+
+
+// showCom = document.getElementById('ShowComments')
+// showCom.onclick = (e) => {
+//   document.querySelector("#postListExpanded").style.display="block";
+// }
+  
+
 
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
@@ -16,7 +24,7 @@ const setLoginErrorFor = (input, message) => {
   // all the error message inside the small tag
   small.innerHTML = message;
   // small.style.visibilty = "visible";
-}
+};
 
 //send user input in the 'Login' form to the 'LoginData' struct in go
 // via the 'LoginHandler' handler function in go
@@ -28,7 +36,7 @@ LoginBtn.onclick = (e) => {
   e.preventDefault();
   let UserName = document.querySelector("#LUserName").value;
   let LoginPw = document.querySelector("#LPassW").value;
-  
+
   //make JS object to store login data
   LoginData = {
     LUserName: UserName,
@@ -38,7 +46,7 @@ LoginBtn.onclick = (e) => {
   console.log({ LoginData });
   //Sending Login form's data with the Fetch API
   //to the 'LoginData' struct in go
-  
+
   let configLogin = {
     method: "POST",
     headers: {
@@ -47,20 +55,18 @@ LoginBtn.onclick = (e) => {
     },
     body: JSON.stringify(LoginData),
   };
-  
-  
 
   fetch("/login", configLogin)
     .then(function (response) {
       console.log(response);
       if (response.status == 200) {
         console.log("successful login");
-        successfulLogin()
+        successfulLogin();
         // refreshPosts();
-       return response.text();
+        return response.text();
       } else {
         unsuccessfullLogin();
-       return response.text();
+        return response.text();
       }
     })
     .then((rsp) => {
@@ -77,11 +83,22 @@ LoginBtn.onclick = (e) => {
         console.log("on track 2");
         setLoginErrorFor(Lpassword, "Please enter correct password");
       } else {
+
         console.log(rsp);
-        currentUser = rsp;
-  
+
+        let userData = JSON.parse(rsp);
+
+        showProfile(userData)
+
+        console.log(userData, "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+
+        currentUser = userData.NickName;
+        console.log(currentUser);
+
         var successlogin = document.getElementById("current-user");
-        successlogin.innerHTML = " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼 " + currentUser.nickname + " &#128512";
+
+        successlogin.innerHTML =
+          " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼 " + currentUser + " &#128512";
         // if (user) {
         //   var successlogin = document.getElementById("current-user");
         //   successlogin.innerHTML = " Welcome " + currentUser;
@@ -90,94 +107,115 @@ LoginBtn.onclick = (e) => {
     });
 };
 
-//print profile data in the left side navigation
-// function showProfile(user) {
-//   console.log("showProfile called", user)
-//   nameContainer = document.querySelector("#current-user")
-//   nameContainer.innerHTML = "";
-//   nameContainer.innerHTML = `<p>`+"Welcome " +user.NickName+"!"+ " &#128512"+`</p>`
-//   profileContainer = document.querySelector("#userProfile")
-//   profileContainer.innerHTML = "";
-//   profileContainer.innerHTML = `
-//     <div id="loggedUserProfile" style="display: none;">
-//     <br>
-//     <br>
-//     <br>
-//     <h1 ><u>`+ user.NickName +`Profile</u></h1>
-//     <p >`+ "First Name: " + user.FirstName + `</p>
-//     <p >`+ "Last Name: " + user.LastName + `</p>
-//     <p >`+ "Nickname: " + user.NickName + `</p>
-//     <p >`+ "Gender: " + user.Gender + `</p>
-//     <p >`+ "Email: " + user.Email + `</p>
-//     <p >`+ "Age: " + user.Age + `</p>
-//     </div>
-//     `
-// }
 
-// //unhide the user profile aftert clicking the 'Profile' hyperlink
-// //in the left-hand-side navigation
-// function showHideUserProfile(){
-//   let profileBlock = document.querySelector(".loggedUserProfile");
-//   if (profileBlock.style.display === "none") {
-//     profileBlock.style.display = "block";
-//   } else {
-//     profileBlock.style.display = "none";
-//   }
-// }
+
+// print profile data in the left side navigation
+const showProfile = (user) => {
+  console.log("showProfile called", user)
+  WelMsg = document.getElementById('WelMsg');
+  FName = document.getElementById('firstName');
+  LName = document.getElementById('lastName');
+  NName = document.getElementById('nickName');
+  Age = document.getElementById('age');
+  Gender = document.getElementById('gender');
+  Email = document.getElementById('email');
+  console.log("AFTER GETTING ALL DOCUMENTS FROM HMTL @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+
+  console.log(user.Age, user.Gender, user.Email)
+  WelMsg.innerHTML = "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " + user.NickName;
+  console.log("FIRST PART OF DISPLAYING INNERHTML @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+
+  FName.innerHTML = "First Name :" + user.FirstName;
+  LName.innerHTML = "Last Name :" + user.LastName;
+  NName.innerHTML = "Nick Name :" + user.NickName;
+  Age.innerHTML = "Age :" + user.Age;
+  Gender.innerHTML = "Gender :" + user.Gender;
+  Email.innerHTML = "Email :" + user.Email;
+
+};
+
+//unhide the user profile aftert clicking the 'Profile' hyperlink
+//in the left-hand-side navigation
+const showHideUserProfile = () => {
+  let profileBlock = document.querySelector("#profileMod");
+  if (profileBlock.style.display === "none") {
+    profileBlock.style.display = "block";
+    document.getElementById("postBlock").style.display = "none";
+    document.getElementById("postListAfterLogin").style.display = "none";
+    document.getElementById("postList").style.display = "none";
+  } else {
+    profileBlock.style.display = "none";
+    document.getElementById("postBlock").style.display = "block";
+    document.getElementById("postListAfterLogin").style.display = "block";
+
+  }
+}
 
 const refreshPostsAfterLogin = () => {
   fetch("/getPosts", {
-    headers : {
+    headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     method: "POST",
   })
-  .then((response)=> {
-    response.text().then(function(data){
-      let posts = JSON.parse(data);
-      console.log("posts:", posts);
-      //post shows all latest posts from database
-      displayPostsAfterLog(posts);
+    .then((response) => {
+      response.text().then(function (data) {
+        let posts = JSON.parse(data);
+        console.log("posts:", posts);
+        //post shows all latest posts from database
+        displayPostsAfterLog(posts);
+      });
+    })
+    .catch((error) => {
+      console.log(error);
     });
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+  
 
   const displayPostsAfterLog = (posts) => {
-    console.log("##############################WE ARE NOW IN AFTERLOGING DISPLAYPOST")
-    postsContainer = document.querySelector('#postListAfterLogin')
+  
+
+    console.log(
+    );
+    postsContainer = document.querySelector("#postListAfterLogin");
     postsContainer.innerHTML = "";
-    for (let i = (posts.length - 1); i >= 0; i--) {
-        postsContainer.innerHTML += `
-            <div class="posts" style.display ="inline-block" id=` + posts[i].PostID + `>
+    for (let i = posts.length - 1; i >= 0; i--) {
+      postsContainer.innerHTML +=
+        `
+            <div class="posts" style.display ="inline-block" id=` +
+        posts[i].PostID +
+        `>
+         
+            
+            <p class="post-content" >` +
+        "Author: " +  posts[i].Author + `</p>
+            <p class="post-content" >` +  "Category: " + posts[i].PostCat + `</p>
+            <p class="post-content" >` +  "Title: " + posts[i].PostTitl + ` </p>
+            <p class="post-content" >` + "Content: " + posts[i].PostCont + `</p>
+            <p class="post-content" >` + "Created: " + ConvertDate(posts[i].PostTime) + `</p> 
+
+    
             <div  style.display="inline-block" &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            <button class="button" id="ShowComments" onclick="displayExpandedPosts() ;" style.text-align="center">` + 
-            " &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;" + " &nbsp; &nbsp; &nbsp; &nbsp;" +
-            " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  Show Comments" + `</button>
+            <button class="button" id="ShowComments" style.text-align="center">` +
+        " &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;" +
+        " &nbsp; &nbsp; &nbsp; &nbsp;" +
+        " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  Show Comments" +
+        `</button>
+
+
             </div>
-            
-            <p class="post-content" >` + "Author: " + posts[i].Author + `</p>
-            <p class="post-content" >` + "Category: " + posts[i].PostCat + `</p>
-            <p class="post-content" >` + "Title: " + posts[i].PostTitl + ` </p>
-            <p class="post-content" >` + "Content: " + posts[i].PostCont + `</p>
-            <p class="post-content" >` + "Created: " + ConvertDate(posts[i].PostTime) + `</p> 
             <br>  
+
            
             <br>  
             </div>
             </div>            
-        `  
+        `;
     }
-  }
-
-  
+  };
 };
-
-
 
 const successfulLogin = () => {
   console.log("STATUS 200 OK");
@@ -197,14 +235,14 @@ const successfulLogin = () => {
   document.getElementById("postBlock").style.display = "block";
   document.getElementById("postList").style.display = "none";
   document.getElementById("usersLog").style.display = "block";
-  // document.getElementById("profile").style.display = "block";
-
+  document.getElementById("profile").style.display = "block";
 
   setTimeout(() => {
     console.log("WERE ARE GETTING TO TIMEOUT LOGIN SIDE");
     document.getElementById("LoggedOn").style.display = "none";
     document.getElementById("happyFace").style.display = "none";
   }, 1500);
+
 
   postBtn = document.querySelector("#postBlock > button");
   postBtn.style.visibility = "visible";
@@ -213,28 +251,31 @@ const successfulLogin = () => {
   // document.getElementsByClassName('commentBlock').style.display = "block";
 
   refreshPostsAfterLogin();
-
 };
 
 const unsuccessfullLogin = () => {
-    
-    console.log("failed - not status 200")
+  console.log("failed - not status 200");
 
-    document.getElementById('loginModal').style.display = "none";
-    document.getElementById('logRejected').style.display = 'block';
-    setTimeout(() => {
-        document.getElementById('logRejected').style.display = 'none';
-      },1500);
-    document.getElementById('postBlock').style.display = 'flex';
-}
+  document.getElementById("loginModal").style.display = "none";
+  document.getElementById("logRejected").style.display = "block";
+  setTimeout(() => {
+    document.getElementById("logRejected").style.display = "none";
+  }, 1500);
+  document.getElementById("postList").style.display = "block";
+  document.getElementById("postBlock").style.display = "none";
+
+};
 
 const Logout = () => {
   document.querySelector(".loggedInUsers").style.visibility = "hidden";
   document.querySelector(".chat-private").style.visibility = "hidden";
-  document.getElementById('current-user').style.display ="none"; 
+  document.getElementById("current-user").style.display = "none";
+  document.getElementById("postList").style.display = "block";
+
+
 
   console.log(document.cookie);
-}
+};
 //
 //
 // ====================================================
@@ -251,9 +292,9 @@ window.onload = function () {
     if (doScroll) {
       log.scrollTop = log.scrollHeight - log.clientHeight;
     }
-  }
-  
-    const AppendUser = (item) => {
+  };
+
+  const AppendUser = (item) => {
     /*if(item.innerText == "UsersList"){
             item.innerText = " "
         }else{
@@ -273,7 +314,7 @@ window.onload = function () {
       receiver = item.innerHTML;
       document.querySelector(".chat-private").style.visibility = "visible";
     };
-  }
+  };
 
   document.getElementById("chat-private-btn").onclick = function () {
     var msg = document.getElementById("msg");
@@ -329,7 +370,6 @@ window.onload = function () {
         }
       }
     };
-
   } else {
     var item = document.createElement("div");
     item.innerHTML = "<b>Your browser does not support WebSockets.</b>";

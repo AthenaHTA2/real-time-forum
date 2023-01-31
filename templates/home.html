@@ -33,6 +33,9 @@
         <a id ="login" onclick="openLogin() ;"class="nav__link" style="display:block">𝕃𝕠𝕘𝕀𝕟</a>
         <a id ="post" onclick="refreshPosts() ;" class="nav__link">ℙ𝕠𝕤𝕥𝕤</a>
         <a id="logout" href="/" onclick="Logout() ;" class="nav__link" style="display:none">𝕃𝕠𝕘𝕆𝕦𝕥</a>   
+
+        <a id="profile" class="nav__link" style="display:none" onclick="showHideUserProfile() ;">ℙ𝕣𝕠𝕗𝕚𝕝𝕖</a> 
+
          <!-- happy face emoji's -->
     <a id="happyFace" style="display:none">
         <img src="/css/img/thumbsup.gif" height="100%" width="100%" margin-left="20%">
@@ -40,8 +43,41 @@
 
     <a id="byeFace" style="display:none">
         <img id="byeFace" src="/css/img/bye.gif" height="90%" width="90%" margin-left="20%">
+    </a>  
+    
+      <!-- loggen on configm popup -->
+      <a id="LoggedOn" style="display:none">
+        <h4>
+            You're are Logged in.
+        </h4>
     </a>
-        <!-- <a id="profile" class="nav__link" onclick="showProfile() ;" style="display:none">ℙ𝕣𝕠𝕗𝕚𝕝𝕖</a>     -->
+
+
+    <!-- registration confirmed pop-up -->
+    <div id="regConfirmed" style="display:none">
+        <h4>
+            You're are now Registered
+      
+        </h4>
+    </div>
+
+        <!-- registration invalid pop-up -->
+    <div id="regRejected" style="display:none">
+        <h4>
+            Sorry Error with Registration
+            <h5></h5>
+
+        </h4><img src="/css/img/sad.gif" alt="" srcset="" height="25%" width="25%">
+    </div>
+
+
+        <!-- loggen on configm popup -->
+        <div id="LoggedOut" style="display:none">
+            <h4>
+                You're are Logged Out.
+            </h4>
+        </div>
+
 
     </nav>
 
@@ -151,7 +187,8 @@
 ===========================================================================================================
  -->
 
- <div id="postListExpanded">
+ <div id="postListExpanded" class="posts" style="display:none">
+    <h6> EXPANDED POST WILL APPEAR HERE WITH COMMENTS ALSO</h6>
   
  </div>
 
@@ -323,37 +360,12 @@
 
 
 
-    <!-- registration confirmed pop-up -->
-    <div id="regConfirmed" style="display:none">
-        <h4>
-            You're are now Registered
-      
-        </h4>
-    </div>
 
 
-    <!-- registration invalid pop-up -->
-    <div id="regRejected" style="display:none">
-        <h4>
-            Sorry Error with Registration
-            <h5></h5>
 
-        </h4><img src="/css/img/sad.gif" alt="" srcset="" height="25%" width="25%">
-    </div>
 
-    <!-- loggen on configm popup -->
-    <div id="LoggedOn" style="display:none">
-        <h4>
-            You're are Logged in.
-        </h4>
-    </div>
+  
 
-        <!-- loggen on configm popup -->
-        <div id="LoggedOut" style="display:none">
-            <h4>
-                You're are Logged Out.
-            </h4>
-        </div>
 
         <div id="logRejected" style="display:none">
             <h4>
@@ -370,10 +382,30 @@
 ===========================================================================================================
 -->
 
-    <!-- <div id="loggedUserProfile" class="modal">
-    
+<div id="profileMod" class="profmodal" style.display="none">
+    <img id="profilePic" src="/css/img/happy.gif" height="15%" width="15%">
+    <h3>🅿🆁🅾🅵🅸🅻🅴</h3>
+    <div id="WelMsg">
     </div>
-     -->
+    <br>
+    <br>
+    <div id="firstName">
+    </div>
+    <div id="lastName">
+     
+    </div>
+    <div id="nickName">
+     
+    </div>
+    <div id="age">
+        
+    </div>
+    <div id="gender">
+ 
+    </div>
+    <div id="email">
+       
+    </div>
     
 
 </body>

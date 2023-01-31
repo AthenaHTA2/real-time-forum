@@ -145,35 +145,35 @@ const refreshPosts = () => {
 
 
 
-const diplayExpandedPosts = () => {
-  console.log('DISPLAY EXPANDED POSTS >>>>>>>>>>>>>>>>>>>>>>>>>>>');
-  postsContainer = document.querySelector('#postListExpanded');
-  postsContainer.innerHTML = "";
-  document.getElementById("postListExpanded").style.display = "block";
-  document.getElementById("postList").style.display = "none";
-  console.log("WE ARE PASSING THE DISPLAY POST EXPANDED DISPLAY SETTING >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+// const displayExpandedPosts = () => {
+//   console.log('DISPLAY EXPANDED POSTS >>>>>>>>>>>>>>>>>>>>>>>>>>>');
+//   postsContainer = document.querySelector('#postListExpanded');
+//   postsContainer.innerHTML = "";
+//   document.getElementById("postListExpanded").style.display = "block";
+//   document.getElementById("postList").style.display = "none";
+//   console.log("WE ARE PASSING THE DISPLAY POST EXPANDED DISPLAY SETTING >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
 
-      postsContainer.innerHTML += `
-      <div class="posts" style.display="block" id=` + posts[i].PostID + `>
+//       postsContainer.innerHTML += `
+//       <div class="posts" style.display="block" id=` + posts[i].PostID + `>
       
-          <p class="post-content" >` + "Comment: " + `<input type="text" class="comment-content" id=commentText" 
-          Placeholder="Comment Here..." ; >`
-          // &nbsp; &nbsp; <button class="CommentBtn" id="addComment" onclick="DisplayComments()">
-          + "Send Comment" + `</button></p>
+//           <p class="post-content" >` + "Comment: " + `<input type="text" class="comment-content" id=commentText" 
+//           Placeholder="Comment Here..." ; >`
+//           // &nbsp; &nbsp; <button class="CommentBtn" id="addComment" onclick="DisplayComments()">
+//           + "Send Comment" + `</button></p>
           
-          <div class="commentBlock" style="height: 200px;">
-          <button id="HideComment" class="button" onclick="CloseComments()">` + "Close" + `</button>
-          </div>            
-      </div>`
+//           <div class="commentBlock" style="height: 200px;">
+//           <button id="HideComment" class="button" onclick="CloseComments()">` + "Close" + `</button>
+//           </div>            
+//       </div>`
 
-      console.log("CODE WAS EXECUTED DISPLAY EXPAND POST WHEN SHOW COMMENTS WAS CLICKED####################################")
+//       console.log("CODE WAS EXECUTED DISPLAY EXPAND POST WHEN SHOW COMMENTS WAS CLICKED####################################")
   
-}
+// }
 
-  // Converts JS time stamp into a string, used when displaying posts
-  
-  
-  
+
+
+
+  // Converts JS time stamp into a string, used when displaying posts 
 const ConvertDate = (date) => {
   // Seperate year, day, hour and minutes into vars
   let yyyy = date.slice(0, 4);

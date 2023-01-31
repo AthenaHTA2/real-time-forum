@@ -240,7 +240,7 @@ const successfulReg = (response) => {
   document.getElementById('regModal').style.display = "none";
   document.getElementById('regConfirmed').style.display = 'block';
   document.getElementById('happyFace').style.display = 'block';
-  // document.getElementById('profileMod').style.display = "none";
+  document.getElementById('profileMod').style.display = "none";
   document.getElementById('welcomemsg').style.display ="none"; 
   document.getElementById('Users').style.display ="block"; 
   document.getElementById('Offline').style.display ="block"; 
@@ -252,7 +252,7 @@ const successfulReg = (response) => {
     document.getElementById('happyFace').style.display = 'none';
   },2000);
 
-  document.getElementById('postBlock').style.display = 'flex';
+  document.getElementById('postList').style.display = 'block';
   document.getElementById('logout').style.display = 'block'
 }
 
@@ -261,14 +261,18 @@ const unsuccessfulReg = () => {
   
   document.getElementById('regModal').style.display = "none";
   document.getElementById('regRejected').style.display = 'block';
-  // document.getElementById('profileMod').style.display = "none";
+  document.getElementById('profileMod').style.display = "none";
+  document.getElementById('sadFace').style.display = "block";
+
   // document.getElementById('postedArticles').style.display ="none"; 
 
   setTimeout(() => {
       document.getElementById('regRejected').style.display = 'none';
+  document.getElementById('sadFace').style.display = "none";
+
     },2000);
 
-  document.getElementById('postBlock').style.display = 'flex';
+  document.getElementById('postList').style.display = 'Block';
   
   return response;
 }

@@ -52,7 +52,7 @@ body {
     }
 
 #Header {
-    margin-left: 3.8cm;
+    margin-left: 11%;
     color: whitesmoke;
     font-size: 3rem;
     font-family:cursive;
@@ -80,6 +80,17 @@ h2 {
     font-size: 1.25em;
     color: white;
     font-family: cursive;
+}
+
+h3 {
+  margin-top: 0cm;
+  margin-bottom: 0cm;
+  padding-right: 10cm;
+  font-size: 1.25em;
+  color: whitesmoke;
+  font-family: cursive;
+  text-indent: 5%;
+  text-decoration: white;
 }
 
 h6 {
@@ -153,7 +164,7 @@ h6 {
    overflow: hidden;
    padding-right: 1cm;
    padding-left: 0cm;
-   overflow: auto;
+   /* overflow: auto; */
    
 }
 
@@ -186,50 +197,47 @@ h6 {
 
 
 #regConfirmed {
-    padding-left: 1.5cm;
-    align-items: center;
-    border-radius: 25px;
-    box-shadow: 2px 2px 2px 2px white;
-    margin-left: 7cm;
-    margin-right: 10cm;
-    background-color: rgb(0, 143, 0);
-    background-size: 100%;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    font-family: cursive;
-    margin-bottom: .25cm;
-    height: 100%;
-    width: 25%;
+  padding-left: 8%;
+  align-items: center;
+  margin-top: 10%;
+  border-radius: 25px;
+  box-shadow: 2px 2px 2px 2px aqua;
+  margin-left: 5%;
+  margin-right: 5%;
+  background-color:rgb(0, 143, 0);
+  background-size: 100%;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: cursive;
+  margin-bottom: .25cm;
 }
 
 #regRejected {
-    padding-left: 1.5cm;
-    align-items: center;
-    margin-top: .25cm;
-    border-radius: 25px;
-    box-shadow: 2px 2px 2px 2px white;
-    margin-left: 7cm;
-    margin-right: 10cm;
-    background-color: rgb(191, 23, 8);
-    background-size: 100%;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    font-family: cursive;
-    margin-bottom: .25cm;
-    height: 100%;
-    width: 25%;
+  padding-left: 8%;
+  align-items: center;
+  margin-top: 10%;
+  border-radius: 25px;
+  box-shadow: 2px 2px 2px 2px aqua;
+  margin-left: 5%;
+  margin-right: 5%;
+  background-color:darkred;
+  background-size: 100%;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: cursive;
+  margin-bottom: .25cm;
 }
 
 #LoggedOn {
-    padding-left: 1.5cm;
+    padding-left: 8%;
     align-items: center;
-    margin-top: .05cm;
+    margin-top: 10%;
     border-radius: 25px;
-    box-shadow: 2px 2px 2px 2px white;
-    margin-left: 7cm;
-    margin-right: 10cm;
+    box-shadow: 2px 2px 2px 2px aqua;
+    margin-left: 5%;
+    margin-right: 5%;
     background-color: rgb(0, 143, 0);
     background-size: 100%;
     color: white;
@@ -237,35 +245,47 @@ h6 {
     font-weight: bold;
     font-family: cursive;
     margin-bottom: .25cm;
-    height: 100%;
-    width: 25%;
 }
 
 #LoggedOut {
-    padding-left: 1.5cm;
-    align-items: center;
-    margin-top: .05cm;
+  padding-left: 8%;
+  align-items: center;
+  margin-top: 10%;
+  border-radius: 25px;
+  box-shadow: 2px 2px 2px 2px aqua;
+  margin-left: 5%;
+  margin-right: 5%;
+  background-color:darkred;
+  background-size: 100%;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: cursive;
+  margin-bottom: .25cm;
+}
+
+.profmodal {
+  margin-top: .25cm;
     border-radius: 25px;
-    box-shadow: 2px 2px 2px 2px white;
-    margin-left: 7cm;
-    margin-right: 10cm;
-    background-color: rgb(0, 143, 0);
-    background-size: 100%;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    font-family: cursive;
-    margin-bottom: .25cm;
-    height: 100%;
-    width: 25%;
-}
+    box-shadow: 2px 2px 2px 2px whitesmoke;
+    margin-left: 11%;
+    margin-right: 35%;
+   background-image:url("/css/img/profile.png");
+   background-repeat:no-repeat;
+   background-size: 120%;
+   font-size: 1.5rem;
+   font-weight: bold;
+   font-family: cursive;
+   margin-bottom: 10%;
+   overflow: none;
+   display: none;
+   color:whitesmoke;
+   align-items: center; 
+   padding-left: 16.5%;
+   padding-bottom: 2.5%;
+   text-indent: 5% white;
 
-#profileMod {
-    height: 100%;
-    width: 100%;
-    align-items: center;
 }
-
 
 /* end */
 
@@ -284,7 +304,7 @@ h6 {
 
 #profilePic {
     margin-bottom: 0;
-    padding-left: 5cm;
+    padding-left: 13%;
 }
 
 .imgcontainer {
@@ -302,7 +322,7 @@ h6 {
     background-size: 100%;
     padding-top: .75cm;
     padding-left: 1cm;
-    padding-bottom: .75cm;
+    padding-bottom: 1.5cm;
     padding-right: 1cm;
     margin-left: 2cm;
     margin-right: 5cm;
@@ -353,6 +373,11 @@ h6 {
 
 /* ------------------------------------------------------------------------- */
 /* comments */
+.cCommentLabel{
+  display:none;
+  padding-right: 0cm;
+}
+
 .comment-content{
     height: 15px;
     visibility: hidden;
@@ -551,6 +576,31 @@ font-weight: bolder;
 }
 
 .ShowComments:hover{
+background-image: none;
+background-color: rgb(136, 200, 176);
+color: rgb(15, 15, 120);
+font-weight: bolder;
+}
+
+/*HTA added to the comment block */
+.cCommentBtn{
+  display: none;
+  background-image: url('/css/img/canvas.png');
+  background-size: 105%;
+  background-repeat: no-repeat;
+  margin-top: .20cm;
+  margin-bottom: .20cm;
+  margin-left: .1cm;
+  border-radius: 25px;
+  box-shadow: 1px 1px 1px 1px white;
+  border-color: white;
+  color: whitesmoke;
+  font-size: 1rem;
+  font-family:cursive;
+  font-weight: bolder;
+  width: 300px;
+}
+.cCommentBtn:hover{
 background-image: none;
 background-color: rgb(136, 200, 176);
 color: rgb(15, 15, 120);
