@@ -115,6 +115,7 @@ function unsuccessfulLogin() {
   document.getElementById("regRejected").style.display = "block";
 
   setTimeout(() => {
+    
     document.getElementById("regRejected").style.display = "none";
   }, 1500);
 
@@ -126,31 +127,13 @@ function Logout() {
   document.querySelector(".chat-private").style.visibility = "hidden";
   console.log(document.cookie);
 }
-//
-//
-// ====================================================
-
-// TODO: change from window.onload to start after logging in and exit on log-out
+// ===================================================================
+//                              CHATS
+// ===================================================================
 async function chatEventHandler() {
   var conn;
-  // var pst = document.getElementById("postList");
-
-  // TODO: change to fit in new details
   var log = document.getElementById("log");
   var usersLog = document.getElementById("usersLog");
-
-  /*
-  function appendLog(item) {
-    let doScroll;
-    console.log(item);
-    if (log && log.scrollTop) {
-      doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
-      log.appendChild(item);
-    }
-    if (doScroll) {
-      log.scrollTop = log.scrollHeight - log.clientHeight;
-    }
-  }*/
 
   let configMsg = {
     method: "POST",
@@ -166,11 +149,6 @@ async function chatEventHandler() {
 
   // TODO: change section to display online and offline users
   function AppendUser(item) {
-    /*if(item.innerText == "UsersList"){
-            item.innerText = " "
-        }else{
-            item.innerText = item.innerText
-        }*/
     var doScroll =
       usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
     item.style.color = "white";
@@ -195,7 +173,6 @@ async function chatEventHandler() {
 
       let chatfriend = document.querySelector(".chat-title");
       chatfriend.innerHTML = "Messaging - " + receiver;
-      
 
       // **filter** and append correct messages to chat window
 
@@ -205,21 +182,16 @@ async function chatEventHandler() {
         let dateDiv = document.createElement("div");
         dateDiv.className = "dateDiv";
 
-        // messageBubble.className = "messages-content message"
-
         // 1. when current user is sender
         if (message.sender === currentUser && message.recipient === receiver) {
           // add class of sender
           messageBubble.className = "sender";
-
-          // append message to div
           messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
           let bubbleWrapper = document.createElement("div");
           bubbleWrapper.className = "messageWrapper";
           dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
           messageBubble.appendChild(dateDiv);
           bubbleWrapper.append(messageBubble);
-          // bubbleWrapper.appendChild(dateDiv);
           // append to child div of main chat window
           document.querySelector(".messages-content").append(bubbleWrapper);
         } else if (
@@ -229,15 +201,9 @@ async function chatEventHandler() {
           // 2. when current user is recipient
           // add class of recipient
           messageBubble.className = "recipient";
-
-          // append message to div
           messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
           dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
           messageBubble.appendChild(dateDiv);
-          // bubbleWrapper.append(messageBubble);
-          // bubbleWrapper.append(dateDiv);
-
-          // append to child div of main chat window
           document.querySelector(".messages-content").append(messageBubble);
         }
       });
@@ -247,8 +213,7 @@ async function chatEventHandler() {
   // function to send message to backend to be stored into DB
   document.getElementById("msg-send-btn").onclick = function () {
     var msg = document.getElementById("msg");
-    // console.log("checking send button");
-    // console.log(msg);
+
     if (!conn) {
       console.log("no conn");
       return false;
@@ -265,8 +230,6 @@ async function chatEventHandler() {
       Content: msg.value.trim(),
       Date: newTime(date.toString()),
     };
-
-    console.log("message.time: ", newTime(date.toString()));
 
     conn.send(JSON.stringify(message));
     msg.value = "";
@@ -288,7 +251,6 @@ async function chatEventHandler() {
       if (IsJsonString(msg)) {
         msg = JSON.parse(msg);
       }
-      // console.log("CURRENT USER!!!!", currentUser, msg);
 
       let messageWrapper = document.createElement("div");
       messageWrapper.className = "messageWrapper";
@@ -303,20 +265,12 @@ async function chatEventHandler() {
         dateDiv.innerHTML = `${msg.Date}`;
         newMessage.appendChild(dateDiv);
         messageWrapper.append(newMessage);
-        // messageWrapper.appendChild(dateDiv);
-
         document.querySelector(".messages-content").append(messageWrapper);
       } else if (currentUser !== msg.Sender) {
-        // let messageWrapper = document.createElement("div");
-        // messageWrapper.className = "messageWrapper";
-        // let newMessage = document.createElement("div");
-        // let dateDiv = document.createElement("div")
-        // dateDiv.className = "dateDiv"
         newMessage.className = "recipient";
         newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
         dateDiv.innerHTML = `${msg.Date}`;
         newMessage.appendChild(dateDiv);
-
         document.querySelector(".messages-content").append(newMessage);
       }
 

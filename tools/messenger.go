@@ -71,48 +71,6 @@ func StoreChat(dm Message) {
 	fmt.Println("chat last inserted: ", LastIns)
 }
 
-// // get all conversation between 2users by ChatID f
-// func GetAllMsgHistoryByChatID(cid int) []*Message {
-// 	var AllMsgs []*Message
-// 	msg := NewMessage()
-// 	if err := sqldb.DB.QueryRow("SELECT messageID, chatMessage, sender, recipient, creationDate FROM MessageHistory WHERE chatID = ?", cid).Scan(&msg.MessageID, &msg.Content, &msg.Sender, &msg.Recipient, &msg.Date); err != nil {
-// 		fmt.Println("GetPostByPID: ", err)
-// 		return nil
-// 	}
-// 	// msg.ChatID = cid
-// 	AllMsgs = append(AllMsgs, msg)
-// 	return AllMsgs
-// }
-
-// // show all chats with users
-// func ReadAllChats() []*Chat {
-// 	var allChats []*Chat
-// 	rows, err := sqldb.DB.Query("SELECT user2 FROM Chats;")
-// 	if err != nil {
-// 		fmt.Println("err: ", err)
-// 		return nil
-// 	}
-// 	for rows.Next() {
-// 		var tempChat *Chat = NewChat()
-// 		err := rows.Scan(&tempChat.User2)
-// 		if err != nil {
-// 			fmt.Println("err: ", err)
-// 		}
-// 		allChats = append(allChats, tempChat)
-// 	}
-// 	rows.Close()
-// 	return allChats
-// }
-
-// func NewMessage() *Message {
-// 	return &Message{}
-// }
-
-// func NewChat() *Chat{
-// 	return &Chat{}
-// }
-
-
 func GetMessages(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "GET" {
