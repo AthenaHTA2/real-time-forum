@@ -84,14 +84,14 @@ type Message struct {
 	Recipient string `json:"recipient"`
 	Content string `json:"content"`
 	Type string
-	Date time.Time
+	Date time.Time `json:"date"`
 }
 
 type Chat struct {
 	ChatID int
 	User1 string
 	User2 string
-	Date time.Time
+	Date string
 }
 
 type ChatHistoryCheck struct {

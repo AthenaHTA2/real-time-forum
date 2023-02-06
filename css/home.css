@@ -487,43 +487,33 @@ Chat
   padding: 10px 10px 10px 50px;
 }
 
+.message-close {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  left: 0px;
+  color: #fff;
+  border: none;
+  background: #248a52;
+  background-image: url(/css/img/icons8-back-arrow-48.png);
+  background-size: 100%;
+  line-height: 1;
+  padding: 20px 20px;
+  margin-left: 2px;
+  border-radius: 10px;
+}
+
 .chat-title {
   flex: 0 1 45px;
   position: relative;
   z-index: 2;
   background: rgba(0, 0, 0, 0.2);
-  color: rgba(255, 255, 255, 0.5);
+  color: rgb(77, 209, 221);
   text-transform: uppercase;
   text-align: left;
   padding: 10px 10px 10px 50px;
-
-  /* font-weight: bolder;
-  font-size: 10px; */
   margin: 0;
   padding: 0;
-}
-
-.chat-title h2 {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 8px;
-  letter-spacing: 1px;
-}
-.chat-title .avatar {
-  position: absolute;
-  z-index: 1;
-  top: 8px;
-  left: 9px;
-  border-radius: 30px;
-  width: 30px;
-  height: 30px;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  border: 2px solid rgba(255, 255, 255, 0.24);
-}
-.chat-title .avatar img {
-  width: 100%;
-  height: auto;
 }
 
 /*--------------------
@@ -534,14 +524,14 @@ Chat
   color: rgba(255, 255, 255, 0.5);
   overflow: auto;
   position: relative;
-  width: 100%;
+  /* width: 100%; */
 }
 .messages-content {
   display: flex;
   flex-direction: column;
 
   height: 400px;
-  width: 100%;
+  /* width: 100%; */
   overflow-y: auto;
   clear: both;
   padding: 6px 10px 7px;
@@ -581,29 +571,17 @@ Chat
   padding: 5px;
 }
 
+.dateDiv {
+  font-size: x-small;
+  color: greenyellow;
+}
+
 .messageWrapper {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
 
-/* .messages .message .avatar {
-  position: absolute;
-  z-index: 1;
-  bottom: -15px;
-  left: -35px;
-  border-radius: 30px;
-  width: 30px;
-  height: 30px;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  border: 2px solid rgba(255, 255, 255, 0.24);
-} */
-/* .messages .message .avatar img {
-  width: 100%;
-  height: auto;
-} */
 .messages .message.message-personal {
   float: right;
   color: #fff;
@@ -716,23 +694,6 @@ Chat
 }
 .message-box textarea:focus:-webkit-placeholder {
   color: transparent;
-}
-
-.message-box .message-close {
-  position: absolute;
-  z-index: 1;
-  top: 12px;
-  right: 48px;
-  color: #fff;
-  border: none;
-  background: #248a52;
-  font-size: 10px;
-  text-transform: uppercase;
-  line-height: 1;
-  padding: 6px 10px;
-  border-radius: 10px;
-  outline: none !important;
-  transition: background 0.2s ease;
 }
 
 .message-box .message-submit {

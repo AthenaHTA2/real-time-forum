@@ -3,6 +3,9 @@ let user;
 let currentUser;
 let receiver;
 
+let today = Date.now();
+let date = new Date(today);
+
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
 let Lpassword = logform.querySelector("#LPassW");
@@ -136,7 +139,7 @@ async function chatEventHandler() {
   var log = document.getElementById("log");
   var usersLog = document.getElementById("usersLog");
 
-  // TODO:
+  /*
   function appendLog(item) {
     let doScroll;
     console.log(item);
@@ -147,7 +150,7 @@ async function chatEventHandler() {
     if (doScroll) {
       log.scrollTop = log.scrollHeight - log.clientHeight;
     }
-  }
+  }*/
 
   let configMsg = {
     method: "POST",
@@ -186,24 +189,22 @@ async function chatEventHandler() {
     item.onclick = () => {
       receiver = item.innerHTML;
 
-      // console.log(receiver);
-      // console.log(currentUser);
-      // Show messages in console for convenience. (optional)
-      // console.log(messages);
-
       // Show main chat window
       let chat = document.querySelector(".chat-private");
       chat.style.visibility = "visible";
 
       let chatfriend = document.querySelector(".chat-title");
-
-      chatfriend.innerHTML = receiver;
-      // console.log("receiver: ", receiver);
+      chatfriend.innerHTML = "Messaging - " + receiver;
+      
 
       // **filter** and append correct messages to chat window
+
       messages.forEach((message) => {
         // create new div for message
         let messageBubble = document.createElement("div");
+        let dateDiv = document.createElement("div");
+        dateDiv.className = "dateDiv";
+
         // messageBubble.className = "messages-content message"
 
         // 1. when current user is sender
@@ -213,10 +214,12 @@ async function chatEventHandler() {
 
           // append message to div
           messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
-
           let bubbleWrapper = document.createElement("div");
           bubbleWrapper.className = "messageWrapper";
+          dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
+          messageBubble.appendChild(dateDiv);
           bubbleWrapper.append(messageBubble);
+          // bubbleWrapper.appendChild(dateDiv);
           // append to child div of main chat window
           document.querySelector(".messages-content").append(bubbleWrapper);
         } else if (
@@ -229,25 +232,14 @@ async function chatEventHandler() {
 
           // append message to div
           messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
+          dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
+          messageBubble.appendChild(dateDiv);
+          // bubbleWrapper.append(messageBubble);
+          // bubbleWrapper.append(dateDiv);
 
           // append to child div of main chat window
           document.querySelector(".messages-content").append(messageBubble);
         }
-
-        // if (
-        //   (message.sender === currentUser && message.recipient === receiver) ||
-        //   (message.recipient === currentUser && message.sender === receiver)
-        // ) {
-        //   // create new div for message
-        //   let messageBubble = document.createElement("div");
-
-        //   // append message to div and style to white
-        //   messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
-        //   messageBubble.style.color = "white";
-
-        //   // append to child div of main chat window
-        //   document.querySelector(".messages-content").append(messageBubble);
-        // }
       });
     };
   }
@@ -255,8 +247,8 @@ async function chatEventHandler() {
   // function to send message to backend to be stored into DB
   document.getElementById("msg-send-btn").onclick = function () {
     var msg = document.getElementById("msg");
-    console.log("checking send button");
-    console.log(msg);
+    // console.log("checking send button");
+    // console.log(msg);
     if (!conn) {
       console.log("no conn");
       return false;
@@ -271,7 +263,10 @@ async function chatEventHandler() {
       Sender: currentUser,
       Recipient: receiver,
       Content: msg.value.trim(),
+      Date: newTime(date.toString()),
     };
+
+    console.log("message.time: ", newTime(date.toString()));
 
     conn.send(JSON.stringify(message));
     msg.value = "";
@@ -293,24 +288,35 @@ async function chatEventHandler() {
       if (IsJsonString(msg)) {
         msg = JSON.parse(msg);
       }
-      console.log("CURRENT USER!!!!", currentUser, msg);
+      // console.log("CURRENT USER!!!!", currentUser, msg);
 
-      // formatting message for recipient
+      let messageWrapper = document.createElement("div");
+      messageWrapper.className = "messageWrapper";
+      let newMessage = document.createElement("div");
+      let dateDiv = document.createElement("div");
+      dateDiv.className = "dateDiv";
+
+      // formatting message
       if (currentUser === msg.Sender) {
-        let messageWrapper = document.createElement("div");
-        messageWrapper.className = "messageWrapper";
-        let newMessage = document.createElement("div");
-        newMessage.innerHTML = `${"You"}: ${msg.Content}`;
         newMessage.className = "sender";
-
+        newMessage.innerHTML = `${"You"}: ${msg.Content}`;
+        dateDiv.innerHTML = `${msg.Date}`;
+        newMessage.appendChild(dateDiv);
         messageWrapper.append(newMessage);
+        // messageWrapper.appendChild(dateDiv);
+
         document.querySelector(".messages-content").append(messageWrapper);
       } else if (currentUser !== msg.Sender) {
-        // formatting message for sender
-        let newMessage = document.createElement("div");
-        newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
+        // let messageWrapper = document.createElement("div");
+        // messageWrapper.className = "messageWrapper";
+        // let newMessage = document.createElement("div");
+        // let dateDiv = document.createElement("div")
+        // dateDiv.className = "dateDiv"
         newMessage.className = "recipient";
-        // newMessage.style.backgroundColor = "red";
+        newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
+        dateDiv.innerHTML = `${msg.Date}`;
+        newMessage.appendChild(dateDiv);
+
         document.querySelector(".messages-content").append(newMessage);
       }
 
@@ -320,23 +326,23 @@ async function chatEventHandler() {
         item.style.color = "#80ed99";
         item.innerText = messages[i];
         //if message is a list of chat members, it begins with a space
-
         if (messages[0] == " ") {
           if (i < messages.length) {
             item.innerText = messages[i];
             //print list inside 'usersLog' div
             AppendUser(item);
           }
-          //the list of posts starts with a double space
-        } else if (messages[0] == "  ") {
-          //print all posts
-          item.innerText = messages[i];
-          //append posts inside in the main window
-          AppendPosts(item);
-        } else {
-          //print list inside 'log' div
-          // appendLog(item);
         }
+        //the list of posts starts with a double space
+        // } else if (messages[0] == "  ") {
+        //   //print all posts
+        //   item.innerText = messages[i];
+        //   //append posts inside in the main window
+        //   AppendPosts(item);
+        // } else {
+        //   //print list inside 'log' div
+        //   // appendLog(item);
+        // }
       }
     };
   } else {
@@ -353,4 +359,143 @@ function IsJsonString(str) {
     return false;
   }
   return true;
+}
+
+// Converts JS time stamp into a string, used when displaying posts
+const ConvertDate = (date) => {
+  // Seperate year, day, hour and minutes into vars
+  let yyyy = date.slice(0, 4);
+  let dd = date.slice(8, 10);
+  let hh = date.slice(11, 13);
+  let mm = date.slice(14, 16);
+  // Get int for day of the week (0-6, Sunday-Saturday)
+  const d = new Date(date);
+  let dayInt = d.getDay();
+  let day = "";
+  switch (dayInt) {
+    case 0:
+      day = "Sunday";
+      break;
+    case 1:
+      day = "Monday";
+      break;
+    case 2:
+      day = "Tuesday";
+      break;
+    case 3:
+      day = "Wednesday";
+      break;
+    case 4:
+      day = "Thursday";
+      break;
+    case 5:
+      day = "Friday";
+      break;
+    case 6:
+      day = "Saturday";
+      break;
+  }
+  // Get int for month (0-11, January-December)
+  let monthInt = d.getMonth();
+  let month = "";
+  switch (monthInt) {
+    case 0:
+      month = "January";
+      break;
+    case 1:
+      month = "February";
+      break;
+    case 2:
+      month = "March";
+      break;
+    case 3:
+      month = "April";
+      break;
+    case 4:
+      month = "May";
+      break;
+    case 5:
+      month = "June";
+      break;
+    case 6:
+      month = "July";
+      break;
+    case 7:
+      month = "August";
+      break;
+    case 8:
+      month = "September";
+      break;
+    case 9:
+      month = "October";
+      break;
+    case 10:
+      month = "November";
+      break;
+    case 11:
+      month = "December";
+      break;
+  }
+  fullDate =
+    day + ", " + dd + " " + month + ", " + yyyy + " @ " + hh + ":" + mm;
+  return fullDate;
+};
+
+function newTime(date) {
+  let dateArray = date.split(" ");
+  let newDate;
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+  const daysShort = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const monthsShort = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  for (let i = 0; i < days.length; i++) {
+    if (dateArray[0] == daysShort[i]) {
+      newDate = days[i];
+    }
+  }
+  newDate += ", " + dateArray[2];
+  for (let i = 0; i < months.length; i++) {
+    if (dateArray[1] == monthsShort[i]) {
+      newDate += " " + months[i] + ", ";
+    }
+  }
+  newDate += dateArray[3] + " @ ";
+  let hour = dateArray[4].split(":");
+  newDate += hour[0] + ":" + hour[1];
+  return newDate;
 }
