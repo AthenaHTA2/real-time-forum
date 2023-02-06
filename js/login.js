@@ -180,12 +180,11 @@ const refreshPostsAfterLogin = () => {
     postsContainer = document.querySelector("#postListAfterLogin");
     postsContainer.innerHTML = "";
     for (let i = posts.length - 1; i >= 0; i--) {
-
     
       postsContainer.innerHTML +=
         `
             <div class="posts" style.display ="inline-block" id=` +
-        posts[i].PostID +
+
         `>
          
             
@@ -201,18 +200,17 @@ const refreshPostsAfterLogin = () => {
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 
-            <button class="button" id="ShowComments" onclick="ShowCommentsBlock(${posts[i].PostID}) ; HideCommentsBlock(${posts[i].PostID}) ;" style.text-align="center">` +
+            <button class="button" id="ShowComments" onclick="ShowCommentsBlock(${posts[i].PostID}) ;" style.text-align="center">` +
         " &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;" +
         " &nbsp; &nbsp; &nbsp; &nbsp;" +
         " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  Show Comments" +
         `</button>
 
-        <div id="c${posts[i].PostID}" class="commentBlock" style='height: 400px;'>
-        <button class="button hideCommentBtn" id="button${posts[i].PostID}"  onclick= 'CloseComments(${posts[i].PostID}) ;'> ` + "Close" + `</button>
+       
       </div>
-
-
-            </div>
+      <div id="c${posts[i].PostID}" class="commentBlock" style='z-index: 1;', >
+      <button class="button hideCommentBtn" id="button${posts[i].PostID}"  onclick= 'CloseComments(${posts[i].PostID}) ;'> ` + "Close" + `</button>
+    </div>
             <br>  
 
            
