@@ -58,6 +58,11 @@ document.getElementById('logout').onclick = (e) => {
     document.getElementById("LoggedOut").style.display = "none";
     document.getElementById("byeFace").style.display = "none";
   }, 1500);
+
+  //delete cookie from databadse
+  LogoutDeleteCookie()
+  //hide users list, chat, user nickname
+  Logout()
 };
 
 function ChatReturn() {

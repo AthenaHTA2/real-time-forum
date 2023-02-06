@@ -1,5 +1,5 @@
 let user;
-let currentUser;
+let CurrentUser;
 let receiver;
 let LoginData;
 let ShowComments
@@ -92,16 +92,16 @@ LoginBtn.onclick = (e) => {
 
         console.log(userData, "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        currentUser = userData.NickName;
-        console.log(currentUser);
+        CurrentUser = userData.NickName;
+        console.log(CurrentUser);
 
         var successlogin = document.getElementById("current-user");
 
         successlogin.innerHTML =
-          " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼 " + currentUser + " &#128512";
+          " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼 " + CurrentUser + " &#128512";
         // if (user) {
         //   var successlogin = document.getElementById("current-user");
-        //   successlogin.innerHTML = " Welcome " + currentUser;
+        //   successlogin.innerHTML = " Welcome " + CurrentUser;
         // }
       }
     });
@@ -180,6 +180,8 @@ const refreshPostsAfterLogin = () => {
     postsContainer = document.querySelector("#postListAfterLogin");
     postsContainer.innerHTML = "";
     for (let i = posts.length - 1; i >= 0; i--) {
+
+    
       postsContainer.innerHTML +=
         `
             <div class="posts" style.display ="inline-block" id=` +
@@ -198,11 +200,16 @@ const refreshPostsAfterLogin = () => {
             <div  style.display="inline-block" &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            <button class="button" id="ShowComments" style.text-align="center">` +
+
+            <button class="button" id="ShowComments" onclick="ShowCommentsBlock(${posts[i].PostID}) ; HideCommentsBlock(${posts[i].PostID}) ;" style.text-align="center">` +
         " &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;" +
         " &nbsp; &nbsp; &nbsp; &nbsp;" +
         " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  Show Comments" +
         `</button>
+
+        <div id="c${posts[i].PostID}" class="commentBlock" style='height: 400px;'>
+        <button class="button hideCommentBtn" id="button${posts[i].PostID}"  onclick= 'CloseComments(${posts[i].PostID}) ;'> ` + "Close" + `</button>
+      </div>
 
 
             </div>
@@ -276,6 +283,39 @@ const Logout = () => {
 
   console.log(document.cookie);
 };
+
+
+//remove cookie from browser when logout
+function LogoutDeleteCookie(){
+	let deleteCookie = GetCookie("user_session");
+  console.log({deleteCookie})
+  let objDeleteCookie = {
+    toDelete: deleteCookie,
+  }
+  console.log({objDeleteCookie})
+  let configLogout = {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    },
+   body: JSON.stringify(objDeleteCookie)
+
+};
+
+fetch("/logout", configLogout)
+.then(function (response) {
+  console.log(response);
+  if (response.status == 200) {
+    console.log("successful logout");
+
+  } else {
+    console.log("unccessful logout");
+
+  }
+})
+}
+
 //
 //
 // ====================================================
@@ -329,7 +369,7 @@ window.onload = function () {
       return false;
     }
     let message = {
-      Sender: currentUser,
+      Sender: CurrentUser,
       Recipient: receiver,
       Content: msg.value.trim(),
     };

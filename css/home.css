@@ -76,7 +76,7 @@ h1 {
 h2 {
     margin-top: 0cm;
     margin-bottom: 0cm;
-    padding-right: 10cm;
+    padding-right: 10%;
     font-size: 1.25em;
     color: white;
     font-family: cursive;
@@ -343,7 +343,7 @@ h6 {
   width: 90vh;
 } */
 
-.expandedPosts{
+/* .expandedPosts{
   border-radius: 25px;
   background-image: url('/css/img/canvas.png');
   background-size: 100%;
@@ -367,8 +367,8 @@ h6 {
   text-align: justify;
   height: 100%;
   width: 100%;
-}
-/* end */
+} */
+end
 
 
 /* ------------------------------------------------------------------------- */
@@ -377,13 +377,14 @@ h6 {
   display:none;
   padding-right: 0cm;
 }
-
-.comment-content{
-    height: 15px;
-    visibility: hidden;
-    background-color:  rgb(136, 200, 176);
-    color: rgb(15, 15, 120);
+/* comment text input inside comment block*/
+.cComment-content{
+  height: 30px;
+  width: 350px;
+  display:none;
 }
+
+
 
 .comment{
     color: aqua;
@@ -394,6 +395,12 @@ h6 {
     visibility: hidden;
 }
 
+.comment-content{
+    height: 15px;
+    visibility: hidden;
+    background-color:  rgb(136, 200, 176);
+    color: rgb(15, 15, 120);
+}
 .commentBlock{
     height: 200px;
     overflow: auto;
@@ -401,13 +408,13 @@ h6 {
     z-index: 1;
     background-image: url('/css/img/canvas.png');
     border-radius: 30px;
-    visibility: hidden;
 }
 
 .comment-container p{
-    display: inline;
+    /* display: inline; */
     height: 150px;
     visibility: hidden;
+    z-index: -1;
 }
 
 /* end */
@@ -501,6 +508,11 @@ color: rgb(15, 15, 120);
 font-weight: bolder;
 }
 
+.hideCommentBtn{
+  visibility: hidden;
+
+}
+
 .CommentBtn{
   display: inline-block;
   background-image: url('/css/img/canvas.png');
@@ -584,7 +596,7 @@ font-weight: bolder;
 
 /*HTA added to the comment block */
 .cCommentBtn{
-  display: none;
+  display: inline-block;
   background-image: url('/css/img/canvas.png');
   background-size: 105%;
   background-repeat: no-repeat;
@@ -599,6 +611,7 @@ font-weight: bolder;
   font-family:cursive;
   font-weight: bolder;
   width: 300px;
+  visibility: visible;
 }
 .cCommentBtn:hover{
 background-image: none;
@@ -607,7 +620,15 @@ color: rgb(15, 15, 120);
 font-weight: bolder;
 }
 
-
+.commentBlock{
+  height: 400px;
+  overflow: auto;
+  display: none;
+  z-index: 1;
+  background-image: url('/css/img/canvas.png');
+  border-radius: 30px;
+  background-size: 100%;
+}
 /* end */
 
 
