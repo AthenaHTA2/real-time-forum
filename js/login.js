@@ -1,6 +1,6 @@
 let LoginData;
 let user;
-let currentUser;
+let CurrentUser;
 let receiver;
 
 let today = Date.now();
@@ -75,13 +75,16 @@ LoginBtn.onclick = (e) => {
         setLoginErrorFor(Lpassword, "Please enter correct password");
       } else {
         console.log(rsp);
-        currentUser = rsp;
+
+        let userData = JSON.parse(rsp);
+        CurrentUser = userData.NickName;
+
         var successlogin = document.getElementById("current-user");
-        successlogin.innerHTML = " Hello " + currentUser + " &#128512";
+        successlogin.innerHTML = " Hello " + CurrentUser + " &#128512";
 
         // if (user) {
         //   var successlogin = document.getElementById("current-user");
-        //   successlogin.innerHTML = " Welcome " + currentUser;
+        //   successlogin.innerHTML = " Welcome " + CurrentUser;
         // }
       }
       return;
@@ -181,7 +184,7 @@ async function chatEventHandler() {
     console.log(item);
 
     // if current user, do not display. (return) because AppendUser() is called in a loop.
-    if (item.innerHTML === currentUser) {
+    if (item.innerHTML === CurrentUser) {
       return;
     }
 
@@ -209,7 +212,7 @@ async function chatEventHandler() {
         dateDiv.className = "dateDiv";
 
         // 1. when current user is sender
-        if (message.sender === currentUser && message.recipient === receiver) {
+        if (message.sender === CurrentUser && message.recipient === receiver) {
           // add class of sender
           messageBubble.className = "sender";
           messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
@@ -221,7 +224,7 @@ async function chatEventHandler() {
           // append to child div of main chat window
           document.querySelector(".messages-content").append(bubbleWrapper);
         } else if (
-          message.recipient === currentUser &&
+          message.recipient === CurrentUser &&
           message.sender === receiver
         ) {
           // 2. when current user is recipient
@@ -251,7 +254,7 @@ async function chatEventHandler() {
 
     // object to message to send to front end
     let message = {
-      Sender: currentUser,
+      Sender: CurrentUser,
       Recipient: receiver,
       Content: msg.value.trim(),
       Date: newTime(date.toString()),
@@ -285,14 +288,14 @@ async function chatEventHandler() {
       dateDiv.className = "dateDiv";
 
       // formatting message
-      if (currentUser === msg.Sender) {
+      if (CurrentUser === msg.Sender) {
         newMessage.className = "sender";
         newMessage.innerHTML = `${"You"}: ${msg.Content}`;
         dateDiv.innerHTML = `${msg.Date}`;
         newMessage.appendChild(dateDiv);
         messageWrapper.append(newMessage);
         document.querySelector(".messages-content").append(messageWrapper);
-      } else if (currentUser !== msg.Sender) {
+      } else if (CurrentUser !== msg.Sender) {
         newMessage.className = "recipient";
         newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
         dateDiv.innerHTML = `${msg.Date}`;

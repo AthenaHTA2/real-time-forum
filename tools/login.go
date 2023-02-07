@@ -124,8 +124,15 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		insertsessStmt.Exec(CurrentUser.UserID, cookieNm, sessionToken)
 
+
+		marshalledUser, err := json.Marshal(CurrentUser)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(CurrentUser.NickName))
+		w.Write([]byte(marshalledUser))
+		// w.Write([]byte(CurrentUser.NickName))
 
 		GetAllUsers()
 	}
