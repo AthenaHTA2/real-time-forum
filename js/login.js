@@ -115,17 +115,43 @@ function unsuccessfulLogin() {
   document.getElementById("regRejected").style.display = "block";
 
   setTimeout(() => {
-    
     document.getElementById("regRejected").style.display = "none";
   }, 1500);
 
   document.getElementById("postBlock").style.display = "flex";
 }
 
-function Logout() {
+const Logout = () => {
   document.querySelector(".loggedInUsers").style.visibility = "hidden";
   document.querySelector(".chat-private").style.visibility = "hidden";
+  document.getElementById("current-user").style.display = "none";
+  document.getElementById("postList").style.display = "block";
   console.log(document.cookie);
+};
+//remove cookie from browser when logout
+function LogoutDeleteCookie() {
+  let deleteCookie = GetCookie("user_session");
+  console.log({ deleteCookie });
+  let objDeleteCookie = {
+    toDelete: deleteCookie,
+  };
+  console.log({ objDeleteCookie });
+  let configLogout = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(objDeleteCookie),
+  };
+  fetch("/logout", configLogout).then(function (response) {
+    console.log(response);
+    if (response.status == 200) {
+      console.log("successful logout");
+    } else {
+      console.log("unccessful logout");
+    }
+  });
 }
 // ===================================================================
 //                              CHATS

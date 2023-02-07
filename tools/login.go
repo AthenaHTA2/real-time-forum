@@ -47,15 +47,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Println("err2 selecting passwordhash in db by nickName or email:", err2)
 		if(err2.Error() == "sql: no rows in result set"){
-			fmt.Println("on track1")
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("ERROR: This username/email doesnt exist, please register to enter this forum"))
 			return
-		
 		}
-		// w.Write([]byte(err.Error()))	
-		// w.WriteHeader(http.StatusBadRequest)
-		// return
 	}
 
 	// func CompareHashAndPassword(hashed password, password []byte) error
@@ -64,17 +59,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// ERROR: 2. returns error if password hash dont match with stored one => user details do not match
 	if comparePass != nil {
 		if((comparePass.Error()) == "crypto/bcrypt: hashedPassword is not the hash of the given password"){
-			fmt.Println("on track2")
 			w.Write([]byte("ERROR: please enter correct password"))
 			return
 		}
-		// convey status to browser
+
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Println("Error from comparing 'passwordhash' with user's pw: ", comparePass)
 		return
 	}
-		
-		
 
 	// returns nil on success
 	if comparePass == nil {
@@ -82,12 +74,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		stmtCurrentUer := "SELECT * FROM Users WHERE nickName = ? OR email = ?"
 		rowCurrentUser := sqldb.DB.QueryRow(stmtCurrentUer, username, username)
 
-		// var (
-		// 	userID, age                                  int
-		// 	firstName, lastName, nickName, gender, email string
-		// )
-
-	
 		err3 := rowCurrentUser.Scan(&CurrentUser.UserID, &CurrentUser.FirstName, &CurrentUser.LastName, &CurrentUser.NickName, &CurrentUser.Age, &CurrentUser.Gender, &CurrentUser.Email, &CurrentUser.Password)
 		if err3 != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -95,26 +81,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			// fmt.Println("error accessing DB")
 			return
 		}
-		// fmt.Println("All current user's data from 'Users' database table: \n", userID, firstName, lastName, nickName, age, gender, email)
-		
-		// //populate the CurrentUser struct (instance of 'User' struct) with values from 'Users' db table:
-		// CurrentUser.UserID = userID
-		// CurrentUser.LastName = lastName
-		// CurrentUser.NickName = nickName
-		// // CurrentUser.Age = age
-		// CurrentUser.Age = strconv.Itoa(age)
-		// CurrentUser.Gender = gender
-		// CurrentUser.Email = email
-		
+			
 		fmt.Println("CurrentUser", CurrentUser)
 		err3 = IsUserAuthenticated(w, &CurrentUser)
 		fmt.Println("IsUserAuthenticated err3: ", err3)
 
 		// ERROR: 3. returns error if user already logged in elsewhere
 		if err3 != nil { 
-			// StatusBadRequest = 400
 			w.WriteHeader(http.StatusBadRequest)
-			// fmt.Println("You are already logged in 🧐")
 			fmt.Println("already logged in: ", err3)
 			return
 		}
@@ -133,7 +107,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			MaxAge:  7200,
 			Expires: expiresAt,
 			// SameSite: true,
-			HttpOnly: true, //removed in order to allow Javascript to access cookie
+			// HttpOnly: true, //removed in order to allow Javascript to access cookie
 		})
 
 		// storing the cookie values in struct
@@ -149,21 +123,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		defer insertsessStmt.Close()
 
 		insertsessStmt.Exec(CurrentUser.UserID, cookieNm, sessionToken)
-
-		fmt.Println("PASSWORD IS CORRECT")
-		fmt.Println("User successfully logged in")
-
-
-		//granting access to the logged in user
-		//by setting selected 'User' struct fields to true etc.
-
-
-		// CurrentUser.Password = password
-		// CurrentUser.Access = 1
-		// CurrentUser.LoggedIn = true
-
-
-		// fmt.Println("User struct data from Login: \n", CurrentUser.UserID, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Password, CurrentUser.Access, CurrentUser.LoggedIn, CurrentUser.Posts, CurrentUser.Comments, CurrentUser.Email)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(CurrentUser.NickName))

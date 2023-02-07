@@ -1,10 +1,14 @@
 package tools
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"rtforum/sqldb"
+	"strings"
+	"unicode/utf8"
 
 	"time"
 
@@ -72,45 +76,70 @@ func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 
 // User's cookie expires when browser is closed, delete the cookie from the database.
 func DeleteSession(w http.ResponseWriter, cookieValue string) error {
-
-	// //first set cookieValue from browser to empty when browser is closed
-	// cookie := &http.Cookie{
-	// 	Name:     "user_session",
-	// 	Value:    "",
-	// 	MaxAge:   -1,
-	// 	HttpOnly: true,
-	// }
-	// http.SetCookie(w, cookie)
-
-	
-	//removing session record from 'Sessions' table
-	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE cookieValue = ? ;")
+	fmt.Println("-----> DeleteSession called")
+	var cookieName string
+	//if cookieName is not found in 'Sessions' db table return err = nil
+	if err := sqldb.DB.QueryRow("SELECT cookieName FROM Sessions WHERE cookieValue = ?", cookieValue).Scan(&cookieName); err != nil {
+		fmt.Println("there was an error selecting ", cookieValue)
+		return nil
+	}
+	//removing cookie from browser
+	cookie := &http.Cookie{
+		Name:   cookieName,
+		Value:  "",
+		MaxAge: -1,
+		//HttpOnly: true,
+	}
+	fmt.Println("the cookie after changing its values -->", cookie)
+	//to delete the cookie in the browser
+	http.SetCookie(w, cookie)
+	//to remove session record from 'Sessions' table
+	stmt, err := sqldb.DB.Prepare("DELETE FROM Sessions WHERE cookieValue=?;")
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
 	defer stmt.Close()
 	stmt.Exec(cookieValue)
-
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Println("DeleteSession err: ", err)
 		return err
 	}
-
 	return nil
 }
-
 // logout handle
 func Logout(w http.ResponseWriter, r *http.Request) {
+	var cooky Cookie
 	if r.URL.Path == "/logout" {
-		c, err := r.Cookie("session_token")
+		cookieVal, err := io.ReadAll(r.Body)
+		fmt.Println("cookieVal before unmarshalled", cookieVal)
 		if err != nil {
-			AddSession(w, "guest", nil)
-			http.Redirect(w, r, "/", http.StatusSeeOther)
-			fmt.Println("Logout error: ", err)
+			log.Fatal(err)
 		}
-		DeleteSession(w, c.Value)
+		cookieStringBefore := string(cookieVal[:])
+		//separate cookie name from cookie value
+		cValue := strings.Split(cookieStringBefore, ":")
+		//get cookie value
+		cookieStringAfter := (cValue[1])
+		//count the number of runes in coookieStringAfter
+		//so that you drop the final '}'
+		numRunes := utf8.RuneCountInString(cookieStringAfter)
+		fmt.Println("the number of runes in cookie: ", numRunes)
+		cookieStringByte := []byte(cookieStringAfter)
+		//to remove the curly bracket at end of cookie value
+		cookieStringAfter = string(cookieStringByte[0 : numRunes-1])
+		fmt.Println("the correct cookie: --->", cookieStringAfter)
+		//populate the Cookie struct field 'Value' with cookie value
+		json.Unmarshal([]byte(cookieStringAfter), &cooky.Value)
+		fmt.Println("cookie value before unmarshal: ", cookieStringBefore)
+		fmt.Println("cookie value after unmarshal: ", string(cookieStringAfter))
+		//delete corresponding row in 'Sessions' table
+		//and delete cookie in browser
+		DeleteSession(w, string(cooky.Value))
 		fmt.Println("user logged out")
-		http.Redirect(w, r, "/", http.StatusFound)
+		//http.Redirect(w, r, "/", http.StatusFound)
 	}
 }
+
 
 // GetUserByCookie ...
 func GetUserByCookie(cookieValue string) *User {
