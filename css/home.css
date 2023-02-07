@@ -9,7 +9,22 @@ body {
     font-size: 18px;
     overflow-x: hidden;
     overflow-y: scroll;
-    scrollbar-color: blue;
+}
+
+body::-webkit-scrollbar {
+  width: .5em;
+}
+ 
+body::-webkit-scrollbar-track {
+  backface-visibility: hidden;
+}
+ 
+body::-webkit-scrollbar-thumb {
+  height: 200px;
+  background-color: rgb(0, 0, 94);
+  border-radius: 25px;
+  box-shadow: 2px 1px 2px 1px white;
+  border-color: white;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -335,11 +350,11 @@ h6 {
     display: block;
     flex-direction: column;
     box-shadow: 2px 2px 2px 2px white;
-    z-index: 0;
+    z-index: -1;
 }
 
 .posts-content{
-z-index: 0;
+z-index: -1;
 }
 
 /* .expandedPosts{
@@ -375,12 +390,15 @@ end
 .cCommentLabel{
   display:none;
   padding-right: 0cm;
+  
 }
+
 /* comment text input inside comment block*/
 .cComment-content{
   height: 30px;
   width: 350px;
   display:none;
+  color:blue;
 }
 
 /* #c{
@@ -389,37 +407,64 @@ end
 } */
 
 
-.comment{
+/* .comment{
     color: aqua;
     font-size: 1.5rem;
     font-family: cursive;
     height: 5%;
     width: 200px;
     z-index: 1;
-}
+} */
 
 .comment-content{
     height: 15px;
-    background-color:  rgb(136, 200, 176);
-    color: rgb(15, 15, 120);
     z-index: 1;
 }
 .commentBlock{
-    height: 200px;
-    overflow: auto;
+    display: block;
+    height: 400px;
     display: none;
-    z-index: -10;
-    background-image: url('/css/img/canvas.png');
+    z-index: 2;
+    background-image: url('/css/img/profile.png');
     border-radius: 30px;
-    background-size: 100%;
+    background-size: 200%;
+    position: relative;
+    overflow: scroll;
+    overflow-x: hidden;
+    line-height: 10%;
+    border-radius: 25px;
+    box-shadow: 2px 2px 2px 2px white;
+    border-color: white;
+
 }
 
-.comment-container p{
-  display: inline-block;
-    height: 50%;
-    z-index: 1;
-    background-image: url('/css/img/canvas.png');
+.commentBlock::-webkit-scrollbar {
+  width: .5em;
 }
+ 
+/* .commentBlock::-webkit-scrollbar-track {
+  col
+} */
+ 
+.commentBlock::-webkit-scrollbar-thumb {
+  height: 200px;
+  background-color: rgb(0, 0, 94);
+  border-radius: 25px;
+  box-shadow: 2px 1px 2px 1px white;
+  border-color: white;
+  
+}
+
+
+
+.comment-container p{
+  color:whitesmoke;
+  z-index: 1;
+  border-bottom: 1px;
+  border-color: white;
+}
+
+
 
 /* end */
 

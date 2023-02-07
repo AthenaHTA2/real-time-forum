@@ -28,14 +28,12 @@
   // //hides a post's comments section
   function CloseComments(id){
     console.log("#############################were are closing commments")
-    let commentBlock = document.querySelector(".commentBlock")
+    let commentBlock = document.querySelector("#c" + id)
     console.log(commentBlock, "#################here is the COMMENT BLOCK")
     let clearCommentBtn = document.querySelector("#button"+id)
-    console.log(clearCommentBtn, "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~WERE CLEARNING THE COMMENT BLOCK")
+    console.log(id, "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ID from close comments")
     commentBlock.style.display = "none"
-    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++closing comment Blcok")
     clearCommentBtn.style.display = "none"
-    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++closing comment Button")
 
   }
 
@@ -122,7 +120,7 @@
   <br>
   <div style="display:flex; flex-direction: row; column-gap: 15px; justify-content: left; align-items: center">
     <p class="commentBlock" ><h2 class="cCommentLabel" id='cCommentLabel${id}'>`+"Comment: " +`</h2><input type="text" class="cComment-content" id='cCommentTxt${id}' placeholder="Write a comment.." ; ><button class="button cCommentBtn" id='cCommentBtn${id}' onclick= 'AppendComments(${id})'> ` + "Send comment" + `</button></p>
-  </div>
+    </div>
   <br id='refNode${id}'>
   `
   let addCommentClass = document.querySelector(".commentBlock");
@@ -139,7 +137,7 @@
           continue
       }
     commentsContainer.innerHTML += `
-    <div class="comment-container"><p class='' >`+ "Author: " + comments[i].Author + `</p>&nbsp;&nbsp;<p class=''>`+ "Comment: " + comments[i].CommContent + `</p>&nbsp;&nbsp;<p class=''>`+ "Time: " + ConvertDate(comments[i].CommentTime) + `</p></div>
+    <div class="comment-container"><hr><p class='' >`+ "Author: " + comments[i].Author + `</p>&nbsp;&nbsp;<p class=''>`+ "Comment: " + comments[i].CommContent + `</p>&nbsp;&nbsp;<p class=''>`+ "Time: " + ConvertDate(comments[i].CommentTime) + `</p><hr></div>
     `
   }
 }
@@ -172,7 +170,7 @@ function addCommentToDB(comment, id){
     //let parentNode = document.querySelector("#c"+id);
 
     item.innerHTML = `
-    <p >`+ "Author: " + CurrentUser + `</p>&nbsp;&nbsp;<p >`+ "Comment: " + comment  + `</p>&nbsp;&nbsp;<p >`+ "Time: " + date_time + `</p>
+    <p >`+ `<hr>`+ "Author: " + CurrentUser + `</p>&nbsp;&nbsp;<p >`+ "Comment: " + comment  + `</p>&nbsp;&nbsp;<p >`+ "Time: " + date_time +  `<hr>`+`</p>
     `
 
     referenceNode.parentNode.insertBefore(item, referenceNode.nextSibling);

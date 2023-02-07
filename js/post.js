@@ -68,6 +68,7 @@ const successfulPost = () => {
     PostTitle.value = ""
     PostContent.value = ""
     document.querySelector("#PostCat").value = ""
+    refreshPostsAfterLogin();
 };
 
 const unsuccessfulPost = () => {

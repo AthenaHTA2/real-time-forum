@@ -62,7 +62,7 @@ LoginBtn.onclick = (e) => {
       if (response.status == 200) {
         console.log("successful login");
         successfulLogin();
-        // refreshPosts();
+        refreshPostsAfterLogin();
         return response.text();
       } else {
         unsuccessfullLogin();
@@ -150,6 +150,9 @@ const showHideUserProfile = () => {
 
   }
 }
+
+
+
 
 const refreshPostsAfterLogin = () => {
   fetch("/getPosts", {
