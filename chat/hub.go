@@ -68,24 +68,6 @@ func (h *Hub) Run() {
 				tools.StoreMessage(directmsg)
 			}
 
-			// if chatHistoryVal.ChatExists {
-			// 	directmsg.ChatID = chatHistoryVal.ChatID
-			// 	tools.StoreMessage(directmsg)
-			// } else if (!chatHistoryVal.ChatExists && chatHistoryVal.ChatID == 0 ){
-			// 	directmsg.ChatID = 1
-			// 	tools.StoreChat(directmsg)
-			// 	tools.StoreMessage(directmsg)
-			// } else {
-			// 	tools.StoreChat(directmsg)
-			// 	tools.StoreMessage(directmsg)
-			// }
-
-
-
-
-			// tools.StoreMessage(directmsg)
-
-
 			for client := range h.Clients {
 
 				if (client == directmsg.Recipient) || (client == directmsg.Sender) {
@@ -102,28 +84,29 @@ func (h *Hub) Run() {
 	}
 }
 
-//to show which users are logged in
-func (h *Hub) RegisteredUsers(nicknames [][]byte) {
-	for _, nknm := range nicknames {
-		nknm = <-h.Broadcast
-		for client := range h.Clients {
-			h.Clients[client].Send <- nknm
+// //to show which users are logged in
+// func (h *Hub) RegisteredUsers(nicknames [][]byte) {
+// 	for _, nknm := range nicknames {
+// 		nknm = <-h.Broadcast
+// 		for client := range h.Clients {
+// 			h.Clients[client].Send <- nknm
 
-		}
-	}
+// 		}
+// 	}
 
-}
+// }
 
 func (h *Hub) LogConns() {
     for {
         fmt.Println(len(h.Clients), "clients connected")
-        for userId := range h.Clients {
+        for userId := range h.Clients {	
             fmt.Printf("client %v have %v connections\n", userId, len(h.Clients))
         }
         fmt.Println()
         time.Sleep(1 * time.Second)
     }
 }
+
 
 /*Code authors:
 Gary Burd <gary@beagledreams.com>

@@ -180,14 +180,12 @@ async function chatEventHandler() {
   function AppendUser(item) {
     var doScroll =
       usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
-    item.style.color = "white";
-    console.log(item);
+  
 
     // if current user, do not display. (return) because AppendUser() is called in a loop.
     if (item.innerHTML === CurrentUser) {
       return;
     }
-
     usersLog.appendChild(item);
     if (doScroll) {
       usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
@@ -306,26 +304,21 @@ async function chatEventHandler() {
       var messages = evt.data.split("\n");
       for (var i = 0; i < messages.length; i++) {
         var item = document.createElement("div");
-        item.style.color = "#80ed99";
-        item.innerText = messages[i];
+        item.innerHTML = messages[i];
         //if message is a list of chat members, it begins with a space
         if (messages[0] == " ") {
           if (i < messages.length) {
+            if (messages[i].includes("-online")) {
+              messages[i] = messages[i].replace("-online", "");
+              item.className = "onlineUser";
+            } else {
+              item.className = "offlineUser";
+            }
             item.innerText = messages[i];
-            //print list inside 'usersLog' div
+            //print list of registered users inside 'usersLog' div
             AppendUser(item);
           }
         }
-        //the list of posts starts with a double space
-        // } else if (messages[0] == "  ") {
-        //   //print all posts
-        //   item.innerText = messages[i];
-        //   //append posts inside in the main window
-        //   AppendPosts(item);
-        // } else {
-        //   //print list inside 'log' div
-        //   // appendLog(item);
-        // }
       }
     };
   } else {

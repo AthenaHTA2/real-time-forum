@@ -421,7 +421,7 @@ h2 {
   display: block;
   padding: 12px 18px;
   text-decoration: none;
-  color: #eeeeee;
+  /* color: #eeeeee; */
   font-weight: 500;
 }
 
@@ -570,6 +570,16 @@ Chat
   height: 20px;
 }
 
+.onlineUser {
+  color: rgb(148, 221, 37);
+  font-weight: bolder;
+  text-transform: uppercase;
+}
+
+.offlineUser {
+  color: gray;
+  text-transform: uppercase;
+}
 /*--------------------
   Message Box
   --------------------*/

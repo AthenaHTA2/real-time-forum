@@ -149,6 +149,7 @@ func GetAllUsers() []byte {
 	for rows.Next() {
 		var tempUser string
 		err := rows.Scan(&tempUser)
+		fmt.Println(tempUser)
 		if err != nil {
 			fmt.Println("err: ", err)
 		}
@@ -187,3 +188,31 @@ func AllPosts() []byte {
 	return NickName
 }*/
 
+func GetAllOnlineUsers()[]string{
+	
+
+	var AllOnlineUsers []string
+	rows, errUsr := sqldb.DB.Query("SELECT userID FROM Sessions;")
+	if errUsr != nil {
+		fmt.Println("Error retrieving users from database: \n", errUsr)
+		return nil
+	}
+	for rows.Next() {
+		var tempUser int
+		var tempUserNickname string
+		err := rows.Scan(&tempUser)
+		if err != nil {
+			fmt.Println("err: ", err)
+		}
+		rows2 ,err2 := sqldb.DB.Query("SELECT nickName FROM Users WHERE userID=?;", tempUser)
+		if err2 != nil {log.Fatal(err)}
+		defer rows2.Close()
+		for rows2.Next(){
+rows2.Scan(&tempUserNickname)
+AllOnlineUsers = append(AllOnlineUsers, tempUserNickname)
+		}
+		}
+	rows.Close()
+	return AllOnlineUsers
+
+}
