@@ -11,42 +11,38 @@ let ShowComments
 // }
   
 
-
+// This code captures the 'Login' form and its inputs to allow the user to log into the forum.
 const logform = document.querySelector("#loginform");
-let userName = logform.querySelector("#LUserName");
-let Lpassword = logform.querySelector("#LPassW");
+let userName = logform.querySelector("#LUserName"); // Selects the username input
+let Lpassword = logform.querySelector("#LPassW"); // Selects the password input
 
+// Helper function to set login errors for a specific input element in the form
 const setLoginErrorFor = (input, message) => {
-  const loginFormControl = input.parentElement; // .reg-form-control
-  const small = loginFormControl.querySelector("small");
-  // add the error class
+  const loginFormControl = input.parentElement; // Get the parent element of the input element, which is the .reg-form-control class
+  const small = loginFormControl.querySelector("small"); // Select the 'small' tag in the .reg-form-control class
+  // Add the error class to the .reg-form-control class
   loginFormControl.className = "login-form-control error";
-  // all the error message inside the small tag
+  // Set the error message inside the small tag
   small.innerHTML = message;
-  // small.style.visibilty = "visible";
 };
 
-//send user input in the 'Login' form to the 'LoginData' struct in go
-// via the 'LoginHandler' handler function in go
+// Get the 'Login' button
 const LoginBtn = document.querySelector("#loginBtn");
 
-//console.log("loginBtn id:", LoginBtn.getAttribute("style"))
+// Handle the click event on the 'Login' button
 LoginBtn.onclick = (e) => {
-  //stop browser refreshing
+  // Prevent the browser from refreshing
   e.preventDefault();
-  let UserName = document.querySelector("#LUserName").value;
-  let LoginPw = document.querySelector("#LPassW").value;
+  let UserName = document.querySelector("#LUserName").value; // Get the username value
+  let LoginPw = document.querySelector("#LPassW").value; // Get the password value
 
-  //make JS object to store login data
+  // Create an object to store the login data
   LoginData = {
     LUserName: UserName,
     LPassW: LoginPw,
   };
 
-  console.log({ LoginData });
-  //Sending Login form's data with the Fetch API
-  //to the 'LoginData' struct in go
-
+  // Send the login data with the Fetch API to the '/login' endpoint
   let configLogin = {
     method: "POST",
     headers: {
@@ -58,7 +54,7 @@ LoginBtn.onclick = (e) => {
 
   fetch("/login", configLogin)
     .then(function (response) {
-      console.log(response);
+      // Check the response status
       if (response.status == 200) {
         console.log("successful login");
         successfulLogin();
@@ -70,10 +66,8 @@ LoginBtn.onclick = (e) => {
       }
     })
     .then((rsp) => {
-      if (
-        rsp ==
-        "ERROR: This username/email doesnt exist, please register to enter this forum"
-      ) {
+      // Handle the different error messages
+      if (rsp == "ERROR: This username/email doesnt exist, please register to enter this forum") {
         console.log("on track 1");
         setLoginErrorFor(
           userName,
@@ -83,17 +77,14 @@ LoginBtn.onclick = (e) => {
         console.log("on track 2");
         setLoginErrorFor(Lpassword, "Please enter correct password");
       } else {
-
-        console.log(rsp);
-
+        // If there are no errors, parse the response as JSON and show the profile of the user
         let userData = JSON.parse(rsp);
-
         showProfile(userData)
-
         console.log(userData, "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-
+        // Set the current user
         CurrentUser = userData.NickName;
         console.log(CurrentUser);
+        
 
         var successlogin = document.getElementById("current-user");
 
