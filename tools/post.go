@@ -22,6 +22,7 @@ PostTime string json:"postTime"
 Cookie string json:"cookie"
 }
 */
+var thePost post
 
 //function to handle post creation
 func Posts(w http.ResponseWriter, r *http.Request) {
@@ -35,25 +36,25 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//unmarshal json data into post struct
-	var thePost post
-	json.Unmarshal(bytes, &thePost)
 
+	json.Unmarshal(bytes, &thePost)
 	//get user ID based on cookie
+	fmt.Println(thePost, "WHERE ARE GETTING HERE-=-=-=-=-=-=-=-=")
 	CookieID := thePost.Cookie
-	usr := GetUserByCookie(CookieID)
-	usrID := usr.UserID
+
+	var usr = GetUserByCookie(CookieID)
+	var usrID = usr.UserID
 
 	//insert post data into database
-	_, err = sqldb.DB.Exec(`INSERT INTO Posts (
-	authorID,
-	author,
-	title,
-	content,
-	category,
-	category_2,
-	creationDate,
-	cookieID
-	) VALUES(?,?,?,?,?,?,?)`, usrID, usr.NickName, thePost.Title, thePost.Content, thePost.Category, postTime, thePost.Cookie)
+	_, err = sqldb.DB.Exec(`INSERT INTO Posts ( 
+		authorID,
+		author,
+		title,
+		content,
+		category,
+		creationDate,
+		cookieID
+		) VALUES(?,?,?,?,?,?,?)`, usrID, usr.NickName, thePost.Title, thePost.Content, thePost.Category, postTime, thePost.Cookie)
 	if err != nil {
 		fmt.Println("Error inserting into 'Posts' table: ", err)
 		return
@@ -65,7 +66,7 @@ func GetPosts() []post {
 	var posts []post
 	var myPost post
 
-	rows, errPost := sqldb.DB.Query("SELECT postID, author, category, category_2, title, content, creationDate FROM Posts;")
+	rows, errPost := sqldb.DB.Query("SELECT postID, author, category, title, content, creationDate FROM Posts;")
 	if errPost != nil {
 		fmt.Println("Error retrieving posts from database: \n", errPost)
 		return nil
@@ -93,7 +94,7 @@ func SendLatestPosts(w http.ResponseWriter, r *http.Request) {
 	var posts []post
 
 	//get all posts from database
-	rows, err := sqldb.DB.Query("SELECT postID, author, category,caregory_2, title, content, creationDate FROM Posts;")
+	rows, err := sqldb.DB.Query("SELECT postID, author, category, title, content, creationDate FROM Posts;")
 	if err != nil {
 		log.Println("Error retrieving posts from database: ", err)
 		w.WriteHeader(http.StatusInternalServerError)

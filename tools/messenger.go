@@ -78,6 +78,7 @@ func GetAllMsgsByChatID(cid int) []*Message {
 }
 
 // show all chats with users
+
 func ReadAllChats() []*Chat {
 	var allChats []*Chat
 	rows, err := sqldb.DB.Query("SELECT user2 FROM Chats;")
@@ -132,6 +133,12 @@ type Message struct {
 	Text     string    `json:"text"`
 	Time     time.Time `json:"time"`
 }
+
+type Message struct {
+	Username string
+}
+
+
 
 // handleWebsocket handles new websocket connections
 func handleWebsocket(w http.ResponseWriter, r *http.Request) {

@@ -44,8 +44,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		age,
 		gender,
 		email,
-		passwordhash
-		) VALUES(?,?,?,?,?,?,?)`, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Email, hash)
+		passwordhash,
+		LoggedIn
+		) VALUES(?,?,?,?,?,?,?,?)`, CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.NickName, CurrentUser.Age, CurrentUser.Gender, CurrentUser.Email, hash, "false")
 
 	if err != nil {
 		// Convey StatusBadRequest = 400 to browser

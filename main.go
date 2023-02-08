@@ -20,7 +20,7 @@ func main() {
 	DB := sqldb.ConnectDB()
 	database.CreateDB()
 	hub := chat.NewHub(DB)
-	go hub.LogConns()
+	//go hub.LogConns()
 	go hub.Run()
 
 	cssFolder := http.FileServer(http.Dir("css/"))
@@ -33,7 +33,7 @@ func main() {
 
 	http.HandleFunc("/", tools.HomePage)
 	http.HandleFunc("/login", tools.Login)
-	http.HandleFunc("/logout", tools.Login)
+	http.HandleFunc("/logout", tools.Logout)
 	http.HandleFunc("/register", tools.Register)
 	http.HandleFunc("/post", tools.Posts)
 	http.HandleFunc("/comment", tools.Comments)

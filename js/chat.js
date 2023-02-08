@@ -54,16 +54,15 @@ window.onload = function () {
   var msg = document.getElementById("msg");
   var log = document.getElementById("log");
   var usersLog = document.getElementById("usersLog");
-  // var postList = document.getElementById("postList");
 
-  function appendLog(item) {
+  // var postList = document.getElementById("postList");
+  const AppendLog = (item) => {
     var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
     log.appendChild(item);
     if (doScroll) {
       log.scrollTop = log.scrollHeight - log.clientHeight;
     }
   }
-
   function AppendUser(item) {
     var doScroll =
       usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
@@ -72,27 +71,6 @@ window.onload = function () {
       usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
     }
   }
-
-  // function AppendPosts(item) {
-  //   var doScroll =
-  //     postList.scrollTop > postList.scrollHeight - postList.clientHeight - 1;
-  //   postList.appendChild(item);
-  //   if (doScroll) {
-  //     postList.scrollTop = postList.scrollHeight - postList.clientHeight;
-  //   }
-  // }
-
-  // document.getElementById("formChat").onsubmit = function () {
-  //   if (!conn) {
-  //     return false;
-  //   }
-  //   if (!msg.value) {
-  //     return false;
-  //   }
-  //   conn.send(msg.value);
-  //   msg.value = "";
-  //   return false;
-  // };
 
   if (window["WebSocket"]) {
     conn = new WebSocket("ws://" + document.location.host + "/ws");
@@ -105,16 +83,10 @@ window.onload = function () {
       var messages = evt.data.split("\n");
       //a space at the start of msg signals that this is the list of registered users
       //that needs to be printed in a different place than normal websocket messages
-      if (string(messages[0]) == " ") {
-        //UserList = messages.slice(1)
-        User = true;
-        //double space at start of message means this is the list of posts
-      } else if (string(messages[0]) == "  ") {
-        postFlag = true;
+
       }
       for (var i = 0; i < messages.length; i++) {
         var item = document.createElement("div");
-
         if (User) {
           item.style.color = "white";
           item.innerText = UserList[i];
@@ -130,30 +102,9 @@ window.onload = function () {
           appendLog(item);
         }
       }
-    };
-
-    /*conn.onopen = function() {
-            conn.onmessage = function (evt) {
-            var messages = evt.data.split('\n');
-            for (var i = 0; i < messages.length; i++) {
-                var item = document.createElement("div");
-                item.style.color = '#80ed99'
-                item.innerText = messages[i];
-                AppendUser(item);
-            }
-        };
-            for ( let usr = 0; usr < regUsers.length; usr++){
-            usersLog.append(
-                '<div class="user-container">' +
-                '<p class="userNickName">' + String.fromCharCode(...regUsers[usr]) + '</p>' +
-                '</div>'
-                );
-        }
-}*/
-  } else {
+    } else {
     var item = document.createElement("div");
     item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
     appendLog(item);
   }
 };
-

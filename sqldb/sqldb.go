@@ -1,6 +1,9 @@
 package sqldb
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+)
 
 // DB is a global variable to hold db connection
 var DB *sql.DB
@@ -10,6 +13,7 @@ func ConnectDB() *sql.DB {
 	db, err := sql.Open("sqlite3", "./database/dataBase.db")
 
 	if err != nil {
+		fmt.Println("panic =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
 		panic(err.Error())
 	}
 

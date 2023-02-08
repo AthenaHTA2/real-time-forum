@@ -39,9 +39,12 @@ const showPost = () => {
 //this function is for the log out button
 // const logOut = document.querySelector("#logout");
 
+
 document.getElementById('logout').onclick = (e) => {
   e.preventDefault();
   document.getElementById("postBlock").style.display = "none";
+  document.getElementById("postListAfterLogin").style.display = "none";
+  document.getElementById("postList").style.display = "block";
   document.getElementById("logout").style.display = "none";
   document.getElementById("LoggedOut").style.display = "block";
   document.getElementById("byeFace").style.display = "block";
@@ -53,7 +56,8 @@ document.getElementById('logout').onclick = (e) => {
   document.getElementById("Online").style.display = "none";
   document.getElementById("Offline").style.display = "none";
   document.getElementById("welcomemsg").style.display = "block";
-  //HTA removed as returned error in browser //expandPost.style.display = "none";
+  document.getElementById("profile").style.display = "none";
+
   
 
   setTimeout(() => {
@@ -69,8 +73,8 @@ document.getElementById('logout').onclick = (e) => {
 function ChatReturn() {
   document.querySelector(".chat-private").style.visibility = "hidden";
   //hide comment lable, input text and button from posts
-  Logout ()
-  LogoutDeleteCookie()
-  hideAddComment()
+//Logout ()
+//LogoutDeleteCookie()
+//hideAddComment()
 }
 

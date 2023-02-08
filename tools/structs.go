@@ -15,14 +15,14 @@ type comment struct {
 }
 
 type post struct {
-	PostID      int       `json:"PostID"`
-	Author      string    // author
-	Cookie      string    `json:"PstCookieID"`
-	Title       string    `json:"PstTitle"`
-	Content     string    `json:"PstContent"`
-	Category    string    `json:"PstCateg"`
-	Category_1  string    `json:"category_1"`
-	Category_2  string    `json:"category_2"`
+	PostID   int    `json:"PostID"`
+	Author   string // author
+	Cookie   string `json:"PstCookieID"`
+	Title    string `json:"PstTitle"`
+	Content  string `json:"PstContent"`
+	Category string `json:"PstCateg"`
+	//Category_1  string    `json:"category_1"`
+	// Category_2  string    `json:"category_2"`
 	PostTime    time.Time `json:"PostTime"`
 	PostTimeStr string
 	Comments    []comment
@@ -58,7 +58,7 @@ type Session struct {
 
 type Cookie struct {
 	Name    string
-	Value   string `json: "deleteCookie"`
+	Value   string //`json: "deleteCookie"`
 	Expires time.Time
 }
 
