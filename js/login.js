@@ -2,15 +2,9 @@ let user;
 let CurrentUser;
 let receiver;
 let LoginData;
-let ShowComments
 
-
-// showCom = document.getElementById('ShowComments')
-// showCom.onclick = (e) => {
-//   document.querySelector("#postListExpanded").style.display="block";
-// }
-  
-
+let today = Date.now();
+let date = new Date(today);
 
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
@@ -63,9 +57,9 @@ LoginBtn.onclick = (e) => {
         console.log("successful login");
         successfulLogin();
         refreshPostsAfterLogin();
+        chatEventHandler();
         return response.text();
       } else {
-        unsuccessfullLogin();
         return response.text();
       }
     })
@@ -84,30 +78,22 @@ LoginBtn.onclick = (e) => {
         setLoginErrorFor(Lpassword, "Please enter correct password");
       } else {
 
-        console.log(rsp);
-
         let userData = JSON.parse(rsp);
+        CurrentUser = userData.NickName;
 
         showProfile(userData)
 
-        console.log(userData, "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-
-        CurrentUser = userData.NickName;
-        console.log(CurrentUser);
-
         var successlogin = document.getElementById("current-user");
-
         successlogin.innerHTML =
-          " 𝕎𝔼𝕃ℂ𝕆𝕄𝔼 " + CurrentUser + " &#128512";
+          CurrentUser + " &#128512";
         // if (user) {
         //   var successlogin = document.getElementById("current-user");
         //   successlogin.innerHTML = " Welcome " + CurrentUser;
         // }
       }
+      return;
     });
 };
-
-
 
 // print profile data in the left side navigation
 const showProfile = (user) => {
@@ -119,11 +105,9 @@ const showProfile = (user) => {
   Age = document.getElementById('age');
   Gender = document.getElementById('gender');
   Email = document.getElementById('email');
-  console.log("AFTER GETTING ALL DOCUMENTS FROM HMTL @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 
   console.log(user.Age, user.Gender, user.Email)
   WelMsg.innerHTML = "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " + user.NickName;
-  console.log("FIRST PART OF DISPLAYING INNERHTML @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 
   FName.innerHTML = "First Name :" + user.FirstName;
   LName.innerHTML = "Last Name :" + user.LastName;
@@ -151,9 +135,6 @@ const showHideUserProfile = () => {
   }
 }
 
-
-
-
 const refreshPostsAfterLogin = () => {
   fetch("/getPosts", {
     headers: {
@@ -177,9 +158,6 @@ const refreshPostsAfterLogin = () => {
 
   const displayPostsAfterLog = (posts) => {
   
-
-    console.log(
-    );
     postsContainer = document.querySelector("#postListAfterLogin");
     postsContainer.innerHTML = "";
     for (let i = posts.length - 1; i >= 0; i--) {
@@ -191,8 +169,7 @@ const refreshPostsAfterLogin = () => {
         `>
          
             
-            <p class="post-content" >` +
-        "Author: " +  posts[i].Author + `</p>
+            <p class="post-content" >` + "Author: " +  posts[i].Author + `</p>
             <p class="post-content" >` +  "Category: " + posts[i].PostCat + `</p>
             <p class="post-content" >` +  "Title: " + posts[i].PostTitl + ` </p>
             <p class="post-content" >` + "Content: " + posts[i].PostCont + `</p>
@@ -204,23 +181,19 @@ const refreshPostsAfterLogin = () => {
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 
             <button class="button" id="ShowComments" onclick="ShowCommentsBlock(${posts[i].PostID}) ;" style.text-align="center">` +
-        " &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;" +
-        " &nbsp; &nbsp; &nbsp; &nbsp;" +
-        " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  Show Comments" +
-        `</button>
-
-       
+            " &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;" +
+            " &nbsp; &nbsp; &nbsp; &nbsp;" +
+            " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  Show Comments" +
+            `</button>
       </div>
+
       <div id="c${posts[i].PostID}" class="commentBlock" style='z-index: 1;', >
       <button class="button hideCommentBtn" id="button${posts[i].PostID}"  onclick= 'CloseComments(${posts[i].PostID}) ;'> ` + "Close" + `</button>
-    </div>
+      /div>
             <br>  
-
-           
             <br>  
             </div>
-            </div>            
-        `;
+            </div> `;
     }
   };
 };
@@ -228,22 +201,25 @@ const refreshPostsAfterLogin = () => {
 const successfulLogin = () => {
   console.log("STATUS 200 OK");
   console.log("WERE ARE GETTING TO SUCCEDDFUL LOGIN FUNCTION");
+  document.getElementById("wName").style.display = "block";
   document.getElementById("loginModal").style.display = "none";
   document.getElementById("LoggedOn").style.display = "block";
+  document.getElementById("homePage").style.display = "none";
   document.getElementById("happyFace").style.display = "block";
   document.getElementById("addPost").style.display = "block";
   document.getElementById("login").style.display = "none";
   document.getElementById("register").style.display = "none";
   document.getElementById("welcomemsg").style.display = "none";
-  document.getElementById("Offline").style.display = "block";
-  document.getElementById("Online").style.display = "block";
-  document.getElementById("Messenger").style.display = "block";
+  // document.getElementById("Offline").style.display = "block";
+  // document.getElementById("Online").style.display = "block";
+  // document.getElementById("Messenger").style.display = "block";
   document.getElementById("current-user").style.display = "block";
   document.getElementById("logout").style.display = "block";
   document.getElementById("postBlock").style.display = "block";
   document.getElementById("postList").style.display = "none";
   document.getElementById("usersLog").style.display = "block";
   document.getElementById("profile").style.display = "block";
+  document.getElementById("Select User").style.display = "block";
 
   setTimeout(() => {
     console.log("WERE ARE GETTING TO TIMEOUT LOGIN SIDE");
@@ -279,12 +255,10 @@ const Logout = () => {
   document.querySelector(".chat-private").style.visibility = "hidden";
   document.getElementById("current-user").style.display = "none";
   document.getElementById("postList").style.display = "block";
+  document.getElementById("homePage").style.display = "block";
+  document.getElementById("wName").style.display = "none";
 
-
-
-  console.log(document.cookie);
 };
-
 
 //remove cookie from browser when logout
 function LogoutDeleteCookie(){
@@ -322,63 +296,130 @@ fetch("/logout", configLogout)
 // ====================================================
 window.onload = function () {
   refreshPosts();
+  ChatReturn()
+}
+
+async function chatEventHandler() {
   var conn;
-  // var pst = document.getElementById("postList");
+  //redundant code commented out by gowseny.
   var log = document.getElementById("log");
   var usersLog = document.getElementById("usersLog");
 
-  const appendLog = (item) => {
-    var doScroll = log.scrollTop > log.scrollHeight - log.clientHeight - 1;
-    log.appendChild(item);
-    if (doScroll) {
-      log.scrollTop = log.scrollHeight - log.clientHeight;
-    }
+  console.log('++++++++++++++++++++++++++++++++++++++++++were are in async function')
+
+  let configMsg = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
   };
 
-  const AppendUser = (item) => {
-    /*if(item.innerText == "UsersList"){
-            item.innerText = " "
-        }else{
-            item.innerText = item.innerText
-        }*/
+  // fetch messages from back end
+  let messages = await fetch("/messagesAPI", configMsg);
+  messages = await messages.json();
+
+  // TODO: change section to display online and offline users
+  function AppendUser(item) {
     var doScroll =
       usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
     item.style.color = "white";
     console.log(item);
-    usersLog.appendChild(item);
 
+    // if current user, do not display. (return) because AppendUser() is called in a loop.
+    if (item.innerHTML === CurrentUser) {
+      return;
+    }
+
+    usersLog.appendChild(item);
     if (doScroll) {
       usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
     }
+    // opening private chat window on clicking on selected users
     item.onclick = () => {
-      console.log(item.innerHTML);
       receiver = item.innerHTML;
-      document.querySelector(".chat-private").style.visibility = "visible";
-    };
-  };
+      // Show main chat window
+      let chat = document.querySelector(".chat-private");
+      chat.style.visibility = "visible";
 
-  document.getElementById("chat-private-btn").onclick = function () {
+      let chatfriend = document.querySelector(".chat-title");
+      chatfriend.innerHTML = "Messaging - " + receiver;
+
+      // **filter** and append correct messages to chat window
+      messages.forEach((message) => {
+
+        // create new div for message
+        let messageBubble = document.createElement("div");
+        let dateDiv = document.createElement("div");
+        dateDiv.className = "dateDiv";
+
+        // 1. when current user is sender
+        if (message.sender === CurrentUser && message.recipient === receiver) {
+
+          // add class of sender
+          messageBubble.className = "sender";
+
+          messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
+
+          let bubbleWrapper = document.createElement("div");
+
+          bubbleWrapper.className = "messageWrapper";
+
+          dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
+
+          messageBubble.appendChild(dateDiv);
+
+          bubbleWrapper.append(messageBubble);
+
+          // append to child div of main chat window
+          document.querySelector(".messages-content").append(bubbleWrapper);
+        } else if (
+
+          message.recipient === CurrentUser &&
+          message.sender === receiver
+        ) {
+
+          // 2. when current user is recipient
+          // add class of recipient
+          messageBubble.className = "recipient";
+          messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
+          dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
+          messageBubble.appendChild(dateDiv);
+          document.querySelector(".messages-content").append(messageBubble);
+        }
+      });
+    };
+  }
+
+  // function to send message to backend to be stored into DB
+  document.getElementById("msg-send-btn").onclick = function () {
+
     var msg = document.getElementById("msg");
-    console.log("checking send button");
-    console.log(msg);
+
     if (!conn) {
       console.log("no conn");
       return false;
     }
+
     if (!msg.value.trim()) {
       console.log("no msg value");
       return false;
     }
+
+    // object to message to send to front end
     let message = {
       Sender: CurrentUser,
       Recipient: receiver,
       Content: msg.value.trim(),
+      Date: newTime(date.toString()),
     };
+
     conn.send(JSON.stringify(message));
     msg.value = "";
     return false;
-  };
 
+  };
+  // websocket activity for chats
   if (window["WebSocket"]) {
     conn = new WebSocket("ws://" + document.location.host + "/ws");
     conn.onclose = function (evt) {
@@ -386,7 +427,37 @@ window.onload = function () {
       item.innerHTML = "<b>Connection closed.</b>";
       appendLog(item);
     };
+
     conn.onmessage = function (evt) {
+
+      let msg = evt.data;
+
+      if (IsJsonString(msg)) {
+        msg = JSON.parse(msg);
+      }
+
+      let messageWrapper = document.createElement("div");
+      messageWrapper.className = "messageWrapper";
+      let newMessage = document.createElement("div");
+      let dateDiv = document.createElement("div");
+      dateDiv.className = "dateDiv";
+
+      // formatting message
+      if (CurrentUser === msg.Sender) {
+        newMessage.className = "sender";
+        newMessage.innerHTML = `${"You"}: ${msg.Content}`;
+        dateDiv.innerHTML = `${msg.Date}`;
+        newMessage.appendChild(dateDiv);
+        messageWrapper.append(newMessage);
+        document.querySelector(".messages-content").append(messageWrapper);
+      } else if (CurrentUser !== msg.Sender) {
+        newMessage.className = "recipient";
+        newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
+        dateDiv.innerHTML = `${msg.Date}`;
+        newMessage.appendChild(dateDiv);
+        document.querySelector(".messages-content").append(newMessage);
+      }
+
       var messages = evt.data.split("\n");
       for (var i = 0; i < messages.length; i++) {
         var item = document.createElement("div");
@@ -399,15 +470,6 @@ window.onload = function () {
             //print list inside 'usersLog' div
             AppendUser(item);
           }
-          //the list of posts starts with a double space
-        } else if (messages[0] == "  ") {
-          //print all posts
-          item.innerText = messages[i];
-          //append posts inside in the main window
-          AppendPosts(item);
-        } else {
-          //print list inside 'log' div
-          appendLog(item);
         }
       }
     };
@@ -416,4 +478,12 @@ window.onload = function () {
     item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
     appendLog(item);
   }
-};
+}
+function IsJsonString(str) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}

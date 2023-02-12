@@ -62,19 +62,21 @@ type Cookie struct {
 
 type Message struct {
 	MessageID int
-	ChatID    int
-	Sender    string
-	Recipient string
-	Content   string
-	Type      string
-	Date      time.Time
+	ChatID int
+	Sender string `json:"sender"`
+	Recipient string `json:"recipient"`
+	Content string `json:"content"`
+	Type string
+	Date time.Time `json:"date"`
 }
+
 type Chat struct {
 	ChatID int
 	User1  string
 	User2  string
-	Date   time.Time
+	Date   string
 }
+
 type ChatHistoryCheck struct {
 	ChatID     int
 	ChatExists bool

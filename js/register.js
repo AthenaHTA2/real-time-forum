@@ -115,14 +115,11 @@ const setSuccessFor = (input) => {
 }
 
 const isEmail = (Email) => {
-  return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.(0-9){1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-    Email
-  );
+  return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(Email);
 }
 
 const isNameValid = (input) => {
-  return /([A-ZÀ-ÿ][-,a-z. '])+/.test(input);
-  console.log(input);
+  return /([A-ZÀ-ÿ][-,a-z. '])+/.test(input)
 }
 
 const validPassowrd = (PassWord) => {
@@ -132,6 +129,7 @@ const validPassowrd = (PassWord) => {
   //for weak password use below regexp
   return /^([a-zA-Z0-9@*#]{8,15})$/.test(PassWord);
 }
+
 //register form input validation checks
 firstname.addEventListener("blur", checkInputs);
 lastname.addEventListener("blur", checkInputs);
@@ -140,6 +138,7 @@ age.addEventListener("blur", checkInputs);
 gender.addEventListener("blur", checkInputs);
 email.addEventListener("blur", checkInputs);
 password.addEventListener("blur", checkInputs);
+
 //show password function
 const togglePassword = document.querySelector("#togglePassword");
 togglePassword.addEventListener("click", function (e) {
@@ -150,6 +149,7 @@ togglePassword.addEventListener("click", function (e) {
   // toggle the eye slash icon
   this.classList.toggle("fa-eye-slash");
 });
+
 //======== Register form submission ========
 //Put register data into a JS object if user clicks 'Register' button
 const registerBtn = document.querySelector("#registerBtn");
@@ -164,6 +164,7 @@ registerBtn.onclick = (e) => {
   let Gender = regform.querySelector("#Gender").value;
   let Email = regform.querySelector("#Email").value;
   let PassWord = regform.querySelector("#PassWord").value;
+
   //populate JS object with user data
   let RegisterData = {
     FirstName: FirstName,
@@ -174,7 +175,7 @@ registerBtn.onclick = (e) => {
     Email: Email,
     PassWord: PassWord,
   };
-  console.log({ RegisterData });
+
   //send user input in the 'Register' form to the 'RegData' struct in go
   // via the 'Register' handler function in go
   let configRegister = {
@@ -223,19 +224,7 @@ registerBtn.onclick = (e) => {
     });
 };
 
-const successfulReg = (response) => {
-  if (response == "ERROR: This email already exists, please log in instead") {
-    console.log("error");
-    setErrorFor(email, "This Email already exists, please log in instead");
-  } else if (
-    response == "ERROR: This username already exists, please log in instead"
-  ) {
-    setErrorFor(
-      nickname,
-      "This NickName already exists, please log in instead"
-    );
-  }
-
+const successfulReg = () => {
   console.log("Reg Successfull --- STATUS 200")
   document.getElementById('regModal').style.display = "none";
   document.getElementById('regConfirmed').style.display = 'block';
@@ -256,23 +245,44 @@ const successfulReg = (response) => {
   document.getElementById('logout').style.display = 'block'
 }
 
-const unsuccessfulReg = () => {
+const unsuccessfulReg = (response) => {
  console.log("REG FAILED --- NOT STATUS 200")
-  
-  document.getElementById('regModal').style.display = "none";
+
+ if (response == "ERROR: This email already exists, please log in instead") {
+  console.log("error");
+  setErrorFor(email, "This Email already exists, please log in instead");
+  document.getElementById('regModal').style.display = "block";
   document.getElementById('regRejected').style.display = 'block';
-  document.getElementById('profileMod').style.display = "none";
   document.getElementById('sadFace').style.display = "block";
 
   // document.getElementById('postedArticles').style.display ="none"; 
 
   setTimeout(() => {
       document.getElementById('regRejected').style.display = 'none';
-  document.getElementById('sadFace').style.display = "none";
+      document.getElementById('sadFace').style.display = "none";
 
     },2000);
 
-  document.getElementById('postList').style.display = 'Block';
-  
+  document.getElementById('postList').style.display = 'none';
+} else if (response == "ERROR: This username already exists, please log in instead") {
+  setErrorFor(
+    nickname,
+    "This NickName already exists, please log in instead"
+  );
+  document.getElementById('regModal').style.display = "block";
+  document.getElementById('regRejected').style.display = 'block';
+  document.getElementById('sadFace').style.display = "block";
+
+  // document.getElementById('postedArticles').style.display ="none"; 
+
+  setTimeout(() => {
+      document.getElementById('regRejected').style.display = 'none';
+      document.getElementById('sadFace').style.display = "none";
+
+    },2000);
+
+  document.getElementById('postList').style.display = 'none';
+}
+
   return response;
 }

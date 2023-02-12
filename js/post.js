@@ -255,3 +255,68 @@ const ConvertDate = (date) => {
     day + ", " + dd + " " + month + ", " + yyyy + " @ " + hh + ":" + mm;
   return fullDate;
 };
+
+const newTime = (date) => {
+  let dateArray = date.split(" ");
+  let newDate;
+
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+
+  const daysShort = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const monthsShort = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  for (let i = 0; i < days.length; i++) {
+    if (dateArray[0] == daysShort[i]) {
+      newDate = days[i];
+    }
+  }
+
+  newDate += ", " + dateArray[2];
+
+  for (let i = 0; i < months.length; i++) {
+    if (dateArray[1] == monthsShort[i]) {
+      newDate += " " + months[i] + ", ";
+    }
+  }
+  
+  newDate += dateArray[3] + " @ ";
+  let hour = dateArray[4].split(":");
+  newDate += hour[0] + ":" + hour[1];
+  return newDate;
+}

@@ -44,10 +44,10 @@ document.getElementById('logout').onclick = (e) => {
   document.getElementById("addPost").style.display = "none";
   document.getElementById("login").style.display = "block";
   document.getElementById("register").style.display = "block";
-  document.getElementById("Messenger").style.display = "none";
-  document.getElementById("usersLog").style.display = "none";
-  document.getElementById("Online").style.display = "none";
-  document.getElementById("Offline").style.display = "none";
+  // document.getElementById("Messenger").style.display = "none";
+  document.getElementById("Select User").style.display = "none";
+  // document.getElementById("Online").style.display = "none";
+  document.getElementById("chatNav").style.display = "block";
   document.getElementById("welcomemsg").style.display = "block";
   document.getElementById("profile").style.display = "none";
 

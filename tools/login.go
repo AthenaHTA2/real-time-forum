@@ -35,7 +35,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	stmt := "SELECT passwordhash FROM Users WHERE nickName = ? OR email = ?"
 	row := sqldb.DB.QueryRow(stmt, LogUserName, LogUserName)
 	err2 := row.Scan(&hash)
+
 	fmt.Println(err2)
+
 	if err2 != nil {
 		fmt.Println("err2 selecting passwordhash in db by nickName or email:", err2)
 		if err2.Error() == "sql: no rows in result set" {
@@ -45,13 +47,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
 	// func CompareHashAndPassword(hashed password, password []byte) error
 	comparePass := bcrypt.CompareHashAndPassword([]byte(hash), []byte(LogPassword))
+
 	fmt.Println("compare 'passwordhash' with user's pw: ", comparePass)
 	fmt.Println("'passwordhash' and 'hash': ", []byte(LogPassword), []byte(hash))
 
 	//returns nil on success
-
 	if comparePass != nil {
 		if (comparePass.Error()) == "crypto/bcrypt: hashedPassword is not the hash of the given password" {
 			fmt.Println("on track2")
@@ -89,9 +92,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("already logged in: ", err3)
 			return
 		}
+
 		sessionToken := uuid.NewV4().String()
 		expiresAt := time.Now().Add(120 * time.Minute)
 		cookieNm := "user_session"
+
 		// Finally, we set the client cookie for "session_token = 'user_session' " as the session token we just generated
 		// we also set an expiry time of 120 minutes
 		http.SetCookie(w, &http.Cookie{
@@ -106,6 +111,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		// storing the cookie values in struct
 		user_session := Cookie{cookieNm, sessionToken, expiresAt}
 		fmt.Println("++++++++++===========================Values in 'Cookie' struct :", user_session)
+		
 		insertsessStmt, err4 := sqldb.DB.Prepare("INSERT INTO Sessions (userID, cookieName, cookieValue) VALUES (?, ?, ?);")
 		if err4 != nil {
 			w.WriteHeader(http.StatusInternalServerError)

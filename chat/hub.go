@@ -1,7 +1,9 @@
 package chat
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	"rtforum/tools"
 	"time"
 )
 // Hub maintains the set of active clients and broadcasts messages to the
@@ -15,7 +17,8 @@ type Hub struct {
 	Register chan *Client
 	// Unregister requests from clients.
 	Unregister chan *Client
-	Database   *sql.DB
+	// database connection
+	Database *sql.DB
 }
 func NewHub(DB *sql.DB) *Hub {
 	return &Hub{
@@ -23,28 +26,58 @@ func NewHub(DB *sql.DB) *Hub {
 		Register:   make(chan *Client),
 		Unregister: make(chan *Client),
 		Clients:    make(map[string]*Client),
-		Database:   DB,
+		Database: DB,
 	}
 }
 func (h *Hub) Run() {
 	for {
 		select {
+			// you can access the username here
 		case client := <-h.Register:
 			h.Clients[client.Username] = client
-			fmt.Println("printing all clients: ", h.Clients[client.Username])
 		case client := <-h.Unregister:
 			if _, ok := h.Clients[client.Username]; ok {
 				delete(h.Clients, client.Username)
 				close(client.Send)
 			}
 		case message := <-h.Broadcast:
+			var directmsg tools.Message
+			json.Unmarshal(message, &directmsg)
+	
+			fmt.Println(directmsg)
+			chatHistoryVal := tools.CheckForChatHistory(directmsg)
+		
+			//stores a new chat
+			if !chatHistoryVal.ChatExists{
+				tools.StoreChat(directmsg)
+			}
+			msgHistroryVal := tools.CheckForChatHistory(directmsg)
+			//stores new messages
+			if msgHistroryVal.ChatExists{
+				directmsg.ChatID = msgHistroryVal.ChatID
+				tools.StoreMessage(directmsg)
+			}
+			// if chatHistoryVal.ChatExists {
+			// 	directmsg.ChatID = chatHistoryVal.ChatID
+			// 	tools.StoreMessage(directmsg)
+			// } else if (!chatHistoryVal.ChatExists && chatHistoryVal.ChatID == 0 ){
+			// 	directmsg.ChatID = 1
+			// 	tools.StoreChat(directmsg)
+			// 	tools.StoreMessage(directmsg)
+			// } else {
+			// 	tools.StoreChat(directmsg)
+			// 	tools.StoreMessage(directmsg)
+			// }
+			// tools.StoreMessage(directmsg)
 			for client := range h.Clients {
-				select {
-					//if the client == receiver ID, can send the message
-				case h.Clients[client].Send <- message:
-				default:
-					close(h.Clients[client].Send)
-					delete(h.Clients, client)
+				if (client == directmsg.Recipient) || (client == directmsg.Sender) {
+					fmt.Println()
+					select {
+					case h.Clients[client].Send <- message:
+					default:
+						close(h.Clients[client].Send)
+						delete(h.Clients, client)
+					}
 				}
 			}
 		}
@@ -59,14 +92,19 @@ func (h *Hub) RegisteredUsers(nicknames [][]byte) {
 		}
 	}
 }
-//To print the clients connected to Hub
 func (h *Hub) LogConns() {
-	for {
-		fmt.Println(len(h.Clients), "clients connected")
-		for userId := range h.Clients {
-			fmt.Printf("client %v have %v connections\n", userId, len(h.Clients))
-		}
-		fmt.Println()
-		time.Sleep(1 * time.Second)
-	}
+    for {
+        fmt.Println(len(h.Clients), "clients connected")
+        for userId := range h.Clients {
+            fmt.Printf("client %v have %v connections\n", userId, len(h.Clients))
+        }
+        fmt.Println()
+        time.Sleep(1 * time.Second)
+    }
 }
+/*Code authors:
+Gary Burd <gary@beagledreams.com>
+Google LLC (https://opensource.google.com/)
+Joachim Bauch <mail@joachim-bauch.de>
+from: https://github.com/gorilla/websocket/chat
+*/

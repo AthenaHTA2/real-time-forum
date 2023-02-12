@@ -52,25 +52,25 @@ func CreateDB() {
 				FOREIGN KEY(userID)REFERENCES Users(userID)
 				);`)
 
-	// Chats table
+// Chats table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Chats" ( 
-		"chatID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		"user1" TEXT,
-		"user2" TEXT,
-		"creationDate" TIMESTAMP, 
-		FOREIGN KEY(user1)REFERENCES Users(nickName),
-		FOREIGN KEY(user2)REFERENCES Users(nickName)
-		);`)
+				"chatID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+				"user1" TEXT,
+				"user2" TEXT,
+				"creationDate" TIMESTAMP, 
+				FOREIGN KEY(user1)REFERENCES Users(nickName),
+				FOREIGN KEY(user2)REFERENCES Users(nickName)
+				);`)
 	// MessageHistory table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "MessageHistory" ( 
-		"messageID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		"chatID" INTEGER,
-		"chatMessage" STRING NOT NULL,
-		"sender" TEXT,
-		"recipient" TEXT,
-		"creationDate" TIMESTAMP, 
-		FOREIGN KEY(chatID)REFERENCES Chats(chatID),
-		FOREIGN KEY(sender)REFERENCES Users(nickName),
-		FOREIGN KEY(recipient)REFERENCES Users(nickName)
-		);`)
+				"messageID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+				"chatID" INTEGER,
+				"chatMessage" STRING NOT NULL,
+				"sender" TEXT,
+				"recipient" TEXT,
+				"creationDate" TIMESTAMP, 
+				FOREIGN KEY(chatID)REFERENCES Chats(chatID),
+				FOREIGN KEY(sender)REFERENCES Users(nickName),
+				FOREIGN KEY(recipient)REFERENCES Users(nickName)
+				);`)
 }

@@ -18,7 +18,7 @@ func main() {
 	DB := sqldb.ConnectDB()
 	database.CreateDB()
 	hub := chat.NewHub(DB)
-	// go hub.LogConns()
+	go hub.LogConns()
 	go hub.Run()
 
 	cssFolder := http.FileServer(http.Dir("css/"))
@@ -37,6 +37,7 @@ func main() {
 	http.HandleFunc("/getPosts", tools.SendLatestPosts)
 	http.HandleFunc("/getComments", tools.SendLatestComments)
 	http.HandleFunc("/logout", tools.Logout)
+	http.HandleFunc("/messagesAPI", tools.GetMessages)
 
 	//serveWs function is a HTTP handler that upgrades the HTTP connection
 	//to the WebSocket protocol, creates a Client type, registers the Client

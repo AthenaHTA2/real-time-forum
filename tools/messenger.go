@@ -1,7 +1,9 @@
 package tools
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"rtforum/sqldb"
 	"time"
 )
@@ -26,13 +28,16 @@ func CheckForChatHistory(dm Message) *ChatHistoryCheck {
 			return nil
 		}
 	}
+
 	chatExists.ChatID = chatScan.ChatID
 	chatExists.ChatExists = true
 	if chatScan.ChatID == 0 {
 		chatExists.ChatExists = false
 	}
+
 	fmt.Println("chatID: ", chatExists.ChatID)
 	fmt.Println("chatExists: ", chatExists.ChatExists)
+
 	return &chatExists
 }
 
@@ -43,9 +48,11 @@ func StoreMessage(dm Message) {
 		fmt.Println("error adding message to DB", err)
 		return
 	}
+
 	result, _ := stmt.Exec(dm.ChatID, dm.Content, dm.Sender, dm.Recipient, Date)
 	rowsAff, _ := result.RowsAffected()
 	LastIns, _ := result.LastInsertId()
+
 	fmt.Println("messageHistory rows affected: ", rowsAff)
 	fmt.Println("messageHistory last inserted: ", LastIns)
 }
@@ -57,48 +64,65 @@ func StoreChat(dm Message) {
 		fmt.Println("error adding chat to DB")
 		return
 	}
+
 	result, _ := stmt.Exec(dm.Sender, dm.Recipient, Date)
 	rowsAff, _ := result.RowsAffected()
 	LastIns, _ := result.LastInsertId()
+
 	fmt.Println("chat rows affected: ", rowsAff)
 	fmt.Println("chat last inserted: ", LastIns)
 }
 
-// get all conversation between 2users by ChatID f
-func GetAllMsgsByChatID(cid int) []*Message {
-	var AllMsgs []*Message
-	msg := NewMessage()
-	if err := sqldb.DB.QueryRow("SELECT messageID, chatMessage, sender, recipient, creationDate FROM MessageHistory WHERE chatID = ?", cid).Scan(&msg.MessageID, &msg.Content, &msg.Sender, &msg.Recipient, &msg.Date); err != nil {
-		fmt.Println("GetPostByPID: ", err)
-		return nil
+func GetMessages(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		w.Write([]byte("No."))
+		return
 	}
-	// msg.ChatID = cid
-	AllMsgs = append(AllMsgs, msg)
-	return AllMsgs
+
+	jsn := ExecuteSQL("SELECT * FROM MessageHistory")
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsn)
 }
 
-// show all chats with users
-func ReadAllChats() []*Chat {
-	var allChats []*Chat
-	rows, err := sqldb.DB.Query("SELECT user2 FROM Chats;")
+// https://stackoverflow.com/questions/43367505/function-in-go-to-execute-select-query-on-database-and-return-json-output
+func ExecuteSQL(queryStr string) []byte {
+	rows, err := sqldb.DB.Query(queryStr)
 	if err != nil {
-		fmt.Println("err: ", err)
-		return nil
+		fmt.Print(err.Error())
 	}
+
+	defer rows.Close()
+
+	columns, _ := rows.Columns()
+	count := len(columns)
+
+	var v struct {
+		Data []interface{} // json:"data"
+	}
+
 	for rows.Next() {
-		var tempChat *Chat = NewChat()
-		err := rows.Scan(&tempChat.User2)
-		if err != nil {
-			fmt.Println("err: ", err)
+		values := make([]interface{}, count)
+		valuePtrs := make([]interface{}, count)
+		for i := range columns {
+			valuePtrs[i] = &values[i]
 		}
-		allChats = append(allChats, tempChat)
+
+		if err := rows.Scan(valuePtrs...); err != nil {
+			fmt.Println(err)
+		}
+
+		//Created a map to handle the issue
+		var m map[string]interface{}
+		m = make(map[string]interface{})
+		
+		for i := range columns {
+			m[columns[i]] = values[i]
+		}
+		
+		v.Data = append(v.Data, m)
 	}
-	rows.Close()
-	return allChats
-}
-func NewMessage() *Message {
-	return &Message{}
-}
-func NewChat() *Chat {
-	return &Chat{}
+	// Put into list.
+	data := v.Data
+	jsonMsg, err := json.Marshal(data)
+	return jsonMsg
 }

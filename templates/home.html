@@ -27,11 +27,12 @@
     <div id="Header">🅡🅔🅐🅛-🅣🅘🅜🅔-🅕🅞🅡🅤🅜</div>
 
     <nav class="nav">
+        <a id="wName" style="display:none">𝕎𝔼𝕃ℂ𝕆𝕄𝔼</a>
         <a id="current-user"></a>
         <a id ="homePage" href = "/" onclick="e.preventDefault();" class="nav__link">ℍ𝕠𝕞𝕖ℙ𝕒𝕘𝕖</a>
         <a id ="register" onclick="openReg() ;"class="nav__link" style="display:block">ℝ𝕖𝕘𝕚𝕤𝕥𝕖𝕣</a>
         <a id ="login" onclick="openLogin() ;"class="nav__link" style="display:block">𝕃𝕠𝕘𝕀𝕟</a>
-        <!-- <a id ="post" onclick="refreshPosts() ;" class="nav__link">ℙ𝕠𝕤𝕥𝕤</a> -->
+        <a id ="post" onclick="refreshPosts() ;" class="nav__link">ℙ𝕠𝕤𝕥𝕤</a>
         <a id="logout" href="/" onclick="Logout() ;" class="nav__link" style="display:none">𝕃𝕠𝕘𝕆𝕦𝕥</a>   
 
         <a id="profile" class="nav__link" style="display:none" onclick="showHideUserProfile() ;">ℙ𝕣𝕠𝕗𝕚𝕝𝕖</a> 
@@ -87,7 +88,7 @@
 ===========================================================================================================
 -->
 
-    <nav class="chat">
+    <!-- <nav class="chat">
         <a id="welcomemsg">𝕎𝔼𝕃ℂ𝕆𝕄𝔼 𝕋𝕆 ℝ𝔼𝔸𝕃 𝕋𝕀𝕄𝔼 𝔽𝕆ℝ𝕌𝕄 𝕃𝕆𝔾𝕀ℕ 𝕆ℝ ℝ𝔼𝔾𝕀𝕊𝕋𝔼ℝ!</a>
         <a id ="Messenger" style="display:none">𝕄𝔼𝕊𝕊𝔼ℕ𝔾𝔼ℝ</a>
         <div id="log"></div>
@@ -96,42 +97,48 @@
             <input type="text" id="msg" size="64" autofocus />
         </form>
 
-        <a id="usersLog" class="loggedInUsers" style="display:none"><strong>𝕌𝕊𝔼ℝ𝕊</strong></a>
-        <a id="Online" class="OnlineUsers" style="display:none"><strong>𝕆ℕ𝕃𝕀ℕ𝔼</strong></a>
-        <a id="Offline" class="OfflineUsers" style="display:none"><strong>𝕆𝔽𝔽𝕃𝕀ℕ𝔼</strong></a>
+        <a id="usersLog" class="loggedInUsers" style="display:none"><strong>𝕌𝕊𝔼ℝ𝕊 𝕆ℕ𝕃𝕀ℕ𝔼</strong></a>
+        <a id="Offline" class="OfflineUsers" style="display:none"><strong>𝕌𝕊𝔼ℝ𝕊 𝕆𝔽𝔽𝕃𝕀ℕ𝔼</strong></a> -->
 
-        <!--chat modal ui-->
-    <div class="chat-private" id="chat-private">
+        <nav class="loggedInUsers" id="chatNav">
+        <a id="welcomemsg">𝕎𝔼𝕃ℂ𝕆𝕄𝔼 𝕋𝕆 ℝ𝔼𝔸𝕃 𝕋𝕀𝕄𝔼 𝔽𝕆ℝ𝕌𝕄 𝕃𝕆𝔾𝕀ℕ 𝕆ℝ ℝ𝔼𝔾𝕀𝕊𝕋𝔼ℝ!</a>
+
+            <a id="Select User" class="loggedInUsers__link" data-link style="display:none"
+              ><strong>𝕄𝔼𝕊𝕊𝔼ℕ𝔾𝔼ℝ</strong></a
+            >
+            <div id="usersLog">
+                    <!--chat modal ui-->
+       <div class="chat-private" id="chat-private">
         <div class="chat-modal" class="modal">
           <!-- <div class="modal-content animate" action="/chat" id="formChat"> -->
-            <div class="chat-title-box">
-              <button type="close-msg" class="button" value="closeBtn" onclick="ChatReturn()">
-                  Back
-              </button>
-           </div>
-            <div class="chat-title">
-              <h1 id="recipient"></h1>
-            </div>
+           
             <div class="messages">
-              <div class="messages-content"></div>
+              <div class="messages-content" id="log">
+                <div class="chat-title-box">
+                    <h2 class="chat-title" id="recipient"></h2>
+                 </div>
+              </div>
             </div>
             <div class="message-box" id ="message-box">
-              <input
-                type="text"
-                id="msg"
-                class="message-input"
-                placeholder="Type message..."
-              ></input>
-              <button class="message-submit" id="chat-private-btn">
-                Send
-              </button>
+              <button class="message-submit" id="msg-send-btn">   Send
+            </button>
+              <button type="close-msg" class="message-close" id="btn" value="closeBtn" onclick="ChatReturn()"></button>
+             
+              <input type="text" id="msg" class="message-input" placeholder="Type message..." ></input>
             </div>
           </div>
         </div>
-      </div>
+    </div>
+      
+        </nav>
 
-    </nav>
+      
+    
+  
+   
 
+
+    
     <!-- 
 ===========================================================================================================
                                     CREATE POST BLOCK                                                       
@@ -150,7 +157,8 @@
             <option value="1">Sports</option>
             <option value="2">Weather</option>
             <option value="3">Social</option>
-            <option value="4">Other</option>
+            <option value="4">Gaming</option>
+            <option value="5">Other</option>
           </select>
           <br>
         <label for="Post Content"> Content:  </label>
