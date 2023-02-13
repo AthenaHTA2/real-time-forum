@@ -225,6 +225,8 @@ const successfulLogin = () => {
     console.log("WERE ARE GETTING TO TIMEOUT LOGIN SIDE");
     document.getElementById("LoggedOn").style.display = "none";
     document.getElementById("happyFace").style.display = "none";
+    document.getElementById("happyFace").style.display = "none";
+
   }, 1500);
 
 
@@ -251,12 +253,13 @@ const unsuccessfullLogin = () => {
 };
 
 const Logout = () => {
-  document.querySelector(".loggedInUsers").style.visibility = "hidden";
+  // document.querySelector(".loggedInUsers").style.visibility = "hidden";
   document.querySelector(".chat-private").style.visibility = "hidden";
   document.getElementById("current-user").style.display = "none";
   document.getElementById("postList").style.display = "block";
   document.getElementById("homePage").style.display = "block";
   document.getElementById("wName").style.display = "none";
+  document.getElementById("usersLog").style.display = "none";
 
 };
 
@@ -323,8 +326,6 @@ async function chatEventHandler() {
   function AppendUser(item) {
     var doScroll =
       usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
-    item.style.color = "white";
-    console.log(item);
 
     // if current user, do not display. (return) because AppendUser() is called in a loop.
     if (item.innerHTML === CurrentUser) {
@@ -459,13 +460,20 @@ async function chatEventHandler() {
       }
 
       var messages = evt.data.split("\n");
+
       for (var i = 0; i < messages.length; i++) {
         var item = document.createElement("div");
-        item.style.color = "#80ed99";
+
         item.innerText = messages[i];
         //if message is a list of chat members, it begins with a space
         if (messages[0] == " ") {
           if (i < messages.length) {
+            if (messages[i].includes("-online")) {
+              messages[i] = messages[i].replace("-online", "");
+              item.className = "onlineUser";
+            } else {
+              item.className = "offlineUser";
+            }
             item.innerText = messages[i];
             //print list inside 'usersLog' div
             AppendUser(item);

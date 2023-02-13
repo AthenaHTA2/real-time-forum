@@ -1,13 +1,16 @@
 package chat
+
 import (
 	"bytes"
 	"fmt"
 	"log"
 	"net/http"
 	"rtforum/tools"
+	"strings"
 	"time"
 	"github.com/gorilla/websocket"
 )
+
 const (
 	// Time allowed to write a message to the peer.
 	writeWait = 10 * time.Second
@@ -18,14 +21,17 @@ const (
 	// Maximum message size allowed from peer.
 	maxMessageSize = 512
 )
+
 var (
 	newline = []byte{'\n'}
 	space   = []byte{' '}
 )
+
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 }
+
 // Client is a middleman between the websocket connection and the hub.
 type Client struct {
 	Hub *Hub
@@ -36,7 +42,7 @@ type Client struct {
 	// Buffered channel of outbound messages.
 	Send chan []byte
 }
-//~~~~~~~~~~~~~~~~~~~Start of Show list of Users
+
 //sends the registeredUsers to the ws client as a byte slice.
 func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 	//put database query result in registeredUsers
@@ -51,6 +57,22 @@ func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 	if err != nil {
 		return
 	}
+	x:= strings.Split(string(registeredUsers), "\n")
+	// fmt.Println(len(x))
+	// fmt.Println(x[0])
+	// fmt.Println("first", x[1])
+	// fmt.Println("ALl Session table: ", tools.GetAllOnlineUsers())
+	// matching online users from sessions table and adding online flag to segregate later in JS
+	onlineUserNames:= tools.GetAllOnlineUsers()
+	for i:=1; i < len(x); i++ {
+		for k:= 0; k < len(onlineUserNames); k++ {
+			if x[i] == onlineUserNames[k]{
+				x[i] += "-online"
+			}
+		}
+	registeredUsers= []byte(strings.Join(x, "\n"))
+	} 
+	// fmt.Println("\n","reguseres",string(registeredUsers),+ len(registeredUsers))
 	w.Write(registeredUsers)
 	// Add queued chat messages to the current websocket message.
 	n := len(c.Send)
@@ -64,44 +86,10 @@ func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 		return
 	}
 }
-//~~~~~~~~ End of Show list of Users
-//~~~~~~~~~~Start of Show list of Posts
-//Gets all posts and sends them as a byte array through a web socket
-func (c *Client) GetAllPosts(conn *websocket.Conn) {
-	//put database query result in registeredUsers
-	allPosts := tools.AllPosts()
-	fmt.Println("allPosts:", allPosts)
-	err := c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
-	if err != nil {
-		// The hub closed the channel.
-		c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
-		return
-	}
-	w, err := c.Conn.NextWriter(websocket.TextMessage)
-	if err != nil {
-		return
-	}
-	w.Write(allPosts)
-	// Add queued chat messages to the current websocket message.
-	n := len(c.Send)
-	for i := 0; i < n; i++ {
-		if string(allPosts[i]) == string(newline) {
-			w.Write(newline)
-		}
-		fmt.Println("sending posts through a websocket")
-		w.Write(<-c.Send)
-	}
-	if err := w.Close(); err != nil {
-		return
-	}
-}
-//~~~~~~~~~~~End of Show list of Posts
-//msgToHub go routine reads messages from the webSocket connection
-//and sends them to the hub
-//
-// The application runs msgToHub in a per-connection goroutine. The application
-// ensures that there is at most one reader on a connection by executing all
-// reads from this goroutine.
+
+// msgToHub go routine reads messages from the webSocket connection and sends them to the hub
+// The application runs msgToHub in a per-connection goroutine. The application ensures that there is at most one reader on a connection by executing all reads from this goroutine.
+// msgToHub == readPump
 func (c *Client) msgToHub() {
 	defer func() {
 		c.Hub.Unregister <- c
@@ -122,10 +110,10 @@ func (c *Client) msgToHub() {
 		c.Hub.Broadcast <- message
 	}
 }
+
 // A goroutine running msgFromHub is started for each connection.
-//
-//msgFromHub go routine reads messages from client's 'send' channel
-//and writes them to the websocket connection.
+// msgFromHub go routine reads messages from client's 'send' channel and writes them to the websocket connection.
+// msgFromHub == writePump
 func (c *Client) msgFromHub() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
@@ -163,6 +151,7 @@ func (c *Client) msgFromHub() {
 		}
 	}
 }
+
 // serveWs handles websocket requests from the peer.
 func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
@@ -183,19 +172,9 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("userName: ", userName)
 	client := &Client{Hub: hub, Username: userName, Conn: conn, Send: make(chan []byte, 256)}
 	client.Hub.Register <- client
-	// Allow collection of memory referenced by the caller by doing all work in
-	// new goroutines.
+	// Allow collection of memory referenced by the caller by doing all work in new goroutines.
 	go client.msgFromHub()
 	go client.msgToHub()
 	//send json of registered users to client
 	go client.SendRegisteredUsers(conn)
-	go client.GetAllPosts(conn)
 }
-/*Gorilla Websocket Code authors:
-Gary Burd <gary@beagledreams.com>
-Google LLC (https://opensource.google.com/)
-Joachim Bauch <mail@joachim-bauch.de>
-from: https://github.com/gorilla/websocket/chat
-msgFromHub == writePump
-msgToHub == readPump
-*/

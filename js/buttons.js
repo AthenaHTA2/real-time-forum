@@ -2,7 +2,7 @@
 
 //This function opens Login Modal
 const openLogin = () => {
-  closePost();
+  // closePost();
   document.getElementById("loginModal").style.display = "block";
   document.getElementById("regModal").style.display = "none";
   document.getElementById("postList").style.display = "none";
@@ -11,7 +11,7 @@ const openLogin = () => {
 
 //this function open Registration Modal
 const openReg = () => {
-  closePost();
+  // closePost();
   document.getElementById("postList").style.display = "none";
   document.getElementById("loginModal").style.display = "none";
   document.getElementById("regModal").style.display = "block";
@@ -25,10 +25,10 @@ const closeBtn = () => {
 };
 
 //this function is to make posts not visible where needed
-const closePost = () => {
-  document.getElementById("postList").style.display = "none";
-  document.getElementById("regConfirmed").style.display = "none";
-};
+// const closePost = () => {
+//   document.getElementById("postList").style.display = "none";
+//   document.getElementById("regConfirmed").style.display = "none";
+// };
 
 //this function is for the log out button
 // const logOut = document.querySelector("#logout");
@@ -47,8 +47,8 @@ document.getElementById('logout').onclick = (e) => {
   // document.getElementById("Messenger").style.display = "none";
   document.getElementById("Select User").style.display = "none";
   // document.getElementById("Online").style.display = "none";
-  document.getElementById("chatNav").style.display = "block";
-  document.getElementById("welcomemsg").style.display = "block";
+  document.getElementById("chatNav").style.visibility = "visible";
+  document.getElementById("welcomemsg").style.display = "flex";
   document.getElementById("profile").style.display = "none";
 
 

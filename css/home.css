@@ -39,14 +39,16 @@ body::-webkit-scrollbar-thumb {
     background-position: center;
     font-family: cursive;
     font-size: 2rem;
+    
 }
 
 .nav__link {
-    display: block;
-    padding: 12px 18px;
-    text-decoration: none;
-    color:aqua;
-    font-weight: bolder;
+  display: block;
+  padding: 5% 17%;
+  text-decoration: none;
+  color: aqua;
+  font-weight: bolder;
+  margin-left: -13px;
 }
 
 .nav__link:hover {
@@ -60,24 +62,23 @@ body::-webkit-scrollbar-thumb {
 /* heading or names */
 
 #welcomemsg{
-    text-shadow: 0.5cm;
-    text-indent: 50px;
-    text-align: justify;
-    color: aqua;
+  color: aqua;
+  padding-left: 13%;
+  font-weight: bolder;
     }
 
 #Header {
-    margin-left: 11%;
+    margin-left: 10%;
     color: whitesmoke;
     font-size: 3rem;
     font-family:cursive;
-    margin-bottom: 0.01cm;
+    margin-bottom: -0.5%;
 }
 
-a{
+/* a{
     color:aqua;
     font-weight:bolder;
-}
+} */
 
 h1 {
     margin-top: 0cm;
@@ -86,15 +87,17 @@ h1 {
     font-size: 3rem;
     color: white;
     font-family: cursive;
+    margin-left:22px;
 }
 
 h2 {
-    margin-top: 0cm;
-    margin-bottom: 0cm;
-    padding-right: 10%;
-    font-size: 1.25em;
-    color: white;
-    font-family: cursive;
+  margin-top: 0cm;
+  margin-bottom: 0cm;
+  font-size: 1.55em;
+  color: white;
+  font-family: cursive;
+  margin-left: -2%;
+  line-height: 1;
 }
 
 h3 {
@@ -114,13 +117,21 @@ h6 {
 
 #wName {
   color: aqua;
-  padding-left: 8%;
+  padding-left: 12%;
+  font-weight: bolder;
 }
 
 #current-user {
+  display:none;
   text-transform: uppercase;
-  color:rgb(18, 214, 18);
-  padding-left: 8%;
+  padding-left: 18%;
+  background-image: radial-gradient(rgb(94, 255, 0), rgb(0, 139, 5), rgb(11, 99, 5));
+  color: #000060;
+}
+
+#usersLog{
+  color:green;
+  padding-left: 5%;
 }
 
 /* end */
@@ -193,23 +204,24 @@ h6 {
 /* -------------------------------------------------------------------- */
 /* start of Modals */
 .modal {
-    display: none;
-    margin-left: .5cm;
-    position: flex;
-    z-index: 1;
-    overflow: none;
-    padding-top: 10px;
-    overflow: hidden;
-    padding-left: 0;
-    /* overflow: hidden; */
+  display: none;
+  margin-left: 2%;
+  position: flex;
+  z-index: 1;
+  overflow: none;
+  padding-top: -34px;
+  overflow: hidden;
+  padding-left: 13px;
+  height: 58%;
+  line-height: 1;
 }
 
 .modal-content {
     margin-top: .25cm;
     border-radius: 25px;
-    box-shadow: 2px 2px 2px 2px white;
+    box-shadow: -1px 5px 14px 6px white;
     margin-left: .5cm;
-    margin-right: 10cm;
+    margin-right: 11cm;
    background-image:url("/css/img/canvas.png");
    background-size: 100%;
    color: white;
@@ -222,6 +234,10 @@ h6 {
    padding-left: 0cm;
    /* overflow: auto; */
    
+}
+
+.avatar{
+  margin-right:0%;
 }
 
 .animate {
@@ -321,25 +337,24 @@ h6 {
 }
 
 .profmodal {
-  margin-top: .25cm;
-    border-radius: 25px;
-    box-shadow: 2px 2px 2px 2px whitesmoke;
-    margin-left: 11%;
-    margin-right: 35%;
-   background-image:url("/css/img/profile.png");
-   background-repeat:no-repeat;
-   background-size: 120%;
-   font-size: 1.5rem;
-   font-weight: bold;
-   font-family: cursive;
-   margin-bottom: 10%;
-   overflow: none;
-   display: none;
-   color:whitesmoke;
-   align-items: center; 
-   padding-left: 16.5%;
-   padding-bottom: 2.5%;
-   text-indent: 5% white;
+  margin-top: 0.25cm;
+  border-radius: 25px;
+  box-shadow: 2px 2px 2px 2px whitesmoke;
+  margin-left: 8%;
+  margin-right: 35%;
+  background-image: url(/css/img/profile.png);
+  background-repeat: no-repeat;
+  background-size: 120%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: cursive;
+  margin-bottom: 10%;
+  overflow: none;
+  display: none;
+  color: whitesmoke;
+  align-items: center;
+  padding-left: 19.5%;
+  padding-bottom: 2.5%;
 }
 
 
@@ -371,7 +386,7 @@ h6 {
 .imgcontainer {
     margin-top: 0cm;
     margin-bottom: 0cm;
-    padding-left: 7.8cm;
+    padding-left: 38%;
 }
 
 /* -------------------------------------------------------------------- */
@@ -518,12 +533,12 @@ end
 /* end */
 
 .container {
-    margin-right: 4cm;
-    padding-left: 320px;
-    padding-right: 2cm;
-    padding-bottom: .01cm;
-    display: flex;
-    flex-direction: column;
+  margin-right: 17%;
+  margin-left: 37%;
+  padding-right: 2cm;
+  padding-bottom: 0.01cm;
+  display: flex;
+  flex-direction: column;
     /* z-index: -1; */
 }
 
@@ -736,14 +751,14 @@ font-weight: bolder;
 
 /* css for chat */
 #log {
-    margin: 0;
-    padding: 0.5em 0.5em 0.5em 0.5em;
-    position: absolute;
-    top: 2em;
-    left: 0.5em;
-    right: 0.5em;
-    bottom: 3em;
-    overflow-y: scroll;
+  margin: 0;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  position: absolute;
+  top: 2em;
+  left: -5.4%;
+  right: -6%;
+  bottom: 3em;
+  overflow-y: scroll;
 }
 
 #formChat {
@@ -793,6 +808,47 @@ font-weight: bolder;
     color: red;
     font-size: 1.6rem;
     margin-left: 1.8cm;
+
+}
+
+.onlineUser {
+  color: rgb(242, 244, 239);
+  text-transform: uppercase;
+  border-radius: 25px;
+  background-image: radial-gradient(rgb(94, 255, 0), rgb(0, 139, 5), rgb(11, 99, 5));
+  border-radius: 0;
+  margin-bottom: 2%;
+  margin-right: 0;
+  padding-left: 38%;
+  margin-left: -18px;
+}
+
+.onlineUser:hover {
+  color: rgb(47, 3, 177);
+  text-transform: uppercase;
+  border-radius: 25px;
+  border-radius: 10px;
+  font-weight:bolder;
+}
+
+.offlineUser {
+  color:white;
+  text-transform: uppercase;
+  border-radius: 10px;
+  background-image: radial-gradient(red, darkred, black);
+  border-radius: 0;
+  margin-bottom: 2%;
+  margin-right: 0;
+  padding-left: 38%;
+  margin-left: -18px;
+
+}
+
+.offlineUser:hover {
+  color: rgb(47, 3, 177);
+  text-transform: uppercase;
+  border-radius: 10px;
+  font-weight: bolder;
 
 }
 /* end of logged in user */
@@ -857,6 +913,8 @@ font-weight: bolder;
     bottom: 0;
     left: 0;
     color: #e74c3c;
+    font-weight: 1000;
+    font-size: 1.1rem;
   }
   .login-form-control {
     margin-bottom: 10px;
@@ -900,6 +958,8 @@ font-weight: bolder;
     bottom: 0;
     left: 0;
     color: #e74c3c;
+    font-weight: 1000;
+    font-size: 1.1rem;
   }
   .login-form-control.success input {
     border-color: #2ecc71;
@@ -939,43 +999,47 @@ Chat
   Chat Title
   --------------------*/
 .chat-title-box {
-  flex: 0 1 45px;
+  flex: 0 1 28px;
   position: relative;
   background: rgba(0, 0, 0, 0.2);
   color: #fff;
   text-transform: uppercase;
   text-align: center;
-  padding: 10px 10px 10px 50px;
+  padding: 3px 0px 0px 49px;
 }
 .message-close {
   position: fixed;
   color: #fff;
-  background: #248a5200;
+  background: #eeeeee;
   background-image: url(/css/img/icons8-back-arrow-48.png);
   background-size: 95%;
   padding: 16px 17px;
   height: 2.4%;
-  width: 1%;
+  width: 2%;
   margin-top: 0.615%;
   margin-left: -4px;
+  border-radius: 25px;
 }
 .chat-title {
   flex: 0 1 45px;
   position: fixed;
-  color: rgb(77, 209, 221);
-  text-transform: uppercase;
-  text-align: left;
-  padding: 10px 10px 10px 50px;
   margin: 0;
   padding: 0;
 }
 
 .chat-title#recipient{
-    color: aqua;
-    font-weight: bolder;
-    font-size: 1.5rem;
-    background-color: rgba(0, 0, 139, 0);
-    margin-left: -1.5%;
+  color: aqua;
+  font-weight: bolder;
+  font-size: 1.5rem;
+  background-color: rgb(0 0 139);
+  margin-left: -3.6%;
+  padding-left: 3%;
+  padding-right: 4.27%;
+  margin-top: -2%;
+  padding-top: 0.2%;
+  border-radius: -18%;
+  padding-bottom: 0.2%;
+  margin-right: 0%;
 
 }
 /*--------------------
@@ -990,21 +1054,20 @@ Chat
 .messages-content {
   display: flex;
   flex-direction: column;
-  height: 572px;
+  height: 621px;
   clear: both;
   padding: 6px 10px 7px;
   border-radius: 10px 10px 10px 0;
-  background: rgba(1, 17, 89, 0.634);
+  background: rgba(2, 25, 119, 0.941);
   margin: 8px 0;
   font-size: 11px;
   position: relative;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.344);
+  border-radius: 25px;
+  line-height: 103.5%;
 
 }
 .messages-content .sender {
-  /* display: flex;
-  flex-direction: row;
-  justify-content: flex-end; */
   float: right;
   color: #fff;
   text-align: left;
@@ -1013,18 +1076,23 @@ Chat
   width: max-content;
   padding: 7px;
   height: 20px;
+  line-height: 87%;
   margin-bottom: 5px;
+  font-size: 130%;
 
 }
 .messages-content .recipient {
-  /* float: left; */
-  width: max-content;
+  float: right;
   color: #fff;
   text-align: left;
   background: linear-gradient(120deg, #248a52, #257287);
-  border-radius: 10px 10px 10px 0;
+  border-radius: 10px 10px 10px 0px;
+  width: max-content;
+  padding: 7px;
+  height: 20px;
+  line-height: 87%;
   margin-bottom: 5px;
-  padding: 5px;
+  font-size: 130%;
 
 }
 .dateDiv {
@@ -1049,9 +1117,10 @@ Chat
   flex: 0 1 40px;
   width: 100%;
   background: rgba(0, 0, 0, 0.3);
-  padding: 10px;
+  padding: 0;
   position: absolute;
-  bottom: 10px;
+  right: -3%;
+  bottom: 3%;
 }
 
 .message-box .message-input {
@@ -1061,11 +1130,11 @@ Chat
   resize: none;
   color: rgba(255, 255, 255, 0.7);
   font-size: 11px;
-  height: 30px;
+  height: 27px;
   margin: 0;
   padding-right: 20px;
   width: 265px;
-  margin-bottom: 3%;
+  margin-bottom: -1%;
 }
 
 .message-box textarea:focus:-webkit-placeholder {
@@ -1076,8 +1145,8 @@ Chat
 .message-box .message-submit {
   position: absolute;
   z-index: 1;
-  top: 24px;
-  right: 28px;
+  top: 39%;
+  right: 6%;
   color: #fff;
   border: none;
   background: #248a52;
@@ -1091,7 +1160,8 @@ Chat
 }
 
 .message-box .message-submit:hover {
-  background: #1d7745;
+  background: #54f954;
+  color: blueviolet;
 }
 
 input#msg{
