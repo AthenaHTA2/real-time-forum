@@ -20,11 +20,6 @@ function closePost() {
   document.getElementById("regConfirmed").style.display = "none";
 }
 
-function ChatReturn() {
-  let chat = document.querySelector(".chat-private");
-  chat.style.visibility = "hidden";
-  document.querySelector(".messages-content").innerHTML = "";
-}
 
 //this function is for the log out button
 // const logOut = document.querySelector("#logout");

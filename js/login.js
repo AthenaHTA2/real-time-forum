@@ -184,6 +184,7 @@ async function chatEventHandler() {
   // TODO: 2. using THROTTLE / DEBOUNCE on scrolling event to display 10 message in reverse order
   // TODO: 3. arrange users with chat(according to most recent descending order)
   function AppendUser(item) {
+    console.log(item.innerHTML);
     var doScroll =
       usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
 
@@ -191,13 +192,56 @@ async function chatEventHandler() {
     if (item.innerHTML === CurrentUser) {
       return;
     }
-    if (CurUserNoti != null){
-    for (let i = 0; i < CurUserNoti.length; i++) {
-      if (item.innerHTML == CurUserNoti[i].notificationsender) {
-        item.classList.add("-notification");
+    if (CurUserNoti != null) {
+      for (let i = 0; i < CurUserNoti.length; i++) {
+        if (item.innerHTML == CurUserNoti[i].notificationsender) {
+          item.classList.add("-notification");
+        }
       }
     }
-  }
+    let chatModal = document.createElement("div");
+    chatModal.className = "chat-modal";
+    console.log(item.innerHTML);
+    chatModal.id = "chat-modal-" + item.innerHTML;
+    let chatTitleBox = document.createElement("div");
+    chatTitleBox.className = "chat-title-box-" + item.innerHTML;
+    let but = document.createElement("button");
+    but.setAttribute("value", "closeBtn");
+    but.addEventListener("click", ChatReturn);
+    but.className = "message-close";
+    but.id = "btn-" + item.innerHTML;
+    let h2 = document.createElement("h2");
+    h2.className = "chat-title";
+    h2.id = "recipient-" + item.innerHTML;
+    chatTitleBox.append(but);
+    chatTitleBox.append(h2);
+
+    let messageHtml = document.createElement("div");
+    messageHtml.className = "messages-" + item.innerHTML;
+    let messageHtml2 = document.createElement("div");
+    messageHtml2.className = "message-content";
+    messageHtml2.id = "log-" + item.innerHTML;
+    messageHtml.append(messageHtml2);
+    let messageBox = document.createElement("div");
+    messageBox.className = "message-box";
+    messageBox.id = "message-box-" + item.innerHTML;
+    let mesInput = document.createElement("input");
+    mesInput.setAttribute("type", "text");
+    mesInput.id = "msg-" + item.innerHTML;
+    mesInput.className = "message-input";
+    mesInput.setAttribute("placeholder", "Type message...");
+    let but2 = document.createElement("button");
+    but2.className = "message-submit";
+    but2.id = "msg-send-btn-" + item.innerHTML;
+    but2.innerText = "Send";
+    messageBox.append(mesInput);
+    messageBox.append(but2);
+    chatModal.append(chatTitleBox, messageHtml, messageBox);
+    chatModal.style.display = "none";
+
+    let chat = document.querySelector(".chat-private");
+    chat.append(chatModal);
+    console.log("append", chatModal);
     usersLog.appendChild(item);
     if (doScroll) {
       usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
@@ -205,13 +249,13 @@ async function chatEventHandler() {
     // opening private chat window on clicking on selected users
     item.onclick = () => {
       receiver = item.innerHTML;
-
-      // Show main chat window
-      let chat = document.querySelector(".chat-private");
       chat.style.visibility = "visible";
+      let chosenId = "#chat-modal-" + item.innerHTML;
+      let receiverChatbox = document.querySelector(chosenId);
+      receiverChatbox.style.display = "block";
+      // Show main chat window
 
-      let chatfriend = document.querySelector(".chat-title");
-      chatfriend.innerHTML = "Messaging - " + receiver;
+      h2.innerHTML = "Messaging - " + receiver;
 
       // **filter** and append correct messages to chat window
 
@@ -232,7 +276,8 @@ async function chatEventHandler() {
           messageBubble.appendChild(dateDiv);
           bubbleWrapper.append(messageBubble);
           // append to child div of main chat window
-          document.querySelector(".messages-content").append(bubbleWrapper);
+          messageHtml2.append(bubbleWrapper);
+          // document.querySelector(".messages-content").append(bubbleWrapper);
         } else if (
           message.recipient === CurrentUser &&
           message.sender === receiver
@@ -243,37 +288,45 @@ async function chatEventHandler() {
           messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
           dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
           messageBubble.appendChild(dateDiv);
-          document.querySelector(".messages-content").append(messageBubble);
+          messageHtml2.append(messageBubble);
+          // document.querySelector(".messages-content").append(messageBubble);
         }
       });
     };
   }
 
   // function to send message to backend to be stored into DB
-  document.getElementById("msg-send-btn").onclick = function () {
-    var msg = document.getElementById("msg");
-
-    if (!conn) {
-      console.log("no conn");
-      return false;
+  function onclickFun(item) {
+    if (item.innerHTML === CurrentUser) {
+      return;
     }
-    if (!msg.value.trim()) {
-      console.log("no msg value");
-      return false;
-    }
+    receiver = item.innerHTML;
+    console.log(receiver);
+    document.getElementById("msg-send-btn-" + receiver).onclick = function () {
+      var msg = document.getElementById("msg-" + receiver);
 
-    // object to message to send to front end
-    let message = {
-      Sender: CurrentUser,
-      Recipient: receiver,
-      Content: msg.value.trim(),
-      Date: newTime(date.toString()),
+      if (!conn) {
+        console.log("no conn");
+        return false;
+      }
+      if (!msg.value.trim()) {
+        console.log("no msg value");
+        return false;
+      }
+
+      // object to message to send to front end
+      let message = {
+        Sender: CurrentUser,
+        Recipient: receiver,
+        Content: msg.value.trim(),
+        Date: newTime(date.toString()),
+      };
+
+      conn.send(JSON.stringify(message));
+      msg.value = "";
+      return false;
     };
-
-    conn.send(JSON.stringify(message));
-    msg.value = "";
-    return false;
-  };
+  }
 
   // websocket activity for chats
   if (window["WebSocket"]) {
@@ -289,35 +342,38 @@ async function chatEventHandler() {
 
       if (IsJsonString(msg)) {
         msg = JSON.parse(msg);
-      }
+        console.log(msg)
+        let messageWrapper = document.createElement("div");
+        messageWrapper.className = "messageWrapper";
+        let newMessage = document.createElement("div");
+        let dateDiv = document.createElement("div");
+        dateDiv.className = "dateDiv";
 
-      let messageWrapper = document.createElement("div");
-      messageWrapper.className = "messageWrapper";
-      let newMessage = document.createElement("div");
-      let dateDiv = document.createElement("div");
-      dateDiv.className = "dateDiv";
+        if (CurrentUser === msg.Sender) {
+          newMessage.className = "sender";
+          newMessage.innerHTML = `${"You"}: ${msg.Content}`;
+          dateDiv.innerHTML = `${msg.Date}`;
+          newMessage.appendChild(dateDiv);
+          messageWrapper.append(newMessage);
+          document
+            .querySelector("#log-" + msg.Recipient)
+            .append(messageWrapper);
+        } else if (CurrentUser !== msg.Sender) {
+          // let senderuser = document.querySelector("#usersLog").children;
+          // console.log(senderuser.senderuser.length);
+          newMessage.className = "recipient";
+          newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
+          dateDiv.innerHTML = `${msg.Date}`;
+          newMessage.appendChild(dateDiv);
+          document.querySelector("#log-" + msg.Sender).append(newMessage);
+        }
+      }
 
       // formatting message
-      if (CurrentUser === msg.Sender) {
-        newMessage.className = "sender";
-        newMessage.innerHTML = `${"You"}: ${msg.Content}`;
-        dateDiv.innerHTML = `${msg.Date}`;
-        newMessage.appendChild(dateDiv);
-        messageWrapper.append(newMessage);
-        document.querySelector(".messages-content").append(messageWrapper);
-      } else if (CurrentUser !== msg.Sender) {
-        // let senderuser = document.querySelector("#usersLog").children;
-        // console.log(senderuser.senderuser.length);
-        newMessage.className = "recipient";
-        newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
-        dateDiv.innerHTML = `${msg.Date}`;
-        newMessage.appendChild(dateDiv);
-        document.querySelector(".messages-content").append(newMessage);
-      }
 
       var messages = evt.data.split("\n");
-
-      for (var i = 0; i < messages.length; i++) {
+      console.log(messages, messages.length);
+      for (var i = 1; i < messages.length; i++) {
         var item = document.createElement("div");
         item.innerHTML = messages[i];
         if (CurUserNoti != null) {
@@ -339,6 +395,8 @@ async function chatEventHandler() {
             item.innerText = messages[i];
             //print list of registered users inside 'usersLog' div
             AppendUser(item);
+            console.log("-----------------------");
+            onclickFun(item);
           }
         }
       }
@@ -496,4 +554,16 @@ function newTime(date) {
   let hour = dateArray[4].split(":");
   newDate += hour[0] + ":" + hour[1];
   return newDate;
+}
+function ChatReturn() {
+  let chat = document.querySelector(".chat-private");
+  chat.style.visibility = "hidden";
+
+  let chosenChatbox = Array.from(document.querySelectorAll(".chat-modal"))
+  if (chosenChatbox != null) {
+    chosenChatbox.forEach((element) => {
+      element.style.display = "none";
+    });
+  }
+  // document.querySelector(".messages-content").innerHTML = "";
 }
