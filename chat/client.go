@@ -67,11 +67,7 @@ func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 	}
 
 	x:= strings.Split(string(registeredUsers), "\n")
-	// fmt.Println(len(x))
-	// fmt.Println(x[0])
-	// fmt.Println("first", x[1])
-	// fmt.Println("ALl Session table: ", tools.GetAllOnlineUsers())
-
+	
 	// matching online users from sessions table and adding online flag to segregate later in JS
 	onlineUserNames:= tools.GetAllOnlineUsers()
 	for i:=1; i < len(x); i++ {

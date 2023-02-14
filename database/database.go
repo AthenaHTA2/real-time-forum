@@ -73,43 +73,14 @@ func CreateDB() {
 				FOREIGN KEY(sender)REFERENCES Users(nickName),
 				FOREIGN KEY(recipient)REFERENCES Users(nickName)
 				);`)
-
-	// // postlikedislike table
-	// sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "postlikedislike" (
-	// 			"postID" INTEGER NOT NULL,
-	// 			"userID" INTEGER NOT NULL,
-	// 			"likecount" INTEGER NOT NULL,
-	// 			"dislikecount" INTEGER NOT NULL,
-	// 			FOREIGN KEY(postID)REFERENCES posts(postID),
-	// 			FOREIGN KEY(userID)REFERENCES users(userID)
-	// 			);`)
-	// // commentlikedislike table
-	// sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "commlikedislike" (
-	// 			"commentID" INTEGER NOT NULL,
-	// 			"userID" INTEGER NOT NULL,
-	// 			"postID" INTEGER NOT NULL,
-	// 			"likecount" INTEGER NOT NULL,
-	// 			"dislikecount" INTEGER NOT NULL,
-	// 			FOREIGN KEY(commentID)REFERENCES comments(commentID),
-	// 			FOREIGN KEY(userID)REFERENCES users(userID),
-	// 			FOREIGN KEY(postID)REFERENCES posts(postID)
-	// 			);`)
-	// // lduserpost table
-	// sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "lduserpost" (
-	// 			"userID" INTEGER NOT NULL,
-	// 			"postID" INTEGER NOT NULL,
-	// 			"kind" INTEGER NOT NULL,
-	// 			FOREIGN KEY(userID)REFERENCES users(userID),
-	// 			FOREIGN KEY(postID)REFERENCES posts(postID)
-	// 			);`)
-	// // ldusercomment table
-	// sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "ldusercomment" (
-	// 			"commentID" INTEGER NOT NULL,
-	// 			"userID" INTEGER NOT NULL,
-	// 			"postID" INTEGER NOT NULL,
-	// 			"kind" INTEGER NOT NULL,
-	// 			FOREIGN KEY(commentID)REFERENCES comments(commentID),
-	// 			FOREIGN KEY(userID)REFERENCES users(userID),
-	// 			FOREIGN KEY(postID)REFERENCES posts(postID)
-	// 			);`)
+	
+	// Notifications table
+	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Notifications" ( 
+				"notificationID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+				"sender" TEXT,
+				"recipient" TEXT,
+				"count" INTEGER,
+				FOREIGN KEY(sender)REFERENCES MessageHistory(sender),
+				FOREIGN KEY(recipient)REFERENCES MessageHistory(recipient)
+				);`)   
 }

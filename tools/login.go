@@ -123,8 +123,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		defer insertsessStmt.Close()
 
 		insertsessStmt.Exec(CurrentUser.UserID, cookieNm, sessionToken)
-
-
+ 		CurrentUser.Notification= GetAllNotificationForCurrentUser(CurrentUser.NickName)
+		fmt.Println("------------------------",CurrentUser.Notification, len(CurrentUser.Notification) )
 		marshalledUser, err := json.Marshal(CurrentUser)
 		if err != nil {
 			log.Fatal(err)
@@ -134,7 +134,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(marshalledUser))
 		// w.Write([]byte(CurrentUser.NickName))
 
-		GetAllUsers()
+		//  GetAllUsers()
 	}
 }
 
@@ -163,6 +163,36 @@ func GetAllUsers() []byte {
 	return []byte(allUsers)
 }
 
+
+func GetAllOnlineUsers()[]string{
+	var AllOnlineUsers []string
+	rows, errUsr := sqldb.DB.Query("SELECT userID FROM Sessions;")
+	if errUsr != nil {
+		fmt.Println("Error retrieving users from database: \n", errUsr)
+		return nil
+	}
+	for rows.Next() {
+		var tempUser int
+		var tempUserNickname string
+		err := rows.Scan(&tempUser)
+		if err != nil {
+			fmt.Println("err: ", err)
+		}
+		rows2 ,err2 := sqldb.DB.Query("SELECT nickName FROM Users WHERE userID=?;", tempUser)
+		if err2 != nil {
+			log.Fatal(err)
+		}
+		defer rows2.Close()
+		for rows2.Next(){
+			rows2.Scan(&tempUserNickname)
+			AllOnlineUsers = append(AllOnlineUsers, tempUserNickname)
+		}
+		}
+	rows.Close()
+	return AllOnlineUsers
+
+}
+
 //Retrieve from db all posts that will be shown on R-T-F front page
 func AllPosts() []byte {
 	var postData post
@@ -182,37 +212,5 @@ func AllPosts() []byte {
 	return onePost
 }
 
-/*func GetNickName() string {
-	var logData LoginData
-	NickName := logData.UserName
-	return NickName
-}*/
 
-func GetAllOnlineUsers()[]string{
-	
 
-	var AllOnlineUsers []string
-	rows, errUsr := sqldb.DB.Query("SELECT userID FROM Sessions;")
-	if errUsr != nil {
-		fmt.Println("Error retrieving users from database: \n", errUsr)
-		return nil
-	}
-	for rows.Next() {
-		var tempUser int
-		var tempUserNickname string
-		err := rows.Scan(&tempUser)
-		if err != nil {
-			fmt.Println("err: ", err)
-		}
-		rows2 ,err2 := sqldb.DB.Query("SELECT nickName FROM Users WHERE userID=?;", tempUser)
-		if err2 != nil {log.Fatal(err)}
-		defer rows2.Close()
-		for rows2.Next(){
-rows2.Scan(&tempUserNickname)
-AllOnlineUsers = append(AllOnlineUsers, tempUserNickname)
-		}
-		}
-	rows.Close()
-	return AllOnlineUsers
-
-}

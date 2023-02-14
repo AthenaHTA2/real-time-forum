@@ -39,6 +39,8 @@ type User struct {
 	Posts     []post
 	Comments  []comment
 	Password  string `json:"PassWord"`
+	Notification []Notification `json:"Notifications"`
+
 }
 
 type LoginData struct {
@@ -98,4 +100,16 @@ type ChatHistoryCheck struct {
 	ChatID int
 	ChatExists bool
 	// ChatHistory []Message
+}
+
+type Notification struct {
+	NotificationID int
+	NotificationSender string `json:"notificationsender"`
+	NotificationRecipient string `json:"notificationrecipient"`
+	NotificationCount int `json:"notificationcount"`
+}
+
+type NotificationCheck struct {
+	NotificationID int
+	NotifExists bool
 }

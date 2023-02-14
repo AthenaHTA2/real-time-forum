@@ -8,8 +8,7 @@ import (
 	"time"
 )
 
-// Hub maintains the set of active clients and broadcasts messages to the
-// clients.
+// Hub maintains the set of active clients and broadcasts messages to the clients.
 type Hub struct {
 	// Registered clients.
 	Clients map[string]*Client
@@ -52,26 +51,32 @@ func (h *Hub) Run() {
 			var directmsg tools.Message
 			json.Unmarshal(message, &directmsg)
 	
-			fmt.Println(directmsg)
-			chatHistoryVal := tools.CheckForChatHistory(directmsg)
-		
 			//stores a new chat
+			chatHistoryVal := tools.CheckForChatHistory(directmsg)
 			if !chatHistoryVal.ChatExists{
 				tools.StoreChat(directmsg)
 			}
 
-			msgHistroryVal := tools.CheckForChatHistory(directmsg)
-
 			//stores new messages
+			msgHistroryVal := tools.CheckForChatHistory(directmsg)
 			if msgHistroryVal.ChatExists{
 				directmsg.ChatID = msgHistroryVal.ChatID
 				tools.StoreMessage(directmsg)
 			}
 
+			// inserting notification into DB, by checking for existing notifications if any
+			newNotif := tools.CheckNotificationExists(directmsg)
+			fmt.Println(newNotif)
+			fmt.Println(newNotif== nil)
+			if  (newNotif == nil)|| (!newNotif.NotifExists) {
+				fmt.Println("if condition working")
+				tools.AddNotification(directmsg)
+			}
+
 			for client := range h.Clients {
 
 				if (client == directmsg.Recipient) || (client == directmsg.Sender) {
-					fmt.Println()
+					// fmt.Println()
 					select {
 					case h.Clients[client].Send <- message:
 					default:
@@ -81,6 +86,17 @@ func (h *Hub) Run() {
 				}
 			}
 		}
+	}
+}
+
+func (h *Hub) LogConns() {
+	for {
+		fmt.Println(len(h.Clients), "clients connected")
+		for userId := range h.Clients {	
+			fmt.Printf("client %v have %v connections\n", userId, len(h.Clients))
+		}
+		fmt.Println()
+		time.Sleep(1 * time.Second)
 	}
 }
 
@@ -96,16 +112,6 @@ func (h *Hub) Run() {
 
 // }
 
-func (h *Hub) LogConns() {
-    for {
-        fmt.Println(len(h.Clients), "clients connected")
-        for userId := range h.Clients {	
-            fmt.Printf("client %v have %v connections\n", userId, len(h.Clients))
-        }
-        fmt.Println()
-        time.Sleep(1 * time.Second)
-    }
-}
 
 
 /*Code authors:

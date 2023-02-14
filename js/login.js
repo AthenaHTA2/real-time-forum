@@ -2,7 +2,7 @@ let LoginData;
 let user;
 let CurrentUser;
 let receiver;
-
+let CurUserNoti;
 let today = Date.now();
 let date = new Date(today);
 
@@ -77,7 +77,9 @@ LoginBtn.onclick = (e) => {
         console.log(rsp);
 
         let userData = JSON.parse(rsp);
+        console.log(userData);
         CurrentUser = userData.NickName;
+        CurUserNoti = userData.Notifications;
 
         var successlogin = document.getElementById("current-user");
         successlogin.innerHTML = " Hello " + CurrentUser + " &#128512";
@@ -176,16 +178,26 @@ async function chatEventHandler() {
   let messages = await fetch("/messagesAPI", configMsg);
   messages = await messages.json();
 
-  // TODO: change section to display online and offline users
+  // TODO: 1. NOTIFICATIONS : ADD (add notifictions if user is online but chat is not open, or user is offline),
+  // TODO:                    DISPLAY(check notification, get notication),
+  // TODO:                    DELETE(remove notification)
+  // TODO: 2. using THROTTLE / DEBOUNCE on scrolling event to display 10 message in reverse order
+  // TODO: 3. arrange users with chat(according to most recent descending order)
   function AppendUser(item) {
     var doScroll =
       usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
-  
 
     // if current user, do not display. (return) because AppendUser() is called in a loop.
     if (item.innerHTML === CurrentUser) {
       return;
     }
+    if (CurUserNoti != null){
+    for (let i = 0; i < CurUserNoti.length; i++) {
+      if (item.innerHTML == CurUserNoti[i].notificationsender) {
+        item.classList.add("-notification");
+      }
+    }
+  }
     usersLog.appendChild(item);
     if (doScroll) {
       usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
@@ -294,6 +306,8 @@ async function chatEventHandler() {
         messageWrapper.append(newMessage);
         document.querySelector(".messages-content").append(messageWrapper);
       } else if (CurrentUser !== msg.Sender) {
+        // let senderuser = document.querySelector("#usersLog").children;
+        // console.log(senderuser.senderuser.length);
         newMessage.className = "recipient";
         newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
         dateDiv.innerHTML = `${msg.Date}`;
@@ -302,9 +316,17 @@ async function chatEventHandler() {
       }
 
       var messages = evt.data.split("\n");
+
       for (var i = 0; i < messages.length; i++) {
         var item = document.createElement("div");
         item.innerHTML = messages[i];
+        if (CurUserNoti != null) {
+          for (let k = 0; k < CurUserNoti.length; k++) {
+            if (messages[i] == CurUserNoti[k].notificationsender) {
+              alert("notification", messages[i]);
+            }
+          }
+        }
         //if message is a list of chat members, it begins with a space
         if (messages[0] == " ") {
           if (i < messages.length) {
