@@ -71,7 +71,7 @@ LoginBtn.onclick = (e) => {
         console.log("on track 1");
         setLoginErrorFor(
           userName,
-          "This Username/Email does not exist, please register to enter this forum"
+          "Username/Email doesn't exist!"
         );
       } else if (rsp == "ERROR: please enter correct password") {
         console.log("on track 2");
