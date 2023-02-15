@@ -516,7 +516,8 @@ Chat
 .messages-content {
   display: flex;
   flex-direction: column;
-  height: 790px;
+  /* height: 790px; */
+  height: 600px;
   overflow-y: scroll;
   clear: both;
   padding: 6px 10px 7px;
@@ -579,6 +580,10 @@ Chat
 .offlineUser {
   color: gray;
   text-transform: uppercase;
+}
+
+.notification {
+  background-image: url("/css/img/newmessage.png");
 }
 /*--------------------
   Message Box

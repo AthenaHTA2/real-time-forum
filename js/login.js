@@ -1,10 +1,13 @@
 let LoginData;
 let user;
 let CurrentUser;
-let receiver;
 let CurUserNoti;
+let notifdiv;
 let today = Date.now();
 let date = new Date(today);
+
+// Create an instance of Notyf
+var notyf = new Notyf();
 
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
@@ -53,6 +56,7 @@ LoginBtn.onclick = (e) => {
       console.log(response);
       if (response.status == 200) {
         console.log("successful login");
+        notyf.success("Logged in");
         successfulLogin();
         chatEventHandler();
         return response.text();
@@ -192,10 +196,19 @@ async function chatEventHandler() {
     if (item.innerHTML === CurrentUser) {
       return;
     }
+
+    //notification after logging in if new messages are present
     if (CurUserNoti != null) {
+
       for (let i = 0; i < CurUserNoti.length; i++) {
         if (item.innerHTML == CurUserNoti[i].notificationsender) {
-          item.classList.add("-notification");
+          item.classList.add("notification");
+          // notifdiv = createElement("div");
+          // notifdiv.className = "notif";
+          // chatBoxId.appendChild(notifdiv);
+          // notifdiv.style.visibility = visible;
+
+          // notyf.success("Logged in");
         }
       }
     }
@@ -221,7 +234,6 @@ async function chatEventHandler() {
     let messageHtml2 = document.createElement("div");
     messageHtml2.className = "messages-content";
     messageHtml2.id = "log-" + item.innerHTML;
-    messageHtml.append(messageHtml2);
     let messageBox = document.createElement("div");
     messageBox.className = "message-box";
     messageBox.id = "message-box-" + item.innerHTML;
@@ -236,64 +248,71 @@ async function chatEventHandler() {
     but2.innerText = "Send";
     messageBox.append(mesInput);
     messageBox.append(but2);
-    chatModal.append(chatTitleBox, messageHtml, messageBox);
+    messageHtml.append(messageHtml2, messageBox);
+    chatModal.append(chatTitleBox, messageHtml);
     chatModal.style.display = "none";
 
     let chat = document.querySelector(".chat-private");
+
     chat.append(chatModal);
     console.log("append", chatModal);
     usersLog.appendChild(item);
+    item.innerHTML = item.innerHTML;
     if (doScroll) {
       usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
     }
     // opening private chat window on clicking on selected users
+
+    // Show main chat window
+
+    // **filter** and append correct messages to chat window
+
+    messages.forEach((message) => {
+      // create new div for message
+      let messageBubble = document.createElement("div");
+      let dateDiv = document.createElement("div");
+      dateDiv.className = "dateDiv";
+
+      // 1. when current user is sender
+      if (
+        message.sender === CurrentUser &&
+        message.recipient === item.innerHTML
+      ) {
+        // add class of sender
+        messageBubble.className = "sender";
+        messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
+        let bubbleWrapper = document.createElement("div");
+        bubbleWrapper.classList.add("messageWrapper"), "sender";
+        dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
+        messageBubble.appendChild(dateDiv);
+        bubbleWrapper.append(messageBubble);
+        // append to child div of main chat window
+        console.log(messageHtml2);
+        messageHtml2.append(bubbleWrapper);
+        // document.querySelector(".messages-content").append(bubbleWrapper);
+      } else if (
+        message.recipient === CurrentUser &&
+        message.sender === item.innerHTML
+      ) {
+        // 2. when current user is recipient
+        // add class of recipient
+        messageBubble.className = "recipient";
+        messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
+        dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
+        messageBubble.appendChild(dateDiv);
+        messageHtml2.append(messageBubble);
+
+        // document.querySelector(".messages-content").append(messageBubble);
+      }
+    });
     item.onclick = () => {
-      receiver = item.innerHTML;
       chat.style.visibility = "visible";
       let chosenId = "#chat-modal-" + item.innerHTML;
       let receiverChatbox = document.querySelector(chosenId);
       receiverChatbox.style.display = "block";
-      // Show main chat window
+      h2.innerHTML = "Messaging - " + item.innerHTML;
 
-      h2.innerHTML = "Messaging - " + receiver;
-
-      // **filter** and append correct messages to chat window
-
-      messages.forEach((message) => {
-        // create new div for message
-        let messageBubble = document.createElement("div");
-        let dateDiv = document.createElement("div");
-        dateDiv.className = "dateDiv";
-
-        // 1. when current user is sender
-        if (message.sender === CurrentUser && message.recipient === receiver) {
-          // add class of sender
-          messageBubble.className = "sender";
-          messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
-          let bubbleWrapper = document.createElement("div");
-          (bubbleWrapper.classList.add = "messageWrapper"),
-            "messages-content",
-            "sender";
-          dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
-          messageBubble.appendChild(dateDiv);
-          bubbleWrapper.append(messageBubble);
-          // append to child div of main chat window
-          messageHtml2.append(bubbleWrapper);
-          // document.querySelector(".messages-content").append(bubbleWrapper);
-        } else if (
-          message.recipient === CurrentUser &&
-          message.sender === receiver
-        ) {
-          // 2. when current user is recipient
-          // add class of recipient
-          messageBubble.className = "recipient";
-          messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
-          dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
-          messageBubble.appendChild(dateDiv);
-          messageHtml2.append(messageBubble);
-          // document.querySelector(".messages-content").append(messageBubble);
-        }
-      });
+      // if condition for removing notification
     };
   }
 
@@ -302,32 +321,32 @@ async function chatEventHandler() {
     if (item.innerHTML === CurrentUser) {
       return;
     }
-    receiver = item.innerHTML;
-    console.log(receiver);
-    document.getElementById("msg-send-btn-" + receiver).onclick = function () {
-      var msg = document.getElementById("msg-" + receiver);
+    console.log(item.innerHTML);
+    document.getElementById("msg-send-btn-" + item.innerHTML).onclick =
+      function () {
+        var msg = document.getElementById("msg-" + item.innerHTML);
 
-      if (!conn) {
-        console.log("no conn");
-        return false;
-      }
-      if (!msg.value.trim()) {
-        console.log("no msg value");
-        return false;
-      }
+        if (!conn) {
+          console.log("no conn");
+          return false;
+        }
+        if (!msg.value.trim()) {
+          console.log("no msg value");
+          return false;
+        }
 
-      // object to message to send to front end
-      let message = {
-        Sender: CurrentUser,
-        Recipient: receiver,
-        Content: msg.value.trim(),
-        Date: newTime(date.toString()),
+        // object to message to send to front end
+        let message = {
+          Sender: CurrentUser,
+          Recipient: item.innerHTML,
+          Content: msg.value.trim(),
+          Date: newTime(date.toString()),
+        };
+
+        conn.send(JSON.stringify(message));
+        msg.value = "";
+        return false;
       };
-
-      conn.send(JSON.stringify(message));
-      msg.value = "";
-      return false;
-    };
   }
 
   // websocket activity for chats
@@ -359,7 +378,7 @@ async function chatEventHandler() {
           messageWrapper.append(newMessage);
           document
             .querySelector("#log-" + msg.Recipient)
-            .append(messageWrapper);
+            .appendChild(messageWrapper);
         } else if (CurrentUser !== msg.Sender) {
           // let senderuser = document.querySelector("#usersLog").children;
           // console.log(senderuser.senderuser.length);
@@ -367,7 +386,30 @@ async function chatEventHandler() {
           newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
           dateDiv.innerHTML = `${msg.Date}`;
           newMessage.appendChild(dateDiv);
+          console.log(
+            document.querySelector("#log-" + msg.Sender).children.length
+          );
           document.querySelector("#log-" + msg.Sender).append(newMessage);
+          console.log(
+            document.querySelector("#log-" + msg.Sender).children.length
+          );
+          // let log = document.querySelector("#log-" + msg.Sender);
+          // log.insertBefore(newMessage, log.firstChild);
+          let allChatbox = Array.from(document.querySelectorAll(".chat-modal"));
+          allChatbox.forEach((element) => {
+            let chatBoxId = "chat-modal-" + msg.Sender;
+            if (chatBoxId == element.id) {
+              // NOTIFICATION to show while already being online and receiving new message
+              if (element.style.display == "none") {
+                element.classList.add("notification");
+                // let notifdiv = createElement("div");
+                // notifdiv.className = "notif";
+                // chatBoxId.appendChild(notifdiv);
+                // notifdiv.style.visibility = visible;
+                // alert("NOTIFICATION");
+              }
+            }
+          });
         }
       }
 
@@ -381,7 +423,7 @@ async function chatEventHandler() {
         if (CurUserNoti != null) {
           for (let k = 0; k < CurUserNoti.length; k++) {
             if (messages[i] == CurUserNoti[k].notificationsender) {
-              alert("notification", messages[i]);
+              // alert("notification", messages[i]);
             }
           }
         }
