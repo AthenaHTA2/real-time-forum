@@ -219,7 +219,7 @@ async function chatEventHandler() {
     let messageHtml = document.createElement("div");
     messageHtml.className = "messages-" + item.innerHTML;
     let messageHtml2 = document.createElement("div");
-    messageHtml2.className = "message-content";
+    messageHtml2.className = "messages-content";
     messageHtml2.id = "log-" + item.innerHTML;
     messageHtml.append(messageHtml2);
     let messageBox = document.createElement("div");
@@ -271,7 +271,9 @@ async function chatEventHandler() {
           messageBubble.className = "sender";
           messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
           let bubbleWrapper = document.createElement("div");
-          bubbleWrapper.className = "messageWrapper";
+          (bubbleWrapper.classList.add = "messageWrapper"),
+            "messages-content",
+            "sender";
           dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
           messageBubble.appendChild(dateDiv);
           bubbleWrapper.append(messageBubble);
@@ -342,7 +344,7 @@ async function chatEventHandler() {
 
       if (IsJsonString(msg)) {
         msg = JSON.parse(msg);
-        console.log(msg)
+        console.log(msg);
         let messageWrapper = document.createElement("div");
         messageWrapper.className = "messageWrapper";
         let newMessage = document.createElement("div");
@@ -559,7 +561,7 @@ function ChatReturn() {
   let chat = document.querySelector(".chat-private");
   chat.style.visibility = "hidden";
 
-  let chosenChatbox = Array.from(document.querySelectorAll(".chat-modal"))
+  let chosenChatbox = Array.from(document.querySelectorAll(".chat-modal"));
   if (chosenChatbox != null) {
     chosenChatbox.forEach((element) => {
       element.style.display = "none";
