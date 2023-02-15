@@ -575,15 +575,20 @@ Chat
   color: rgb(148, 221, 37);
   font-weight: bolder;
   text-transform: uppercase;
+  text-align: justify;
 }
 
 .offlineUser {
   color: gray;
   text-transform: uppercase;
+  text-align: justify;
 }
 
 .notification {
   background-image: url("/css/img/newmessage.png");
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: auto;
 }
 /*--------------------
   Message Box

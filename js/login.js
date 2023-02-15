@@ -199,14 +199,10 @@ async function chatEventHandler() {
 
     //notification after logging in if new messages are present
     if (CurUserNoti != null) {
-
       for (let i = 0; i < CurUserNoti.length; i++) {
         if (item.innerHTML == CurUserNoti[i].notificationsender) {
+          let notiItem = CurUserNoti[i].notificationsender;
           item.classList.add("notification");
-          // notifdiv = createElement("div");
-          // notifdiv.className = "notif";
-          // chatBoxId.appendChild(notifdiv);
-          // notifdiv.style.visibility = visible;
 
           // notyf.success("Logged in");
         }
@@ -313,6 +309,9 @@ async function chatEventHandler() {
       h2.innerHTML = "Messaging - " + item.innerHTML;
 
       // if condition for removing notification
+      if (item.classList.contains("notification")) {
+        item.classList.remove("notification");
+      }
     };
   }
 
@@ -402,11 +401,6 @@ async function chatEventHandler() {
               // NOTIFICATION to show while already being online and receiving new message
               if (element.style.display == "none") {
                 element.classList.add("notification");
-                // let notifdiv = createElement("div");
-                // notifdiv.className = "notif";
-                // chatBoxId.appendChild(notifdiv);
-                // notifdiv.style.visibility = visible;
-                // alert("NOTIFICATION");
               }
             }
           });
@@ -420,6 +414,7 @@ async function chatEventHandler() {
       for (var i = 1; i < messages.length; i++) {
         var item = document.createElement("div");
         item.innerHTML = messages[i];
+        //
         if (CurUserNoti != null) {
           for (let k = 0; k < CurUserNoti.length; k++) {
             if (messages[i] == CurUserNoti[k].notificationsender) {
