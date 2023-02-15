@@ -310,6 +310,15 @@ async function chatEventHandler() {
 
       // if condition for removing notification
       if (item.classList.contains("notification")) {
+        // object to message to send to front end
+        let notification = {
+          NotificationSender: item.innerHTML,
+          NotificationRecipient: CurrentUser,
+          NotificationSeen: "seen",
+        };
+
+        conn.send(JSON.stringify(notification));
+
         item.classList.remove("notification");
       }
     };
@@ -414,7 +423,8 @@ async function chatEventHandler() {
       for (var i = 1; i < messages.length; i++) {
         var item = document.createElement("div");
         item.innerHTML = messages[i];
-        //
+
+        //! CHECK: IF NEEDED---------------------------------
         if (CurUserNoti != null) {
           for (let k = 0; k < CurUserNoti.length; k++) {
             if (messages[i] == CurUserNoti[k].notificationsender) {
@@ -422,6 +432,8 @@ async function chatEventHandler() {
             }
           }
         }
+        // !--------------------------------------------
+
         //if message is a list of chat members, it begins with a space
         if (messages[0] == " ") {
           if (i < messages.length) {

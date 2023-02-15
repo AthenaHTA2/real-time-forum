@@ -107,6 +107,7 @@ type Notification struct {
 	NotificationSender string `json:"notificationsender"`
 	NotificationRecipient string `json:"notificationrecipient"`
 	NotificationCount int `json:"notificationcount"`
+	NotificationSeen string `json:"notificationseen"`
 }
 
 type NotificationCheck struct {

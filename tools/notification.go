@@ -42,19 +42,16 @@ fmt.Println(dm)
 
 
 
-func RemoveNotification(n Notification) error{
-	stmt, err := sqldb.DB.Prepare("DELETE * FROM Notifications WHERE notificationID = ? ")
+func RemoveNotification(n Notification) {
+	stmt, err := sqldb.DB.Prepare("DELETE FROM Notifications WHERE sender = ? AND recipient = ?")
 	if err != nil {
 		fmt.Println("Error removing notification from DB")
-		return err
 	}
 	defer stmt.Close()
-	stmt.Exec(n.NotificationID)
+	stmt.Exec(n.NotificationSender,n.NotificationRecipient)
 	if err != nil {
 		fmt.Println("Error deleting notification: ", err)
-		return err
 	}
-	return nil
 }
 
 func GetAllNotificationForCurrentUser(currentUser string) []Notification {

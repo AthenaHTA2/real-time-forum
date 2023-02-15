@@ -50,20 +50,28 @@ func (h *Hub) Run() {
 		case message := <-h.Broadcast:
 			var directmsg tools.Message
 			json.Unmarshal(message, &directmsg)
-	
+		if directmsg.Content == "" {
+				var notifseen tools.Notification
+				json.Unmarshal(message, &notifseen)
+
+				tools.RemoveNotification(notifseen)
+		
+			} else {
+							
 			//stores a new chat
 			chatHistoryVal := tools.CheckForChatHistory(directmsg)
 			if !chatHistoryVal.ChatExists{
 				tools.StoreChat(directmsg)
 			}
-
+			
 			//stores new messages
+			
 			msgHistroryVal := tools.CheckForChatHistory(directmsg)
 			if msgHistroryVal.ChatExists{
 				directmsg.ChatID = msgHistroryVal.ChatID
 				tools.StoreMessage(directmsg)
 			}
-
+			
 			// inserting notification into DB, by checking for existing notifications if any
 			newNotif := tools.CheckNotificationExists(directmsg)
 			fmt.Println(newNotif)
@@ -73,8 +81,10 @@ func (h *Hub) Run() {
 				tools.AddNotification(directmsg)
 			}
 
-			for client := range h.Clients {
+			
 
+			for client := range h.Clients {
+				
 				if (client == directmsg.Recipient) || (client == directmsg.Sender) {
 					// fmt.Println()
 					select {
@@ -86,6 +96,7 @@ func (h *Hub) Run() {
 				}
 			}
 		}
+	}
 	}
 }
 
