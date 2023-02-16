@@ -19,6 +19,11 @@ import (
 //Populate the LoginData struct, validate user password,
 //generate cookie data and upload these into database 'Sessions' table
 func Login(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == "GET" {
+		w.Write([]byte("No."))
+		return
+	}
 	var logData LoginData
 
 	loginD, err := io.ReadAll(r.Body)
@@ -37,11 +42,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// retrieve password from db to compare (hash) with user supplied password's hash
 	var hash string
+
 	stmt := "SELECT passwordhash FROM Users WHERE nickName = ? OR email = ?"
 	row := sqldb.DB.QueryRow(stmt, username, username)
 	err2 := row.Scan(&hash)
-
-
 	// ERROR: 1. returns error if username or email is not found
 	if err2 != nil {
 
@@ -59,11 +63,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// ERROR: 2. returns error if password hash dont match with stored one => user details do not match
 	if comparePass != nil {
 		if((comparePass.Error()) == "crypto/bcrypt: hashedPassword is not the hash of the given password"){
+			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("ERROR: please enter correct password"))
 			return
 		}
 
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("ERROR: please check password"))
 		fmt.Println("Error from comparing 'passwordhash' with user's pw: ", comparePass)
 		return
 	}
@@ -77,6 +83,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		err3 := rowCurrentUser.Scan(&CurrentUser.UserID, &CurrentUser.FirstName, &CurrentUser.LastName, &CurrentUser.NickName, &CurrentUser.Age, &CurrentUser.Gender, &CurrentUser.Email, &CurrentUser.Password)
 		if err3 != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("ERROR"))
 			fmt.Println("error with currentUser", err3)
 			// fmt.Println("error accessing DB")
 			return
@@ -89,6 +96,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		// ERROR: 3. returns error if user already logged in elsewhere
 		if err3 != nil { 
 			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("ERROR"))
 			fmt.Println("already logged in: ", err3)
 			return
 		}
@@ -114,7 +122,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		user_session := Cookie{cookieNm, sessionToken, expiresAt}
 		fmt.Println("Values in 'Cookie' struct :", user_session)
 		
-		insertsessStmt, err4 := sqldb.DB.Prepare("INSERT INTO Sessions (userID, cookieName, cookieValue) VALUES (?, ?, ?);")
+		insertsessStmt, err4 := sqldb.DB.Prepare(`INSERT INTO Sessions (userID, cookieName, cookieValue) VALUES (?, ?, ?)`)
 		if err4 != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Println("err4 with inserting session:", err4)
@@ -128,6 +136,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		marshalledUser, err := json.Marshal(CurrentUser)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 
 		w.WriteHeader(http.StatusOK)

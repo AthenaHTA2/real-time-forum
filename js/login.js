@@ -2,12 +2,8 @@ let LoginData;
 let user;
 let CurrentUser;
 let CurUserNoti;
-let notifdiv;
 let today = Date.now();
 let date = new Date(today);
-
-// Create an instance of Notyf
-var notyf = new Notyf();
 
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
@@ -56,7 +52,6 @@ LoginBtn.onclick = (e) => {
       console.log(response);
       if (response.status == 200) {
         console.log("successful login");
-        notyf.success("Logged in");
         successfulLogin();
         chatEventHandler();
         return response.text();
@@ -185,8 +180,9 @@ async function chatEventHandler() {
   // TODO: 1. NOTIFICATIONS : ADD (add notifictions if user is online but chat is not open, or user is offline),
   // TODO:                    DISPLAY(check notification, get notication),
   // TODO:                    DELETE(remove notification)
-  // TODO: 2. using THROTTLE / DEBOUNCE on scrolling event to display 10 message in reverse order
-  // TODO: 3. arrange users with chat(according to most recent descending order)
+  // TODO: 2. **get ONLINE USERS list updated in real time
+  // TODO: 3. using THROTTLE / DEBOUNCE on scrolling event to display 10 message in reverse order
+  // TODO: 4. arrange users with chat(according to most recent descending order)
   function AppendUser(item) {
     console.log(item.innerHTML);
     var doScroll =
@@ -203,11 +199,11 @@ async function chatEventHandler() {
         if (item.innerHTML == CurUserNoti[i].notificationsender) {
           let notiItem = CurUserNoti[i].notificationsender;
           item.classList.add("notification");
-
-          // notyf.success("Logged in");
         }
       }
     }
+
+    //making individual chat-modals for all users
     let chatModal = document.createElement("div");
     chatModal.className = "chat-modal";
     console.log(item.innerHTML);
@@ -254,12 +250,10 @@ async function chatEventHandler() {
     console.log("append", chatModal);
     usersLog.appendChild(item);
     item.innerHTML = item.innerHTML;
+
     if (doScroll) {
       usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
     }
-    // opening private chat window on clicking on selected users
-
-    // Show main chat window
 
     // **filter** and append correct messages to chat window
 
@@ -301,6 +295,8 @@ async function chatEventHandler() {
         // document.querySelector(".messages-content").append(messageBubble);
       }
     });
+
+    // opening private chat window on clicking on selected users
     item.onclick = () => {
       chat.style.visibility = "visible";
       let chosenId = "#chat-modal-" + item.innerHTML;
@@ -310,15 +306,13 @@ async function chatEventHandler() {
 
       // if condition for removing notification
       if (item.classList.contains("notification")) {
-        // object to message to send to front end
+        // object of notification to send to front end
         let notification = {
           NotificationSender: item.innerHTML,
           NotificationRecipient: CurrentUser,
           NotificationSeen: "seen",
         };
-
         conn.send(JSON.stringify(notification));
-
         item.classList.remove("notification");
       }
     };
@@ -343,7 +337,7 @@ async function chatEventHandler() {
           return false;
         }
 
-        // object to message to send to front end
+        // object with message to send to front end
         let message = {
           Sender: CurrentUser,
           Recipient: item.innerHTML,
@@ -388,8 +382,6 @@ async function chatEventHandler() {
             .querySelector("#log-" + msg.Recipient)
             .appendChild(messageWrapper);
         } else if (CurrentUser !== msg.Sender) {
-          // let senderuser = document.querySelector("#usersLog").children;
-          // console.log(senderuser.senderuser.length);
           newMessage.className = "recipient";
           newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
           dateDiv.innerHTML = `${msg.Date}`;
@@ -401,15 +393,22 @@ async function chatEventHandler() {
           console.log(
             document.querySelector("#log-" + msg.Sender).children.length
           );
-          // let log = document.querySelector("#log-" + msg.Sender);
-          // log.insertBefore(newMessage, log.firstChild);
+
           let allChatbox = Array.from(document.querySelectorAll(".chat-modal"));
           allChatbox.forEach((element) => {
             let chatBoxId = "chat-modal-" + msg.Sender;
             if (chatBoxId == element.id) {
               // NOTIFICATION to show while already being online and receiving new message
               if (element.style.display == "none") {
-                element.classList.add("notification");
+                var newitem = document.getElementById("usersLog").children;
+                var searchitem = msg.Sender;
+                var newnotif;
+                for (var i = 0; i < newitem.length; i++) {
+                  if (item[i].textContent == searchitem) {
+                    newnotif = newitem[i];
+                    newnotif.classList.add("notification");
+                  }
+                }
               }
             }
           });
@@ -417,22 +416,11 @@ async function chatEventHandler() {
       }
 
       // formatting message
-
       var messages = evt.data.split("\n");
       console.log(messages, messages.length);
       for (var i = 1; i < messages.length; i++) {
         var item = document.createElement("div");
         item.innerHTML = messages[i];
-
-        //! CHECK: IF NEEDED---------------------------------
-        if (CurUserNoti != null) {
-          for (let k = 0; k < CurUserNoti.length; k++) {
-            if (messages[i] == CurUserNoti[k].notificationsender) {
-              // alert("notification", messages[i]);
-            }
-          }
-        }
-        // !--------------------------------------------
 
         //if message is a list of chat members, it begins with a space
         if (messages[0] == " ") {
