@@ -1054,7 +1054,7 @@ Chat
 .messages-content {
   display: flex;
   flex-direction: column;
-  height: 392px;
+  height: 360px;
   clear: both;
   padding: 6px 10px 7px;
   border-radius: 10px 10px 10px 0;
