@@ -386,7 +386,7 @@ async function chatEventHandler() {
     if(chatScroll.scrollTop == 0){
       //show next ten or less messages when scrolling to the top
       let msgContainer = document.querySelector(".messages-content");
-      MsgsInChat = msgContainer.children.length -1;
+      MsgsInChat = msgContainer.children.length;
       console.log("the number of msgs in chat:---->",MsgsInChat-1);
       console.log("length of history of messages:---->",MessagesForDisplay.length)
      /* if(MsgsInChat -1 == MessagesForDisplay.length){
@@ -395,7 +395,7 @@ async function chatEventHandler() {
       //find array index for the most recent message yet to be printed
       //adding one here as the 'slice' method excludes the last index
       let cutoffIndex = MessagesForDisplay.length +1 - MsgsInChat
-      console.log("1st index for new batch of messages______:",cutoffIndex)
+      console.log("Scroll event - 1st index for new batch of messages______:",cutoffIndex)
       //make a new slice that only includes messages yet to be printed
       let msgsToPrint = MessagesForDisplay.slice(0,cutoffIndex);
       console.log("the updated array of messages:~~~~~",msgsToPrint)
@@ -407,9 +407,8 @@ async function chatEventHandler() {
 
 function addTen (messages, limit){
       //count the number of messages inside the chat window
-      //and subtract one to account for the chat title
       let msgContainer = document.querySelector(".messages-content");
-      MsgsInChat = msgContainer.children.length -1;
+      MsgsInChat = msgContainer.children.length;
       console.log("the number of msgs in chat section:---->",MsgsInChat-1);
       console.log("total number of chat msgs:---->",MessagesForDisplay.length);
       //let availableMsgs = messages.length- MsgsInChat;
@@ -420,7 +419,7 @@ function addTen (messages, limit){
       let arrayPosition = messages.length-1;
       console.log("array index of first message to prepend:---->",arrayPosition)
   //do nothing if all messages have been printed
-      if((arrayPosition == 0 && messages.length >= 1)|| messages.length == 0 || MessagesForDisplay.length == MsgsInChat){
+      if((arrayPosition == 0 && messages.length > 1)|| arrayPosition < 0 || messages.length == 0 || MessagesForDisplay.length <= MsgsInChat){
     //if(!(arrayPosition == 0 && messages.length >= 1)){
     console.log("addTen function exits here")
       return
