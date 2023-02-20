@@ -409,20 +409,15 @@ async function chatEventHandler() {
 function addTen (messages, limit){
       //count the number of messages inside the chat window
       //in case user added a message before scrolling to top
-      //let msgContainer = document.querySelector(".messages-content");
       MsgsInChat = ParentDiv.children.length -1 - CountNewMessages;//to exclude the messages added just now
       console.log("the number of msgs in chat section:---->",MsgsInChat);
       console.log("total number of chat msgs:---->",MessagesForDisplay.length);
-      //let availableMsgs = messages.length- MsgsInChat;
-      //console.log("the number of msgs available to be added:---->",availableMsgs);
       let msgsToAdd = Math.min(limit,messages.length);
       console.log("the number of msgs to add:---->",msgsToAdd);
-      //let arrayPosition = messages.length-msgsToAdd;
       let arrayPosition = messages.length-1;
       console.log("array index of first message to prepend:---->",arrayPosition)
     //do nothing if all messages have been printed
       if((arrayPosition == 0 && messages.length > 1)|| arrayPosition < 0 || messages.length == 0 || MessagesForDisplay.length <= MsgsInChat){
-    //if(!(arrayPosition == 0 && messages.length >= 1)){
     console.log("addTen function exits here")
       return
   }else{  
@@ -446,21 +441,6 @@ function addTen (messages, limit){
                     bubbleWrapper.append(messageBubble);
                     ParentDiv.prepend(bubbleWrapper)
                     if(m==0){return}
-                    //check if there are no child nodes in chat's parent node
-                    /*if(ParentDiv.children.length -1 <= 10){
-                      console.log("number of children in 'chat' expected to be 0:++++",ParentDiv.children.length -1)
-                      //add message to chat
-                      ParentDiv.append(bubbleWrapper);
-                    }else{
-                      //add message on top of existing chat messages
-                      ParentDiv.prepend(bubbleWrapper);
-                    }*/
-                    
-                  //to avoid printing an empty message
-                /*} else if(messages[m].recipient === undefined || messages[m].recipient === null ){
-                  console.log("entering the 'else' section, where recipient or sender are 'undefined'")
-                  console.log("the sender is: &&&& ",messages[m].sender ,"the receiver is: ++++: ",messages[m].recipient)
-                  continue*/
                 }  
                 
                 
@@ -474,14 +454,6 @@ function addTen (messages, limit){
                     messageBubble.appendChild(dateDiv);
                     ParentDiv.prepend(messageBubble);
                     if(m==0){return}
-                    //check if there are no child nodes in chat's parent node
-                    /*if(ParentDiv.children.length -1 == 0){
-                      //add message to chat
-                      ParentDiv.append(messageBubble);
-                    }else{
-                      //add message on top of existing chat messages
-                      ParentDiv.prepend(messageBubble);
-                    }*/  
             }
             MsgsInChat = MsgsInChat +  msgsToAdd
   }
