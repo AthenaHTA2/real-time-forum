@@ -3,6 +3,7 @@ package tools
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"rtforum/sqldb"
 	"time"
@@ -83,6 +84,12 @@ func GetMessages(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsn)
 
+}
+func UpdateChatTable(dm Message){
+	fmt.Println("updating",dm)
+	rows, err := sqldb.DB.Prepare("UPDATE Chats SET creationDate =?  WHERE (user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?);"); if err != nil {log.Fatal(err)}
+	defer rows.Close()
+	rows.Exec(Date,dm.Recipient,dm.Sender,dm.Sender,dm.Recipient)
 }
 
 // https://stackoverflow.com/questions/43367505/function-in-go-to-execute-select-query-on-database-and-return-json-output

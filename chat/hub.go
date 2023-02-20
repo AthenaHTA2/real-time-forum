@@ -62,6 +62,8 @@ func (h *Hub) Run() {
 			chatHistoryVal := tools.CheckForChatHistory(directmsg)
 			if !chatHistoryVal.ChatExists{
 				tools.StoreChat(directmsg)
+				}else {
+				tools.UpdateChatTable(directmsg)
 			}
 			
 			//stores new messages

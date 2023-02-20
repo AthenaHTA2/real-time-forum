@@ -55,7 +55,9 @@ func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 
 	//put database query result in registeredUsers
 	registeredUsers := tools.GetAllUsers()
-	err := c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
+
+ 
+  	err := c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
 	if err != nil {
 		// The hub closed the channel.
 		c.Conn.WriteMessage(websocket.CloseMessage, []byte{})

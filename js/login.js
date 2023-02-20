@@ -417,13 +417,12 @@ async function chatEventHandler() {
 
       // formatting message
       var messages = evt.data.split("\n");
-      console.log(messages, messages.length);
       for (var i = 1; i < messages.length; i++) {
         var item = document.createElement("div");
         item.innerHTML = messages[i];
 
         //if message is a list of chat members, it begins with a space
-        if (messages[0] == " ") {
+        if (messages[0] == "") {
           if (i < messages.length) {
             if (messages[i].includes("-online")) {
               messages[i] = messages[i].replace("-online", "");
