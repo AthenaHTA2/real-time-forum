@@ -304,11 +304,15 @@ window.onload = function () {
   refreshPosts();
   ChatReturn()
 }
+//============== Chat scroll variables ======================
 //private messages history array
 let MessagesForDisplay = []
-let MsgsInChat
+var CountNewMessages = 0;
+let MsgsInChat;
 // Get a reference to chat's parent node
 const ParentDiv = document.querySelector(".messages-content");
+//============== Chat scroll variables ======================
+
 async function chatEventHandler() {
   var conn;
   //redundant code commented out by gowseny.
@@ -385,13 +389,10 @@ async function chatEventHandler() {
   chatScroll.addEventListener("scroll" ,function(evt){
     if(chatScroll.scrollTop == 0){
       //show next ten or less messages when scrolling to the top
-      let msgContainer = document.querySelector(".messages-content");
-      MsgsInChat = msgContainer.children.length;
-      console.log("the number of msgs in chat:---->",MsgsInChat-1);
+      //subtracting any new messages in order to keep chat history constant
+      MsgsInChat = ParentDiv.children.length - CountNewMessages;
+      console.log("the number of msgs in chat:---->",MsgsInChat-1);//<======== remove -1 here?
       console.log("length of history of messages:---->",MessagesForDisplay.length)
-     /* if(MsgsInChat -1 == MessagesForDisplay.length){
-        return
-      }*/
       //find array index for the most recent message yet to be printed
       //adding one here as the 'slice' method excludes the last index
       let cutoffIndex = MessagesForDisplay.length +1 - MsgsInChat
@@ -407,9 +408,10 @@ async function chatEventHandler() {
 
 function addTen (messages, limit){
       //count the number of messages inside the chat window
-      let msgContainer = document.querySelector(".messages-content");
-      MsgsInChat = msgContainer.children.length;
-      console.log("the number of msgs in chat section:---->",MsgsInChat-1);
+      //in case user added a message before scrolling to top
+      //let msgContainer = document.querySelector(".messages-content");
+      MsgsInChat = ParentDiv.children.length -1 - CountNewMessages;//to exclude the messages added just now
+      console.log("the number of msgs in chat section:---->",MsgsInChat);
       console.log("total number of chat msgs:---->",MessagesForDisplay.length);
       //let availableMsgs = messages.length- MsgsInChat;
       //console.log("the number of msgs available to be added:---->",availableMsgs);
@@ -418,7 +420,7 @@ function addTen (messages, limit){
       //let arrayPosition = messages.length-msgsToAdd;
       let arrayPosition = messages.length-1;
       console.log("array index of first message to prepend:---->",arrayPosition)
-  //do nothing if all messages have been printed
+    //do nothing if all messages have been printed
       if((arrayPosition == 0 && messages.length > 1)|| arrayPosition < 0 || messages.length == 0 || MessagesForDisplay.length <= MsgsInChat){
     //if(!(arrayPosition == 0 && messages.length >= 1)){
     console.log("addTen function exits here")
@@ -548,12 +550,18 @@ function addTen (messages, limit){
         newMessage.appendChild(dateDiv);
         messageWrapper.append(newMessage);
         ParentDiv.append(messageWrapper);
+        CountNewMessages ++
+        //set chat scroll-bar at bottom by default
+        chatScroll.scrollTop = chatScroll.scrollHeight;
       } else if (CurrentUser == msg.Recipient) {
         newMessage.className = "recipient";
         newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
         dateDiv.innerHTML = `${msg.Date}`;
         newMessage.appendChild(dateDiv);
         ParentDiv.append(newMessage);
+        CountNewMessages ++
+        //set chat scroll-bar at bottom by default
+        chatScroll.scrollTop = chatScroll.scrollHeight;
       }else if (msg.Recipient == undefined || msg.Recipient == null || msg.Sender == undefined || msg.Sender == null){
         //don't print 'undefined' message
       }
