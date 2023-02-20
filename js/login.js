@@ -395,10 +395,10 @@ async function chatEventHandler() {
       console.log("the number of msgs in chat:---->",MsgsInChat);
       console.log("length of history of messages:---->",MessagesForDisplay.length)
       //find array index for the most recent message yet to be printed
-      //adding one here as the 'slice' method excludes the last index
       let cutoffIndex = MessagesForDisplay.length - MsgsInChat -1
       console.log("Scroll event - 1st index for new batch of messages______:",cutoffIndex)
       //make a new slice that only includes messages yet to be printed
+      //adding one here as the 'slice' method excludes the last index
       let msgsToPrint = MessagesForDisplay.slice(0,cutoffIndex +1);
       console.log("the updated array of messages:~~~~~",msgsToPrint)
       addTen(msgsToPrint, 10)
