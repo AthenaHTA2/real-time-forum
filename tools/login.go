@@ -13,11 +13,19 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+
 //function for login
 //Populate the LoginData struct, validate user password,
 //generate cookie data and upload these into database 'Sessions' table
 
 func Login(w http.ResponseWriter, r *http.Request) {
+
+
+	if r.Method == "GET" {
+		w.Write([]byte("No."))
+		return
+	}
+
 	var loginData LoginData
 
 	loginD, err := io.ReadAll(r.Body)
@@ -57,12 +65,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	//returns nil on success
 	if comparePass != nil {
 		if (comparePass.Error()) == "crypto/bcrypt: hashedPassword is not the hash of the given password" {
+			w.WriteHeader(http.StatusBadRequest)
 			fmt.Println("on track2")
 			w.Write([]byte("ERROR: please enter correct password"))
 			return
 		}
 		// convey status to browser
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("ERROR: please check password"))
 		fmt.Println("Error from comparing 'passwordhash' with user's pw: ", comparePass)
 		return
 	}
@@ -75,6 +85,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		err3 := rowCurrentUser.Scan(&CurrentUser.UserID, &CurrentUser.FirstName, &CurrentUser.LastName, &CurrentUser.NickName, &CurrentUser.Age, &CurrentUser.Gender, &CurrentUser.Email, &CurrentUser.Password)
 		if err3 != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("ERROR"))
 			fmt.Println("error with currentUser", err3)
 			// fmt.Println("error accessing DB")
 			return
@@ -88,6 +99,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		if err3 != nil {
 			// StatusBadRequest = 400
 			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("ERROR"))
 			// fmt.Println("You are already logged in 🧐")
 			fmt.Println("already logged in: ", err3)
 			return
@@ -112,7 +124,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		user_session := Cookie{cookieNm, sessionToken, expiresAt}
 		fmt.Println("++++++++++===========================Values in 'Cookie' struct :", user_session)
 		
-		insertsessStmt, err4 := sqldb.DB.Prepare("INSERT INTO Sessions (userID, cookieName, cookieValue) VALUES (?, ?, ?);")
+		insertsessStmt, err4 := sqldb.DB.Prepare(`INSERT INTO Sessions (userID, cookieName, cookieValue) VALUES (?, ?, ?)`)
 		if err4 != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!err4 with inserting session:", err4)
@@ -128,17 +140,19 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	marshalledUser, err := json.Marshal(CurrentUser)
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(marshalledUser))
-	GetAllUsers()
+	// GetAllUsers()
 
 }
+
 func GetAllUsers() []byte {
 	//space at start of websocket message signals that this is the list of users
 	allUsers := " "
-	rows, errUsr := sqldb.DB.Query("SELECT DISTINCT nickName FROM Users ORDER BY nickName ASC;")
+	rows, errUsr := sqldb.DB.Query("SELECT DISTINCT nickName FROM Users ORDER BY email ASC;")
 	if errUsr != nil {
 		fmt.Println("Error retrieving users from database:  line 147\n", errUsr)
 		return nil
@@ -158,6 +172,34 @@ func GetAllUsers() []byte {
 	return []byte(allUsers)
 }
 
+func GetAllOnlineUsers()[]string{
+	var AllOnlineUsers []string
+	rows, errUsr := sqldb.DB.Query("SELECT userID FROM Sessions;")
+	if errUsr != nil {
+		fmt.Println("Error retrieving users from database: \n", errUsr)
+		return nil
+	}
+	for rows.Next() {
+		var tempUser int
+		var tempUserNickname string
+		err := rows.Scan(&tempUser)
+		if err != nil {
+			fmt.Println("err: ", err)
+		}
+		rows2 ,err2 := sqldb.DB.Query("SELECT nickName FROM Users WHERE userID=?;", tempUser)
+		if err2 != nil {
+			log.Fatal(err)
+		}
+		defer rows2.Close()
+		for rows2.Next(){
+			rows2.Scan(&tempUserNickname)
+			AllOnlineUsers = append(AllOnlineUsers, tempUserNickname)
+		}
+		}
+	rows.Close()
+	return AllOnlineUsers
+}
+
 //Retrieve from db all posts that will be shown on R-T-F front page
 func AllPosts() []byte {
 	var postData post
@@ -173,33 +215,4 @@ func AllPosts() []byte {
 	fmt.Println("postItem: ", postItem)
 	onePost := []byte(postItem)
 	return onePost
-}
-
-func GetAllOnlineUsers()[]string{
-	
-
-	var AllOnlineUsers []string
-	rows, errUsr := sqldb.DB.Query("SELECT userID FROM Sessions;")
-	if errUsr != nil {
-		fmt.Println("Error retrieving users from database: \n", errUsr)
-		return nil
-	}
-	for rows.Next() {
-		var tempUser int
-		var tempUserNickname string
-		err := rows.Scan(&tempUser)
-		if err != nil {
-			fmt.Println("err: ", err)
-		}
-		rows2 ,err2 := sqldb.DB.Query("SELECT nickName FROM Users WHERE userID=?;", tempUser)
-		if err2 != nil {log.Fatal(err)}
-		defer rows2.Close()
-		for rows2.Next(){
-rows2.Scan(&tempUserNickname)
-AllOnlineUsers = append(AllOnlineUsers, tempUserNickname)
-		}
-		}
-	rows.Close()
-	return AllOnlineUsers
-
 }

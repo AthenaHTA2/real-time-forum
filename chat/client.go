@@ -1,5 +1,4 @@
 package chat
-
 import (
 	"bytes"
 	"fmt"
@@ -10,7 +9,6 @@ import (
 	"time"
 	"github.com/gorilla/websocket"
 )
-
 const (
 	// Time allowed to write a message to the peer.
 	writeWait = 10 * time.Second
@@ -21,17 +19,14 @@ const (
 	// Maximum message size allowed from peer.
 	maxMessageSize = 512
 )
-
 var (
 	newline = []byte{'\n'}
 	space   = []byte{' '}
 )
-
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 }
-
 // Client is a middleman between the websocket connection and the hub.
 type Client struct {
 	Hub *Hub
@@ -42,7 +37,6 @@ type Client struct {
 	// Buffered channel of outbound messages.
 	Send chan []byte
 }
-
 //sends the registeredUsers to the ws client as a byte slice.
 func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 	//put database query result in registeredUsers
@@ -58,10 +52,7 @@ func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 		return
 	}
 	x:= strings.Split(string(registeredUsers), "\n")
-	// fmt.Println(len(x))
-	// fmt.Println(x[0])
-	// fmt.Println("first", x[1])
-	// fmt.Println("ALl Session table: ", tools.GetAllOnlineUsers())
+	
 	// matching online users from sessions table and adding online flag to segregate later in JS
 	onlineUserNames:= tools.GetAllOnlineUsers()
 	for i:=1; i < len(x); i++ {
@@ -86,7 +77,6 @@ func (c *Client) SendRegisteredUsers(conn *websocket.Conn) {
 		return
 	}
 }
-
 // msgToHub go routine reads messages from the webSocket connection and sends them to the hub
 // The application runs msgToHub in a per-connection goroutine. The application ensures that there is at most one reader on a connection by executing all reads from this goroutine.
 // msgToHub == readPump
@@ -110,7 +100,6 @@ func (c *Client) msgToHub() {
 		c.Hub.Broadcast <- message
 	}
 }
-
 // A goroutine running msgFromHub is started for each connection.
 // msgFromHub go routine reads messages from client's 'send' channel and writes them to the websocket connection.
 // msgFromHub == writePump
@@ -151,7 +140,6 @@ func (c *Client) msgFromHub() {
 		}
 	}
 }
-
 // serveWs handles websocket requests from the peer.
 func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)

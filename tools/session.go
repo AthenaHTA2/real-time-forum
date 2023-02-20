@@ -57,12 +57,12 @@ func IsUserAuthenticated(w http.ResponseWriter, u *User) error {
 	//if user is not found in "sessions" db table return err = nil
 	if err := sqldb.DB.QueryRow("SELECT cookieValue FROM Sessions WHERE userID = ?", u.UserID).Scan(&cookieValue); err != nil {
 		fmt.Println("WERE ARE GETTING IT HERE _______________++++===============", cookieValue)
-		w.WriteHeader(http.StatusInternalServerError)
+		// w.WriteHeader(http.StatusInternalServerError)
 		fmt.Println("checking sessions table err:     ", err)
 		return nil
 	}
 	if err := DeleteSession(w, cookieValue); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		// w.WriteHeader(http.StatusInternalServerError)
 		fmt.Println("inside delete sessions:     ", err)
 		return err
 	}

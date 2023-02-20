@@ -5,6 +5,7 @@ import (
 )
 
 func CreateDB() {
+	
 	// user table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Users" (
 				"userID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
@@ -16,6 +17,7 @@ func CreateDB() {
 				"email" TEXT NOT NULL UNIQUE, 
 				"passwordhash" BLOB NOT NULL
 				);`)
+
 	// post table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Posts" ( 
 				"postID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
@@ -28,11 +30,13 @@ func CreateDB() {
 				"cookieID" TEXT NOT NULL,
 				FOREIGN KEY(authorID)REFERENCES users(userID)
 				);`)
+
 	// category table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Category" (
 				"postID" INTEGER REFERENCES post(postID), 
 				"category" TEXT NOT NULL
 				);`)
+
 	// comments table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Comments" ( 
 				"commentID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
@@ -44,6 +48,7 @@ func CreateDB() {
 				FOREIGN KEY(postID)REFERENCES posts(postID),
 				FOREIGN KEY(authorID)REFERENCES users(userID)
 				);`)
+
 	// sessions table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Sessions" ( 
 				"userID" INTEGER NOT NULL,
@@ -61,6 +66,7 @@ func CreateDB() {
 				FOREIGN KEY(user1)REFERENCES Users(nickName),
 				FOREIGN KEY(user2)REFERENCES Users(nickName)
 				);`)
+
 	// MessageHistory table
 	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "MessageHistory" ( 
 				"messageID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -73,4 +79,14 @@ func CreateDB() {
 				FOREIGN KEY(sender)REFERENCES Users(nickName),
 				FOREIGN KEY(recipient)REFERENCES Users(nickName)
 				);`)
+
+				// Notifications table
+	sqldb.DB.Exec(`CREATE TABLE IF NOT EXISTS "Notifications" ( 
+		"notificationID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		"sender" TEXT,
+		"recipient" TEXT,
+		"count" INTEGER,
+		FOREIGN KEY(sender)REFERENCES MessageHistory(sender),
+		FOREIGN KEY(recipient)REFERENCES MessageHistory(recipient)
+		);`)  
 }

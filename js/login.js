@@ -1,10 +1,10 @@
+let LoginData;
 let user;
 let CurrentUser;
-let receiver;
-let LoginData;
-
+let CurUserNoti;
 let today = Date.now();
 let date = new Date(today);
+
 
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
@@ -80,7 +80,7 @@ LoginBtn.onclick = (e) => {
 
         let userData = JSON.parse(rsp);
         CurrentUser = userData.NickName;
-
+        CurUserNoti = userData.Notifications;
         showProfile(userData)
 
         var successlogin = document.getElementById("current-user");
@@ -299,16 +299,14 @@ fetch("/logout", configLogout)
 // ====================================================
 window.onload = function () {
   refreshPosts();
-  ChatReturn()
+  // ChatReturn()
 }
-
 async function chatEventHandler() {
-  var conn;
-  //redundant code commented out by gowseny.
-  var log = document.getElementById("log");
-  var usersLog = document.getElementById("usersLog");
 
-  console.log('++++++++++++++++++++++++++++++++++++++++++were are in async function')
+  var conn;
+  var log = document.getElementById("log");
+
+  var usersLog = document.getElementById("usersLog");
 
   let configMsg = {
     method: "POST",
@@ -317,13 +315,18 @@ async function chatEventHandler() {
       Accept: "application/json",
     },
   };
-
   // fetch messages from back end
   let messages = await fetch("/messagesAPI", configMsg);
   messages = await messages.json();
-
-  // TODO: change section to display online and offline users
+  // TODO: 1. NOTIFICATIONS : ADD (add notifictions if user is online but chat is not open, or user is offline),
+  // TODO:                    DISPLAY(check notification, get notication),
+  // TODO:                    DELETE(remove notification)
+  // TODO: 2. **get ONLINE USERS list updated in real time
+  // TODO: 3. using THROTTLE / DEBOUNCE on scrolling event to display 10 message in reverse order
+  // TODO: 4. arrange users with chat(according to most recent descending order)
+  
   function AppendUser(item) {
+    console.log(item.innerHTML);
     var doScroll =
       usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
 
@@ -331,95 +334,168 @@ async function chatEventHandler() {
     if (item.innerHTML === CurrentUser) {
       return;
     }
+    //notification after logging in if new messages are present
+    if (CurUserNoti != null) {
+      for (let i = 0; i < CurUserNoti.length; i++) {
+        if (item.innerHTML == CurUserNoti[i].notificationsender) {
+          let notiItem = CurUserNoti[i].notificationsender; //This variable is not being called anywhere
+          item.classList.add("notification");
+        }
+      }
+    }
 
+    //making individual chat-modals for all users
+    let chatModal = document.createElement("div");
+    chatModal.className = "chat-modal";
+    console.log(item.innerHTML);
+    chatModal.id = "chat-modal-" + item.innerHTML;
+    
+    let chatTitleBox = document.createElement("div");
+    chatTitleBox.className = "chat-title-box-" + item.innerHTML;
+    
+    let but = document.createElement("button");
+    but.setAttribute("value", "closeBtn");
+    but.addEventListener("click", ChatReturn);
+    but.className = "message-close";
+    but.id = "btn-" + item.innerHTML;
+    
+    let h2 = document.createElement("h2");
+    h2.className = "chat-title";
+    h2.id = "recipient-" + item.innerHTML;
+    chatTitleBox.append(but);
+    chatTitleBox.append(h2);
+    
+    let messageHtml = document.createElement("div");
+    messageHtml.className = "messages-" + item.innerHTML;
+    
+    let messageHtml2 = document.createElement("div");
+    messageHtml2.className = "messages-content";
+    messageHtml2.id = "log-" + item.innerHTML;
+    
+    let messageBox = document.createElement("div");
+    messageBox.className = "message-box";
+    messageBox.id = "message-box-" + item.innerHTML;
+    
+    let mesInput = document.createElement("input");
+    mesInput.setAttribute("type", "text");
+    mesInput.id = "msg-" + item.innerHTML;
+    mesInput.className = "message-input";
+    mesInput.setAttribute("placeholder", "Type message...");
+    
+    let but2 = document.createElement("button");
+    but2.className = "message-submit";
+    but2.id = "msg-send-btn-" + item.innerHTML;
+    but2.innerText = "Send";
+    messageBox.append(mesInput);
+    messageBox.append(but2);
+    messageHtml.append(messageHtml2, messageBox);
+    chatModal.append(chatTitleBox, messageHtml);
+    chatModal.style.display = "none";
+    
+    let chat = document.querySelector(".chat-private");
+    chat.append(chatModal);
+    console.log("append", chatModal);
     usersLog.appendChild(item);
+    item.innerHTML = item.innerHTML;
+    
     if (doScroll) {
       usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
     }
+    // **filter** and append correct messages to chat window
+    messages.forEach((message) => {
+      // create new div for message
+      let messageBubble = document.createElement("div");
+      let dateDiv = document.createElement("div");
+      dateDiv.className = "dateDiv";
+
+      // 1. when current user is sender
+      if (
+        message.sender === CurrentUser &&
+        message.recipient === item.innerHTML
+      ) {
+        // add class of sender
+        messageBubble.className = "sender";
+        messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
+        let bubbleWrapper = document.createElement("div");
+        bubbleWrapper.classList.add("messageWrapper"), "sender";
+        dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
+        messageBubble.appendChild(dateDiv);
+        bubbleWrapper.append(messageBubble);
+        // append to child div of main chat window
+        console.log(messageHtml2);
+        messageHtml2.append(bubbleWrapper);
+        // document.querySelector(".messages-content").append(bubbleWrapper);
+      } else if (
+        message.recipient === CurrentUser &&
+        message.sender === item.innerHTML
+      ) {
+        // 2. when current user is recipient
+        // add class of recipient
+        messageBubble.className = "recipient";
+        messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
+        dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
+        messageBubble.appendChild(dateDiv);
+        messageHtml2.append(messageBubble);
+        // document.querySelector(".messages-content").append(messageBubble);
+      }
+    });
     // opening private chat window on clicking on selected users
     item.onclick = () => {
-      receiver = item.innerHTML;
-      // Show main chat window
-      let chat = document.querySelector(".chat-private");
       chat.style.visibility = "visible";
+      let chosenId = "#chat-modal-" + item.innerHTML;
+      let receiverChatbox = document.querySelector(chosenId);
+      receiverChatbox.style.display = "block";
+      h2.innerHTML = "Messaging - " + item.innerHTML;
 
-      let chatfriend = document.querySelector(".chat-title");
-      chatfriend.innerHTML = "Messaging - " + receiver;
-
-      // **filter** and append correct messages to chat window
-      messages.forEach((message) => {
-
-        // create new div for message
-        let messageBubble = document.createElement("div");
-        let dateDiv = document.createElement("div");
-        dateDiv.className = "dateDiv";
-
-        // 1. when current user is sender
-        if (message.sender === CurrentUser && message.recipient === receiver) {
-
-          // add class of sender
-          messageBubble.className = "sender";
-
-          messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
-
-          let bubbleWrapper = document.createElement("div");
-
-          bubbleWrapper.className = "messageWrapper";
-
-          dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
-
-          messageBubble.appendChild(dateDiv);
-
-          bubbleWrapper.append(messageBubble);
-
-          // append to child div of main chat window
-          document.querySelector(".messages-content").append(bubbleWrapper);
-        } else if (
-
-          message.recipient === CurrentUser &&
-          message.sender === receiver
-        ) {
-
-          // 2. when current user is recipient
-          // add class of recipient
-          messageBubble.className = "recipient";
-          messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
-          dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
-          messageBubble.appendChild(dateDiv);
-          document.querySelector(".messages-content").append(messageBubble);
-        }
-      });
+      // if condition for removing notification
+      if (item.classList.contains("notification")) {
+        // object of notification to send to front end
+        let notification = {
+          NotificationSender: item.innerHTML,
+          NotificationRecipient: CurrentUser,
+          NotificationSeen: "seen",
+        };
+        conn.send(JSON.stringify(notification));
+        item.classList.remove("notification");
+      }
     };
   }
 
   // function to send message to backend to be stored into DB
-  document.getElementById("msg-send-btn").onclick = function () {
-
-    var msg = document.getElementById("msg");
-
-    if (!conn) {
-      console.log("no conn");
-      return false;
+  function onclickFun(item) {
+    if (item.innerHTML === CurrentUser) {
+      return;
     }
+    console.log(item.innerHTML);
+    document.getElementById("msg-send-btn-" + item.innerHTML).onclick =
+      
+    function () {
+        var msg = document.getElementById("msg-" + item.innerHTML);
+        
+        if (!conn) {
+          console.log("no conn");
+          return false;
+        }
+        
+        if (!msg.value.trim()) {
+          console.log("no msg value");
+          return false;
+        }
+        
+        // object with message to send to front end
+        let message = {
+          Sender: CurrentUser,
+          Recipient: item.innerHTML,
+          Content: msg.value.trim(),
+          Date: newTime(date.toString()),
+        };
 
-    if (!msg.value.trim()) {
-      console.log("no msg value");
-      return false;
-    }
+        conn.send(JSON.stringify(message));
+        msg.value = "";
+        return false;
+      };
+  }
 
-    // object to message to send to front end
-    let message = {
-      Sender: CurrentUser,
-      Recipient: receiver,
-      Content: msg.value.trim(),
-      Date: newTime(date.toString()),
-    };
-
-    conn.send(JSON.stringify(message));
-    msg.value = "";
-    return false;
-
-  };
   // websocket activity for chats
   if (window["WebSocket"]) {
     conn = new WebSocket("ws://" + document.location.host + "/ws");
@@ -428,43 +504,70 @@ async function chatEventHandler() {
       item.innerHTML = "<b>Connection closed.</b>";
       appendLog(item);
     };
-
     conn.onmessage = function (evt) {
-
       let msg = evt.data;
-
+      
       if (IsJsonString(msg)) {
         msg = JSON.parse(msg);
+        console.log(msg);
+        let messageWrapper = document.createElement("div");
+        messageWrapper.className = "messageWrapper";
+        let newMessage = document.createElement("div");
+        let dateDiv = document.createElement("div");
+        dateDiv.className = "dateDiv";
+        
+        if (CurrentUser === msg.Sender) {
+          newMessage.className = "sender";
+          newMessage.innerHTML = `${"You"}: ${msg.Content}`;
+          dateDiv.innerHTML = `${msg.Date}`;
+          newMessage.appendChild(dateDiv);
+          messageWrapper.append(newMessage);
+          document
+            .querySelector("#log-" + msg.Recipient)
+            .appendChild(messageWrapper);
+        } else if (CurrentUser !== msg.Sender) {
+          newMessage.className = "recipient";
+          newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
+          dateDiv.innerHTML = `${msg.Date}`;
+          newMessage.appendChild(dateDiv);
+          console.log(
+            document.querySelector("#log-" + msg.Sender).children.length
+          );
+          document.querySelector("#log-" + msg.Sender).append(newMessage);
+          console.log(
+            document.querySelector("#log-" + msg.Sender).children.length
+          );
+
+          
+          let allChatbox = Array.from(document.querySelectorAll(".chat-modal"));
+          allChatbox.forEach((element) => {
+            let chatBoxId = "chat-modal-" + msg.Sender;
+            
+            if (chatBoxId == element.id) {
+              // NOTIFICATION to show while already being online and receiving new message
+              if (element.style.display == "none") {
+                var newitem = document.getElementById("usersLog").children;
+                var searchitem = msg.Sender;
+                var newnotif;
+                console.log(item)
+                for (var i = 0; i < newitem.length; i++) {
+                  if (newitem[i].textContent == searchitem) {
+                    newnotif = newitem[i];
+                    newnotif.classList.add("notification");
+                  }
+                }
+              }
+            }
+          });
+        }
       }
-
-      let messageWrapper = document.createElement("div");
-      messageWrapper.className = "messageWrapper";
-      let newMessage = document.createElement("div");
-      let dateDiv = document.createElement("div");
-      dateDiv.className = "dateDiv";
-
+      
       // formatting message
-      if (CurrentUser === msg.Sender) {
-        newMessage.className = "sender";
-        newMessage.innerHTML = `${"You"}: ${msg.Content}`;
-        dateDiv.innerHTML = `${msg.Date}`;
-        newMessage.appendChild(dateDiv);
-        messageWrapper.append(newMessage);
-        document.querySelector(".messages-content").append(messageWrapper);
-      } else if (CurrentUser !== msg.Sender) {
-        newMessage.className = "recipient";
-        newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
-        dateDiv.innerHTML = `${msg.Date}`;
-        newMessage.appendChild(dateDiv);
-        document.querySelector(".messages-content").append(newMessage);
-      }
-
       var messages = evt.data.split("\n");
-
-      for (var i = 0; i < messages.length; i++) {
+      console.log(messages, messages.length);
+      for (var i = 1; i < messages.length; i++) {
         var item = document.createElement("div");
-
-        item.innerText = messages[i];
+        item.innerHTML = messages[i];
         //if message is a list of chat members, it begins with a space
         if (messages[0] == " ") {
           if (i < messages.length) {
@@ -475,8 +578,10 @@ async function chatEventHandler() {
               item.className = "offlineUser";
             }
             item.innerText = messages[i];
-            //print list inside 'usersLog' div
+            //print list of registered users inside 'usersLog' div
             AppendUser(item);
+            console.log("-----------------------");
+            onclickFun(item);
           }
         }
       }

@@ -82,3 +82,15 @@ type ChatHistoryCheck struct {
 	ChatExists bool
 	// ChatHistory []Message
 }
+
+type Notification struct {
+	NotificationID int
+	NotificationSender string `json:"notificationsender"`
+	NotificationRecipient string `json:"notificationrecipient"`
+	NotificationCount int `json:"notificationcount"`
+	NotificationSeen string `json:"notificationseen"`
+}
+type NotificationCheck struct {
+	NotificationID int
+	NotifExists bool
+}

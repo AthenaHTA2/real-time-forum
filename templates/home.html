@@ -11,6 +11,10 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
   />
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css"
+/>
   <script
   src="https://kit.fontawesome.com/3c167d6bd6.js"
   crossorigin="anonymous"
@@ -18,6 +22,7 @@
 </head>
 
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
         <!-- 
 ===========================================================================================================
                                LEFT MAIN NAV LINK                                                    
@@ -106,37 +111,16 @@
             <a id="Select User" class="loggedInUsers__link" data-link style="display:none"
               ><strong>𝕄𝔼𝕊𝕊𝔼ℕ𝔾𝔼ℝ</strong></a
             >
-            <div id="usersLog"> 
-                    <!--chat modal ui-->
-       <div class="chat-private" id="chat-private">
-        <div class="chat-modal" class="modal">
-          <!-- <div class="modal-content animate" action="/chat" id="formChat"> -->
-           
-            <div class="messages">
-              <div class="messages-content" id="log">
-                <div class="chat-title-box">
-                    <h2 class="chat-title" id="recipient"></h2>
-                 </div>
-              </div>
-            </div>
-            <div class="message-box" id ="message-box">
-              <button class="message-submit" id="msg-send-btn">   Send
-            </button>
-              <button type="close-msg" class="message-close" id="btn" value="closeBtn" onclick="ChatReturn()"></button>
-             
-              <input type="text" id="msg" class="message-input" placeholder="Type message..." ></input>
-            </div>
-          </div>
-        </div>
-        </div>
-   
-</nav>
-    
-    <!-- 
-===========================================================================================================
+            <div id="usersLog"></div> 
+
+        </nav>
+
+       <div class="chat-private" id="chat-private"></div>
+
+<!-- ===========================================================================================================
                                     CREATE POST BLOCK                                                       
 ===========================================================================================================
--->
+--> 
 
     <div id="postBlock" class="posts" style="display:none">
         <label for="PostTitle">Post Title:</label>
@@ -224,6 +208,7 @@
                 <div class="login-form-control">    
                     <label for="psw"><b>Password</b></label>
                     <input type="password" id="LPassW" placeholder="Enter Password" name="psw" required>
+                    <i class="far fa-eye" id="togglePassword" style="cursor: pointer; visibility: visible;"></i>
                     <i class="fa-regular fa-circle-check"></i>
                     <i class="fa-regular fa-exclamation"></i>
                     <small>Error Message</small>
@@ -292,7 +277,7 @@
 
         <div class="reg-form-control">
             <label for="NickName"><b>NickName</b></label>
-            <input id="NickName" type="text" placeholder="This will be your userName" name="Nick Name" required  minlength="4" maxlength="10">
+            <input id="NickName" type="text" placeholder="Create UserName" name="Nick Name" required  minlength="4" maxlength="10">
             <i class="fa-regular fa-circle-check"></i>
             <i class="fa-regular fa-exclamation"></i>
             <small>Error Message</small>
@@ -329,8 +314,7 @@
         <div class="reg-form-control">
              <label for="psw"><b>Password</b></label>
             <input id="PassWord" type="password" placeholder="Enter Password" name="psw" required>
-            <i class="far fa-eye" id="togglePassword" style="cursor: pointer; visibility: visible; color: rgb(220, 2, 2); top: 40px;
-          right: 40px;"></i>
+            <i class="far fa-eye" id="togglePassword" style="cursor: pointer; visibility: visible;"></i>
             <i class="fa-regular fa-circle-check"></i>
             <i class="fa-regular fa-exclamation"></i>
             <small>Error Message</small>

@@ -1,5 +1,4 @@
 package chat
-
 import (
 	"database/sql"
 	"encoding/json"
@@ -7,9 +6,7 @@ import (
 	"rtforum/tools"
 	"time"
 )
-
-// Hub maintains the set of active clients and broadcasts messages to the
-// clients.
+// Hub maintains the set of active clients and broadcasts messages to the clients.
 type Hub struct {
 	// Registered clients.
 	Clients map[string]*Client
@@ -22,7 +19,6 @@ type Hub struct {
 	// database connection
 	Database *sql.DB
 }
-
 func NewHub(DB *sql.DB) *Hub {
 	return &Hub{
 		Broadcast:  make(chan []byte),
@@ -32,7 +28,6 @@ func NewHub(DB *sql.DB) *Hub {
 		Database: DB,
 	}
 }
-
 func (h *Hub) Run() {
 	for {
 		select {
@@ -47,23 +42,40 @@ func (h *Hub) Run() {
 		case message := <-h.Broadcast:
 			var directmsg tools.Message
 			json.Unmarshal(message, &directmsg)
-	
-			fmt.Println(directmsg)
-			chatHistoryVal := tools.CheckForChatHistory(directmsg)
+		if directmsg.Content == "" {
+				var notifseen tools.Notification
+				json.Unmarshal(message, &notifseen)
+				tools.RemoveNotification(notifseen)
 		
+			} else {
+							
 			//stores a new chat
+			chatHistoryVal := tools.CheckForChatHistory(directmsg)
 			if !chatHistoryVal.ChatExists{
 				tools.StoreChat(directmsg)
 			}
-			msgHistroryVal := tools.CheckForChatHistory(directmsg)
+			
 			//stores new messages
+			
+			msgHistroryVal := tools.CheckForChatHistory(directmsg)
 			if msgHistroryVal.ChatExists{
 				directmsg.ChatID = msgHistroryVal.ChatID
 				tools.StoreMessage(directmsg)
 			}
+			
+			// inserting notification into DB, by checking for existing notifications if any
+			newNotif := tools.CheckNotificationExists(directmsg)
+			fmt.Println(newNotif)
+			fmt.Println(newNotif== nil)
+			if  (newNotif == nil)|| (!newNotif.NotifExists) {
+				fmt.Println("if condition working")
+				tools.AddNotification(directmsg)
+			}
+			
 			for client := range h.Clients {
+				
 				if (client == directmsg.Recipient) || (client == directmsg.Sender) {
-					fmt.Println()
+					// fmt.Println()
 					select {
 					case h.Clients[client].Send <- message:
 					default:
@@ -74,25 +86,15 @@ func (h *Hub) Run() {
 			}
 		}
 	}
+	}
 }
-
-// //to show which users are logged in
-// func (h *Hub) RegisteredUsers(nicknames [][]byte) {
-// 	for _, nknm := range nicknames {
-// 		nknm = <-h.Broadcast
-// 		for client := range h.Clients {
-// 			h.Clients[client].Send <- nknm
-// 		}
-// 	}
-// }
-
 func (h *Hub) LogConns() {
-    for {
-        fmt.Println(len(h.Clients), "clients connected")
-        for userId := range h.Clients {	
-            fmt.Printf("client %v have %v connections\n", userId, len(h.Clients))
-        }
-        fmt.Println()
-        time.Sleep(1 * time.Second)
-    }
+	for {
+		fmt.Println(len(h.Clients), "clients connected")
+		for userId := range h.Clients {	
+			fmt.Printf("client %v have %v connections\n", userId, len(h.Clients))
+		}
+		fmt.Println()
+		time.Sleep(1 * time.Second)
+	}
 }

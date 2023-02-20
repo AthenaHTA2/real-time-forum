@@ -66,5 +66,14 @@ document.getElementById('logout').onclick = (e) => {
 };
 
 function ChatReturn() {
-  document.querySelector(".chat-private").style.visibility = "hidden";
+  let chat = document.querySelector(".chat-private");
+  chat.style.visibility = "hidden";
+  let chosenChatbox = Array.from(document.querySelectorAll(".chat-modal"));
+  if (chosenChatbox != null) {
+    chosenChatbox.forEach((element) => {
+      element.style.display = "none";
+    });
+  }
+  // document.querySelector(".messages-content").innerHTML = "";
 }
+
