@@ -4,11 +4,13 @@ let CurrentUser;
 let CurUserNoti;
 let today = Date.now();
 let date = new Date(today);
+let receiver;
 
 
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
 let Lpassword = logform.querySelector("#LPassW");
+let chatScroll = document.querySelector(".messages-content")
 
 const setLoginErrorFor = (input, message) => {
   const loginFormControl = input.parentElement; // .reg-form-control
@@ -301,10 +303,17 @@ window.onload = function () {
   refreshPosts();
   // ChatReturn()
 }
+
+//============== Chat scroll variables ======================
+//private messages history array
+let MessagesForDisplay = []
+var CountNewMessages = 0;
+let MsgsInChat;
+
 async function chatEventHandler() {
 
   var conn;
-  var log = document.getElementById("log");
+  // var log = document.getElementById("log");
 
   var usersLog = document.getElementById("usersLog");
 
@@ -318,17 +327,16 @@ async function chatEventHandler() {
   // fetch messages from back end
   let messages = await fetch("/messagesAPI", configMsg);
   messages = await messages.json();
-  // TODO: 1. NOTIFICATIONS : ADD (add notifictions if user is online but chat is not open, or user is offline),
-  // TODO:                    DISPLAY(check notification, get notication),
-  // TODO:                    DELETE(remove notification)
+  
   // TODO: 2. **get ONLINE USERS list updated in real time
   // TODO: 3. using THROTTLE / DEBOUNCE on scrolling event to display 10 message in reverse order
   // TODO: 4. arrange users with chat(according to most recent descending order)
   
+  
   function AppendUser(item) {
-    console.log(item.innerHTML);
-    var doScroll =
-      usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
+    console.log(item.innerHTML, "--------");
+    // var doScroll =
+    //   usersLog.scrollTop > usersLog.scrollHeight - usersLog.clientHeight - 1;
 
     // if current user, do not display. (return) because AppendUser() is called in a loop.
     if (item.innerHTML === CurrentUser) {
@@ -338,7 +346,7 @@ async function chatEventHandler() {
     if (CurUserNoti != null) {
       for (let i = 0; i < CurUserNoti.length; i++) {
         if (item.innerHTML == CurUserNoti[i].notificationsender) {
-          let notiItem = CurUserNoti[i].notificationsender; //This variable is not being called anywhere
+          // let notiItem = CurUserNoti[i].notificationsender; //This variable is not being called anywhere
           item.classList.add("notification");
         }
       }
@@ -368,6 +376,7 @@ async function chatEventHandler() {
     let messageHtml = document.createElement("div");
     messageHtml.className = "messages-" + item.innerHTML;
     
+    // message content box for scroll event
     let messageHtml2 = document.createElement("div");
     messageHtml2.className = "messages-content";
     messageHtml2.id = "log-" + item.innerHTML;
@@ -398,47 +407,11 @@ async function chatEventHandler() {
     usersLog.appendChild(item);
     item.innerHTML = item.innerHTML;
     
-    if (doScroll) {
-      usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
-    }
-    // **filter** and append correct messages to chat window
-    messages.forEach((message) => {
-      // create new div for message
-      let messageBubble = document.createElement("div");
-      let dateDiv = document.createElement("div");
-      dateDiv.className = "dateDiv";
+    // if (doScroll) {
+    //   usersLog.scrollTop = usersLog.scrollHeight - usersLog.clientHeight;
+    // }
+    
 
-      // 1. when current user is sender
-      if (
-        message.sender === CurrentUser &&
-        message.recipient === item.innerHTML
-      ) {
-        // add class of sender
-        messageBubble.className = "sender";
-        messageBubble.innerText = `${"You"}: ${message.chatMessage}`;
-        let bubbleWrapper = document.createElement("div");
-        bubbleWrapper.classList.add("messageWrapper"), "sender";
-        dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
-        messageBubble.appendChild(dateDiv);
-        bubbleWrapper.append(messageBubble);
-        // append to child div of main chat window
-        console.log(messageHtml2);
-        messageHtml2.append(bubbleWrapper);
-        // document.querySelector(".messages-content").append(bubbleWrapper);
-      } else if (
-        message.recipient === CurrentUser &&
-        message.sender === item.innerHTML
-      ) {
-        // 2. when current user is recipient
-        // add class of recipient
-        messageBubble.className = "recipient";
-        messageBubble.innerText = `${message.sender}: ${message.chatMessage}`;
-        dateDiv.innerHTML = `${ConvertDate(message.creationDate)}`;
-        messageBubble.appendChild(dateDiv);
-        messageHtml2.append(messageBubble);
-        // document.querySelector(".messages-content").append(messageBubble);
-      }
-    });
     // opening private chat window on clicking on selected users
     item.onclick = () => {
       chat.style.visibility = "visible";
@@ -458,6 +431,30 @@ async function chatEventHandler() {
         conn.send(JSON.stringify(notification));
         item.classList.remove("notification");
       }
+
+      // **filter** and append correct messages to chat window
+      messages.forEach((message) => {
+
+        // 1. when current user is sender
+        if (
+          message.sender === CurrentUser &&
+          message.recipient === item.innerHTML
+        ) {
+          
+          MessagesForDisplay.push(message)
+        } else if (
+          message.recipient === CurrentUser &&
+          message.sender === item.innerHTML
+        ) {
+          // 2. when current user is recipient
+          MessagesForDisplay.push(message)
+        }
+      });
+
+      
+
+      //show ten or less messages when opening the chat
+      addTen(MessagesForDisplay, 10, item.innerHTML)
     };
   }
 
@@ -599,4 +596,64 @@ function IsJsonString(str) {
     return false;
   }
   return true;
+}
+
+function addTen (messages, limit, name){
+  //count the number of messages inside the chat window
+  //in case user added a message before scrolling to top
+  let ParentDiv = document.getElementById("log-" + name)
+  MsgsInChat = ParentDiv.children.length -1 - CountNewMessages;//to exclude the messages added just now
+  console.log("the number of msgs in chat section:---->",MsgsInChat);
+  console.log("total number of chat msgs:---->",MessagesForDisplay.length);
+  //let availableMsgs = messages.length- MsgsInChat;
+  //console.log("the number of msgs available to be added:---->",availableMsgs);
+  let msgsToAdd = Math.min(limit,messages.length);
+  console.log("the number of msgs to add:---->",msgsToAdd);
+  //let arrayPosition = messages.length-msgsToAdd;
+  let arrayPosition = messages.length-1;
+  console.log("array index of first message to prepend:---->",arrayPosition)
+//do nothing if all messages have been printed
+  if((arrayPosition == 0 && messages.length > 1)|| arrayPosition < 0 || messages.length == 0 || MessagesForDisplay.length <= MsgsInChat){
+//if(!(arrayPosition == 0 && messages.length >= 1)){
+console.log("addTen function exits here")
+  return
+}else{  
+      console.log("Entering the 'else' section of 'addTen'");
+      //print available messages in chunks of 10 or less
+        for(let m = arrayPosition; m > (arrayPosition - limit); m--){
+          console.log("messages array index:>>>>>>",m)
+          let messageBubble = document.createElement("div");
+          let dateDiv = document.createElement("div");
+          dateDiv.className = "dateDiv";
+          console.log("printing the message details:+++",messages[m])
+            if (messages[m].sender === CurrentUser && messages[m].recipient === name){ 
+              console.log("Printing index 'm' in 'if' 'sender'******************",m)
+              console.log("Who is the recipient?******************",messages[m].recipient, "and the sender: ***", messages[m].sender)
+                messageBubble.className = "sender";
+                messageBubble.innerText = `"You": ${messages[m].chatMessage}`;
+                let bubbleWrapper = document.createElement("div"); 
+                bubbleWrapper.className = "messageWrapper"; 
+                dateDiv.innerHTML = `${ConvertDate(messages[m].creationDate)}`;  
+                messageBubble.appendChild(dateDiv);
+                bubbleWrapper.append(messageBubble);
+                ParentDiv.prepend(bubbleWrapper)
+                //move the chat scroll-bar 30px from top
+                // chatScroll.scrollTop = chatScroll.scrollHeight;
+                if(m==0){return}
+            }  else if (messages[m].recipient === CurrentUser && messages[m].sender === name) {
+              // when current user is recipient add class of recipient
+              console.log("Printing index 'm' in 'else if recipient'******************: ",m)
+              console.log("CurrentUser is the recipient or the sender?****************** ",messages[m].recipient, messages[m].sender)
+                messageBubble.className = "recipient";
+                messageBubble.innerText = `${messages[m].sender}: ${messages[m].chatMessage}`;
+                dateDiv.innerHTML = `${ConvertDate(messages[m].creationDate)}`;
+                messageBubble.appendChild(dateDiv);
+                ParentDiv.prepend(messageBubble);
+                //move the chat scroll-bar 30px from top
+                // chatScroll.scrollTop = chatScroll.scrollHeight;
+                if(m==0){return}
+        }
+        MsgsInChat = MsgsInChat +  msgsToAdd
+}
+}
 }

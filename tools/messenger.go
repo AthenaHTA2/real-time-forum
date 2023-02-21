@@ -126,3 +126,4 @@ func ExecuteSQL(queryStr string) []byte {
 	jsonMsg, err := json.Marshal(data)
 	return jsonMsg
 }
+
