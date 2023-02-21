@@ -990,7 +990,7 @@ font-weight: bolder;
 Chat
 --------------------*/
 .chat-private {
-  position: absolute;
+  position: fixed;
   top: 6%;
   left: 78%;
   right: 87px;
