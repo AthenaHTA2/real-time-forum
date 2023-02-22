@@ -1,4 +1,5 @@
 package chat
+
 import (
 	"database/sql"
 	"encoding/json"
@@ -6,6 +7,7 @@ import (
 	"rtforum/tools"
 	"time"
 )
+
 // Hub maintains the set of active clients and broadcasts messages to the clients.
 type Hub struct {
 	// Registered clients.
@@ -19,6 +21,7 @@ type Hub struct {
 	// database connection
 	Database *sql.DB
 }
+
 func NewHub(DB *sql.DB) *Hub {
 	return &Hub{
 		Broadcast:  make(chan []byte),
@@ -28,6 +31,7 @@ func NewHub(DB *sql.DB) *Hub {
 		Database: DB,
 	}
 }
+
 func (h *Hub) Run() {
 	for {
 		select {
@@ -53,6 +57,8 @@ func (h *Hub) Run() {
 			chatHistoryVal := tools.CheckForChatHistory(directmsg)
 			if !chatHistoryVal.ChatExists{
 				tools.StoreChat(directmsg)
+				}else {
+				tools.UpdateChatTable(directmsg)
 			}
 			
 			//stores new messages
@@ -88,6 +94,7 @@ func (h *Hub) Run() {
 	}
 	}
 }
+
 func (h *Hub) LogConns() {
 	for {
 		fmt.Println(len(h.Clients), "clients connected")

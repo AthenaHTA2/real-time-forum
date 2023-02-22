@@ -5,12 +5,12 @@ let CurUserNoti;
 let today = Date.now();
 let date = new Date(today);
 let receiver;
+let chatScroll;
 
 
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
 let Lpassword = logform.querySelector("#LPassW");
-let chatScroll = document.querySelector(".messages-content")
 
 const setLoginErrorFor = (input, message) => {
   const loginFormControl = input.parentElement; // .reg-form-control
@@ -302,6 +302,7 @@ fetch("/logout", configLogout)
 window.onload = function () {
   refreshPosts();
   // ChatReturn()
+
 }
 
 //============== Chat scroll variables ======================
@@ -380,6 +381,8 @@ async function chatEventHandler() {
     let messageHtml2 = document.createElement("div");
     messageHtml2.className = "messages-content";
     messageHtml2.id = "log-" + item.innerHTML;
+
+    chatScroll = messageHtml2 
     
     let messageBox = document.createElement("div");
     messageBox.className = "message-box";
@@ -451,15 +454,40 @@ async function chatEventHandler() {
         }
       });
 
-      
-
       //show ten or less messages when opening the chat
+      
       addTen(MessagesForDisplay, 10, item.innerHTML)
+
+      chatScroll.scrollTop = chatScroll.scrollHeight;
+
     };
   }
 
   // function to send message to backend to be stored into DB
   function onclickFun(item) {
+    
+    chatScroll.addEventListener("scroll", function() {
+     
+      let ParentDiv = document.getElementById("log-" + item.innerHTML)
+
+      MsgsInChat = ParentDiv.children.length - CountNewMessages;//<=== subtracting 1 to get correct #of messages
+      console.log("the number of msgs in chat:---->",MsgsInChat);
+      console.log("length of history of messages:---->",MessagesForDisplay.length)
+      //find array index for the most recent message yet to be printed
+      let cutoffIndex = MessagesForDisplay.length - MsgsInChat;
+      console.log("Scroll event - 1st index for new batch of messages______:",cutoffIndex)
+      //make a new slice that only includes messages yet to be printed
+      //adding one here as the 'slice' method excludes the last index
+      let msgsToPrint = MessagesForDisplay.slice(0,cutoffIndex +1);
+      console.log("the updated array of messages:~~~~~",msgsToPrint)
+
+      if(chatScroll.scrollTop == 0) {
+        addTen(msgsToPrint, 10, item.innerHTML)
+        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", msgsToPrint)
+      }
+      
+    })
+    
     if (item.innerHTML === CurrentUser) {
       return;
     }
@@ -566,7 +594,7 @@ async function chatEventHandler() {
         var item = document.createElement("div");
         item.innerHTML = messages[i];
         //if message is a list of chat members, it begins with a space
-        if (messages[0] == " ") {
+        if (messages[0] == "") {
           if (i < messages.length) {
             if (messages[i].includes("-online")) {
               messages[i] = messages[i].replace("-online", "");
@@ -602,12 +630,12 @@ function addTen (messages, limit, name){
   //count the number of messages inside the chat window
   //in case user added a message before scrolling to top
   let ParentDiv = document.getElementById("log-" + name)
-  MsgsInChat = ParentDiv.children.length -1 - CountNewMessages;//to exclude the messages added just now
+  MsgsInChat = ((ParentDiv.children.length)-1) - CountNewMessages;//to exclude the messages added just now
   console.log("the number of msgs in chat section:---->",MsgsInChat);
   console.log("total number of chat msgs:---->",MessagesForDisplay.length);
   //let availableMsgs = messages.length- MsgsInChat;
   //console.log("the number of msgs available to be added:---->",availableMsgs);
-  let msgsToAdd = Math.min(limit,messages.length);
+  let msgsToAdd = Math.min(limit - messages.length);
   console.log("the number of msgs to add:---->",msgsToAdd);
   //let arrayPosition = messages.length-msgsToAdd;
   let arrayPosition = messages.length-1;
@@ -656,4 +684,5 @@ console.log("addTen function exits here")
         MsgsInChat = MsgsInChat +  msgsToAdd
 }
 }
+
 }

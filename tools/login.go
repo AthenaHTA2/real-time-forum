@@ -151,25 +151,45 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 func GetAllUsers() []byte {
 	//space at start of websocket message signals that this is the list of users
-	allUsers := " "
+	var allUsers []string
+
 	rows, errUsr := sqldb.DB.Query("SELECT DISTINCT nickName FROM Users ORDER BY email ASC;")
 	if errUsr != nil {
 		fmt.Println("Error retrieving users from database:  line 147\n", errUsr)
 		return nil
 	}
+
 	for rows.Next() {
 		var tempUser string
 		err := rows.Scan(&tempUser)
 		if err != nil {
 			fmt.Println("err: ", err)
 		}
-		allUsers = allUsers + "\n" + tempUser
+		allUsers = append(allUsers, tempUser)
 	}
+
 	rows.Close()
-	for _, user := range allUsers {
-		fmt.Println(string(user))
+
+	sortedUsers:= GetRecentChatUsers() 
+	registeredUsers:= GetRecentChatUsers() 
+	for i:= 0 ; i < len(allUsers); i++{
+		 check:= false
+		for k:= 0 ; k < len(registeredUsers); k++{
+			if registeredUsers[k] == allUsers[i]{
+		check = true
+			}
+		}
+		if check == false {
+			sortedUsers = append(sortedUsers, allUsers[i])
+						}
+	 }
+	
+	returnValue := ""
+	for _, user := range sortedUsers {
+		returnValue +=  "\n" + user 
 	}
-	return []byte(allUsers)
+	
+	return []byte(returnValue)
 }
 
 func GetAllOnlineUsers()[]string{
@@ -215,4 +235,41 @@ func AllPosts() []byte {
 	fmt.Println("postItem: ", postItem)
 	onePost := []byte(postItem)
 	return onePost
+}
+
+func GetRecentChatUsers()[]string{
+	fmt.Println("-------------",CurrentUser.NickName, "--------------------------------")
+	
+	// var AllRecentChatUsers []string
+	rows,errUsr := sqldb.DB.Query(`SELECT * 
+	FROM Chats 
+	WHERE user1 = ? OR user2 = ?
+	ORDER BY creationDate DESC;`, CurrentUser.NickName, CurrentUser.NickName)
+	
+	if errUsr != nil {
+		fmt.Println("GetRecentChatUser err: ", errUsr)
+	}
+
+	// defer rows.Close()
+	var Chats []Chat
+	
+	for rows.Next() {
+		var tempChat Chat
+		rows.Scan(&tempChat.ChatID,&tempChat.User1,&tempChat.User2,&tempChat.Date )
+		Chats = append(Chats, tempChat)
+	}
+	var returnValue []string
+	tempusername:=""
+	
+	for i:=0; i< len(Chats); i++{
+		tempusername= ""
+		if Chats[i].User1 != CurrentUser.NickName {
+			tempusername = Chats[i].User1 
+		}else {
+			tempusername = Chats[i].User2
+		}
+		returnValue = append(returnValue, tempusername)
+	}
+
+	return returnValue
 }

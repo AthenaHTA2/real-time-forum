@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"rtforum/sqldb"
 	"time"
+	"log"
 )
 
 // var dm Message
@@ -127,3 +128,9 @@ func ExecuteSQL(queryStr string) []byte {
 	return jsonMsg
 }
 
+func UpdateChatTable(dm Message){
+	fmt.Println("updating",dm)
+	rows, err := sqldb.DB.Prepare("UPDATE Chats SET creationDate =?  WHERE (user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?);"); if err != nil {log.Fatal(err)}
+	defer rows.Close()
+	rows.Exec(Date,dm.Recipient,dm.Sender,dm.Sender,dm.Recipient)
+}
