@@ -6,6 +6,7 @@ let today = Date.now();
 let date = new Date(today);
 let receiver;
 let chatScroll;
+let timerId = undefined
 
 
 const logform = document.querySelector("#loginform");
@@ -465,7 +466,8 @@ async function chatEventHandler() {
           });
         }
         document.getElementById("log-" + item.innerHTML).innerHTML = ""
-        document.getElementById("log-" + item.innerHTML).removeEventListener("scroll")
+        // needed to remove bubbling event
+        // document.getElementById("log-" + item.innerHTML).removeEventListener("scroll")
       }
 
       //show ten or less messages when opening the chat
@@ -476,23 +478,23 @@ async function chatEventHandler() {
 
       chatScroll = document.getElementById("log-" + item.innerHTML) 
 
-      chatScroll.addEventListener("scroll", function() {
-     
-        let ParentDiv = document.getElementById("log-" + item.innerHTML)
-  
-        MsgsInChat = ParentDiv.children.length - CountNewMessages;//<=== subtracting 1 to get correct #of messages
-        //find array index for the most recent message yet to be printed
-        let cutoffIndex = MessagesForDisplay.length - MsgsInChat;
-        //make a new slice that only includes messages yet to be printed
-        //adding one here as the 'slice' method excludes the last index
-        let msgsToPrint = MessagesForDisplay.slice(0,cutoffIndex +1);
-        
-        console.log(chatScroll.scrollTop)
-        if(chatScroll.scrollTop == 0) {
-          addTen(msgsToPrint, 10, item.innerHTML)
-        }
-        
-      })
+      const loadMsg = function () {
+          let ParentDiv = document.getElementById("log-" + item.innerHTML)
+
+          MsgsInChat = ParentDiv.children.length - CountNewMessages;//<=== subtracting 1 to get correct #of messages
+          //find array index for the most recent message yet to be printed
+          let cutoffIndex = MessagesForDisplay.length - MsgsInChat;
+          //make a new slice that only includes messages yet to be printed
+          //adding one here as the 'slice' method excludes the last index
+          let msgsToPrint = MessagesForDisplay.slice(0,cutoffIndex +1);
+          
+          console.log(chatScroll.scrollTop)
+          if(chatScroll.scrollTop <= 15) {
+            addTen(msgsToPrint, 10, item.innerHTML)
+          } 
+      }
+
+      chatScroll.addEventListener("scroll", () => {throttle(loadMsg, 50)})
 
     };
   }
@@ -688,4 +690,16 @@ function addTen (messages, limit, name){
     }
   }
 
+}
+
+function throttle(fn, wait) {
+  if (timerId) {
+      return
+  }
+
+  fn()
+
+  timerId = setTimeout(function () {
+      timerId = undefined
+  }, wait)
 }
