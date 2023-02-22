@@ -640,49 +640,43 @@ function addTen (messages, limit, name){
   //let arrayPosition = messages.length-msgsToAdd;
   let arrayPosition = messages.length-1;
   console.log("array index of first message to prepend:---->",arrayPosition)
-//do nothing if all messages have been printed
+  //do nothing if all messages have been printed
   if((arrayPosition == 0 && messages.length > 1)|| arrayPosition < 0 || messages.length == 0 || MessagesForDisplay.length <= MsgsInChat){
-//if(!(arrayPosition == 0 && messages.length >= 1)){
-console.log("addTen function exits here")
-  return
-}else{  
-      console.log("Entering the 'else' section of 'addTen'");
-      //print available messages in chunks of 10 or less
-        for(let m = arrayPosition; m > (arrayPosition - limit); m--){
-          console.log("messages array index:>>>>>>",m)
-          let messageBubble = document.createElement("div");
-          let dateDiv = document.createElement("div");
-          dateDiv.className = "dateDiv";
-          console.log("printing the message details:+++",messages[m])
-            if (messages[m].sender === CurrentUser && messages[m].recipient === name){ 
-              console.log("Printing index 'm' in 'if' 'sender'******************",m)
-              console.log("Who is the recipient?******************",messages[m].recipient, "and the sender: ***", messages[m].sender)
-                messageBubble.className = "sender";
-                messageBubble.innerText = `"You": ${messages[m].chatMessage}`;
-                let bubbleWrapper = document.createElement("div"); 
-                bubbleWrapper.className = "messageWrapper"; 
-                dateDiv.innerHTML = `${ConvertDate(messages[m].creationDate)}`;  
-                messageBubble.appendChild(dateDiv);
-                bubbleWrapper.append(messageBubble);
-                ParentDiv.prepend(bubbleWrapper)
-                //move the chat scroll-bar 30px from top
-                // chatScroll.scrollTop = chatScroll.scrollHeight;
-                if(m==0){return}
-            }  else if (messages[m].recipient === CurrentUser && messages[m].sender === name) {
-              // when current user is recipient add class of recipient
-              console.log("Printing index 'm' in 'else if recipient'******************: ",m)
-              console.log("CurrentUser is the recipient or the sender?****************** ",messages[m].recipient, messages[m].sender)
-                messageBubble.className = "recipient";
-                messageBubble.innerText = `${messages[m].sender}: ${messages[m].chatMessage}`;
-                dateDiv.innerHTML = `${ConvertDate(messages[m].creationDate)}`;
-                messageBubble.appendChild(dateDiv);
-                ParentDiv.prepend(messageBubble);
-                //move the chat scroll-bar 30px from top
-                // chatScroll.scrollTop = chatScroll.scrollHeight;
-                if(m==0){return}
-        }
-        MsgsInChat = MsgsInChat +  msgsToAdd
-}
-}
+    //if(!(arrayPosition == 0 && messages.length >= 1)){
+    console.log("addTen function exits here")
+    return
+  }else{  
+    console.log("Entering the 'else' section of 'addTen'");
+    //print available messages in chunks of 10 or less
+    for(let m = arrayPosition; m > (arrayPosition - limit); m--){
+      let messageBubble = document.createElement("div");
+      let dateDiv = document.createElement("div");
+      dateDiv.className = "dateDiv";
+      if (messages[m].sender === CurrentUser && messages[m].recipient === name){ 
+        messageBubble.className = "sender";
+        messageBubble.innerText = `"You": ${messages[m].chatMessage}`;
+        let bubbleWrapper = document.createElement("div"); 
+        bubbleWrapper.className = "messageWrapper"; 
+        dateDiv.innerHTML = `${ConvertDate(messages[m].creationDate)}`;  
+        messageBubble.appendChild(dateDiv);
+        bubbleWrapper.append(messageBubble);
+        ParentDiv.prepend(bubbleWrapper)
+        //move the chat scroll-bar 30px from top
+        // chatScroll.scrollTop = chatScroll.scrollHeight;
+        if(m==0){return}
+      } else if (messages[m].recipient === CurrentUser && messages[m].sender === name) {
+        // when current user is recipient add class of recipient
+        messageBubble.className = "recipient";
+        messageBubble.innerText = `${messages[m].sender}: ${messages[m].chatMessage}`;
+        dateDiv.innerHTML = `${ConvertDate(messages[m].creationDate)}`;
+        messageBubble.appendChild(dateDiv);
+        ParentDiv.prepend(messageBubble);
+        //move the chat scroll-bar 30px from top
+        // chatScroll.scrollTop = chatScroll.scrollHeight;
+        if(m==0){return}
+      }
+      MsgsInChat = MsgsInChat +  msgsToAdd
+    }
+  }
 
 }
