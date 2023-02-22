@@ -364,10 +364,9 @@ async function chatEventHandler() {
     
     let but = document.createElement("button");
     but.setAttribute("value", "closeBtn");
-    but.addEventListener("click", ChatReturn);
     but.className = "message-close";
     but.id = "btn-" + item.innerHTML;
-    
+
     let h2 = document.createElement("h2");
     h2.className = "chat-title";
     h2.id = "recipient-" + item.innerHTML;
@@ -454,8 +453,24 @@ async function chatEventHandler() {
         }
       });
 
-      //show ten or less messages when opening the chat
+      //clearing message content when exit btn clicked
+
+      // click event for exit chat btn
       
+      document.getElementById("btn-" + item.innerHTML).onclick = () => {
+        let chat = document.querySelector(".chat-private");
+        chat.style.visibility = "hidden";
+        let chosenChatbox = Array.from(document.querySelectorAll(".chat-modal"));
+        if (chosenChatbox != null) {
+          chosenChatbox.forEach((element) => {
+            element.style.display = "none";
+          });
+        }
+        document.getElementById("log-" + item.innerHTML).innerHTML = ""
+      }
+
+      //show ten or less messages when opening the chat
+    
       addTen(MessagesForDisplay, 10, item.innerHTML)
 
       chatScroll.scrollTop = chatScroll.scrollHeight;
