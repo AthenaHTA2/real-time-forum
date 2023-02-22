@@ -380,8 +380,6 @@ async function chatEventHandler() {
     let messageHtml2 = document.createElement("div");
     messageHtml2.className = "messages-content";
     messageHtml2.id = "log-" + item.innerHTML;
-
-    chatScroll = messageHtml2 
     
     let messageBox = document.createElement("div");
     messageBox.className = "message-box";
@@ -467,6 +465,7 @@ async function chatEventHandler() {
           });
         }
         document.getElementById("log-" + item.innerHTML).innerHTML = ""
+        document.getElementById("log-" + item.innerHTML).removeEventListener("scroll")
       }
 
       //show ten or less messages when opening the chat
@@ -475,24 +474,22 @@ async function chatEventHandler() {
 
       // chat scroll event
 
+      chatScroll = document.getElementById("log-" + item.innerHTML) 
+
       chatScroll.addEventListener("scroll", function() {
      
         let ParentDiv = document.getElementById("log-" + item.innerHTML)
   
         MsgsInChat = ParentDiv.children.length - CountNewMessages;//<=== subtracting 1 to get correct #of messages
-        console.log("the number of msgs in chat:---->",MsgsInChat);
-        console.log("length of history of messages:---->",MessagesForDisplay.length)
         //find array index for the most recent message yet to be printed
         let cutoffIndex = MessagesForDisplay.length - MsgsInChat;
-        console.log("Scroll event - 1st index for new batch of messages______:",cutoffIndex)
         //make a new slice that only includes messages yet to be printed
         //adding one here as the 'slice' method excludes the last index
         let msgsToPrint = MessagesForDisplay.slice(0,cutoffIndex +1);
-        console.log("the updated array of messages:~~~~~",msgsToPrint)
-  
+        
+        console.log(chatScroll.scrollTop)
         if(chatScroll.scrollTop == 0) {
           addTen(msgsToPrint, 10, item.innerHTML)
-          console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", msgsToPrint)
         }
         
       })
@@ -646,22 +643,19 @@ function addTen (messages, limit, name){
   //in case user added a message before scrolling to top
   let ParentDiv = document.getElementById("log-" + name)
   MsgsInChat = ((ParentDiv.children.length)-1) - CountNewMessages;//to exclude the messages added just now
-  console.log("the number of msgs in chat section:---->",MsgsInChat);
-  console.log("total number of chat msgs:---->",MessagesForDisplay.length);
   //let availableMsgs = messages.length- MsgsInChat;
   //console.log("the number of msgs available to be added:---->",availableMsgs);
   let msgsToAdd = Math.min(limit - messages.length);
-  console.log("the number of msgs to add:---->",msgsToAdd);
+  
   //let arrayPosition = messages.length-msgsToAdd;
   let arrayPosition = messages.length-1;
-  console.log("array index of first message to prepend:---->",arrayPosition)
+
   //do nothing if all messages have been printed
   if((arrayPosition == 0 && messages.length > 1)|| arrayPosition < 0 || messages.length == 0 || MessagesForDisplay.length <= MsgsInChat){
     //if(!(arrayPosition == 0 && messages.length >= 1)){
-    console.log("addTen function exits here")
     return
   }else{  
-    console.log("Entering the 'else' section of 'addTen'");
+
     //print available messages in chunks of 10 or less
     for(let m = arrayPosition; m > (arrayPosition - limit); m--){
       let messageBubble = document.createElement("div");
@@ -677,7 +671,7 @@ function addTen (messages, limit, name){
         bubbleWrapper.append(messageBubble);
         ParentDiv.prepend(bubbleWrapper)
         //move the chat scroll-bar 30px from top
-        chatScroll.scrollTop = chatScroll.scrollHeight;
+        ParentDiv.scrollTop = ParentDiv.scrollHeight/8;
         if(m==0){return}
       } else if (messages[m].recipient === CurrentUser && messages[m].sender === name) {
         // when current user is recipient add class of recipient
@@ -687,7 +681,7 @@ function addTen (messages, limit, name){
         messageBubble.appendChild(dateDiv);
         ParentDiv.prepend(messageBubble);
         //move the chat scroll-bar 30px from top
-        chatScroll.scrollTop = chatScroll.scrollHeight;
+        ParentDiv.scrollTop = ParentDiv.scrollHeight/8;
         if(m==0){return}
       }
       MsgsInChat = MsgsInChat +  msgsToAdd
