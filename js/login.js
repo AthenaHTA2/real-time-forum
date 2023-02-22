@@ -473,35 +473,35 @@ async function chatEventHandler() {
     
       addTen(MessagesForDisplay, 10, item.innerHTML)
 
-      chatScroll.scrollTop = chatScroll.scrollHeight;
+      // chat scroll event
+
+      chatScroll.addEventListener("scroll", function() {
+     
+        let ParentDiv = document.getElementById("log-" + item.innerHTML)
+  
+        MsgsInChat = ParentDiv.children.length - CountNewMessages;//<=== subtracting 1 to get correct #of messages
+        console.log("the number of msgs in chat:---->",MsgsInChat);
+        console.log("length of history of messages:---->",MessagesForDisplay.length)
+        //find array index for the most recent message yet to be printed
+        let cutoffIndex = MessagesForDisplay.length - MsgsInChat;
+        console.log("Scroll event - 1st index for new batch of messages______:",cutoffIndex)
+        //make a new slice that only includes messages yet to be printed
+        //adding one here as the 'slice' method excludes the last index
+        let msgsToPrint = MessagesForDisplay.slice(0,cutoffIndex +1);
+        console.log("the updated array of messages:~~~~~",msgsToPrint)
+  
+        if(chatScroll.scrollTop == 0) {
+          addTen(msgsToPrint, 10, item.innerHTML)
+          console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", msgsToPrint)
+        }
+        
+      })
 
     };
   }
 
   // function to send message to backend to be stored into DB
   function onclickFun(item) {
-    
-    chatScroll.addEventListener("scroll", function() {
-     
-      let ParentDiv = document.getElementById("log-" + item.innerHTML)
-
-      MsgsInChat = ParentDiv.children.length - CountNewMessages;//<=== subtracting 1 to get correct #of messages
-      console.log("the number of msgs in chat:---->",MsgsInChat);
-      console.log("length of history of messages:---->",MessagesForDisplay.length)
-      //find array index for the most recent message yet to be printed
-      let cutoffIndex = MessagesForDisplay.length - MsgsInChat;
-      console.log("Scroll event - 1st index for new batch of messages______:",cutoffIndex)
-      //make a new slice that only includes messages yet to be printed
-      //adding one here as the 'slice' method excludes the last index
-      let msgsToPrint = MessagesForDisplay.slice(0,cutoffIndex +1);
-      console.log("the updated array of messages:~~~~~",msgsToPrint)
-
-      if(chatScroll.scrollTop == 0) {
-        addTen(msgsToPrint, 10, item.innerHTML)
-        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", msgsToPrint)
-      }
-      
-    })
     
     if (item.innerHTML === CurrentUser) {
       return;
@@ -677,7 +677,7 @@ function addTen (messages, limit, name){
         bubbleWrapper.append(messageBubble);
         ParentDiv.prepend(bubbleWrapper)
         //move the chat scroll-bar 30px from top
-        // chatScroll.scrollTop = chatScroll.scrollHeight;
+        chatScroll.scrollTop = chatScroll.scrollHeight;
         if(m==0){return}
       } else if (messages[m].recipient === CurrentUser && messages[m].sender === name) {
         // when current user is recipient add class of recipient
@@ -687,7 +687,7 @@ function addTen (messages, limit, name){
         messageBubble.appendChild(dateDiv);
         ParentDiv.prepend(messageBubble);
         //move the chat scroll-bar 30px from top
-        // chatScroll.scrollTop = chatScroll.scrollHeight;
+        chatScroll.scrollTop = chatScroll.scrollHeight;
         if(m==0){return}
       }
       MsgsInChat = MsgsInChat +  msgsToAdd
