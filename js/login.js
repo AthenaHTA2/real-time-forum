@@ -372,7 +372,8 @@ async function chatEventHandler() {
         let newMessage = document.createElement("div");
         let dateDiv = document.createElement("div");
         dateDiv.className = "dateDiv";
-
+        let newitem = document.getElementById("usersLog").children;
+        console.log("newitem :", newitem);
         if (CurrentUser === msg.Sender) {
           newMessage.className = "sender";
           newMessage.innerHTML = `${"You"}: ${msg.Content}`;
@@ -382,23 +383,27 @@ async function chatEventHandler() {
           document
             .querySelector("#log-" + msg.Recipient)
             .appendChild(messageWrapper);
-          // let newitem = document.getElementById("usersLog").children;
-          // for (var i = 0; i < newitem.length; i++) {
-          //   index = i;
-          //   newitem.unshift(newitem.splice(index, 1)[0]);
-          // }
+
+          let allChatbox = Array.from(document.querySelectorAll(".chat-modal"));
+          allChatbox.forEach((element) => {
+            let chatBoxId = "chat-modal-" + msg.Recipient;
+            if (chatBoxId == element.id) {
+              // NOTIFICATION to show while already being online and receiving new message
+              if (element.style.display == "block") {
+                for (var i = 0; i < newitem.length; i++) {
+                  if (newitem[i].textContent == msg.Recipient) {
+                    usersLog.insertBefore(newitem[i], newitem[0]);
+                  }
+                }
+              }
+            }
+          });
         } else if (CurrentUser !== msg.Sender) {
           newMessage.className = "recipient";
           newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
           dateDiv.innerHTML = `${msg.Date}`;
           newMessage.appendChild(dateDiv);
-          console.log(
-            document.querySelector("#log-" + msg.Sender).children.length
-          );
           document.querySelector("#log-" + msg.Sender).append(newMessage);
-          console.log(
-            document.querySelector("#log-" + msg.Sender).children.length
-          );
 
           let allChatbox = Array.from(document.querySelectorAll(".chat-modal"));
           allChatbox.forEach((element) => {
@@ -410,12 +415,11 @@ async function chatEventHandler() {
                 var searchitem = msg.Sender;
                 var newnotif;
                 for (var i = 0; i < newitem.length; i++) {
-                  if (item[i].textContent == searchitem) {
+                  if (newitem[i].textContent == searchitem) {
                     newnotif = newitem[i];
                     newnotif.classList.add("notification");
-                    // // moving the item to first position on newmessage
-                    // index = i;
-                    // newitem.unshift(newitem.splice(index, 1)[0]);
+                    // moving the item to first position on newmessage
+                    usersLog.insertBefore(newitem[i], newitem[0]);
                   }
                 }
               }
