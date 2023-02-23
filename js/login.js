@@ -4,6 +4,7 @@ let CurrentUser;
 let CurUserNoti;
 let today = Date.now();
 let date = new Date(today);
+let index;
 
 const logform = document.querySelector("#loginform");
 let userName = logform.querySelector("#LUserName");
@@ -381,6 +382,11 @@ async function chatEventHandler() {
           document
             .querySelector("#log-" + msg.Recipient)
             .appendChild(messageWrapper);
+          // let newitem = document.getElementById("usersLog").children;
+          // for (var i = 0; i < newitem.length; i++) {
+          //   index = i;
+          //   newitem.unshift(newitem.splice(index, 1)[0]);
+          // }
         } else if (CurrentUser !== msg.Sender) {
           newMessage.className = "recipient";
           newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
@@ -407,6 +413,9 @@ async function chatEventHandler() {
                   if (item[i].textContent == searchitem) {
                     newnotif = newitem[i];
                     newnotif.classList.add("notification");
+                    // // moving the item to first position on newmessage
+                    // index = i;
+                    // newitem.unshift(newitem.splice(index, 1)[0]);
                   }
                 }
               }
