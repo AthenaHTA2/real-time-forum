@@ -6,6 +6,7 @@ let today = Date.now();
 let date = new Date(today);
 let receiver;
 let chatScroll;
+let timerId = undefined
 
 
 const logform = document.querySelector("#loginform");
@@ -364,10 +365,9 @@ async function chatEventHandler() {
     
     let but = document.createElement("button");
     but.setAttribute("value", "closeBtn");
-    but.addEventListener("click", ChatReturn);
     but.className = "message-close";
     but.id = "btn-" + item.innerHTML;
-    
+
     let h2 = document.createElement("h2");
     h2.className = "chat-title";
     h2.id = "recipient-" + item.innerHTML;
@@ -381,8 +381,6 @@ async function chatEventHandler() {
     let messageHtml2 = document.createElement("div");
     messageHtml2.className = "messages-content";
     messageHtml2.id = "log-" + item.innerHTML;
-
-    chatScroll = messageHtml2 
     
     let messageBox = document.createElement("div");
     messageBox.className = "message-box";
@@ -454,39 +452,55 @@ async function chatEventHandler() {
         }
       });
 
-      //show ten or less messages when opening the chat
+      //clearing message content when exit btn clicked
+
+      // click event for exit chat btn
       
+      document.getElementById("btn-" + item.innerHTML).onclick = () => {
+        let chat = document.querySelector(".chat-private");
+        chat.style.visibility = "hidden";
+        let chosenChatbox = Array.from(document.querySelectorAll(".chat-modal"));
+        if (chosenChatbox != null) {
+          chosenChatbox.forEach((element) => {
+            element.style.display = "none";
+          });
+        }
+        document.getElementById("log-" + item.innerHTML).innerHTML = ""
+        // needed to remove bubbling event
+        // document.getElementById("log-" + item.innerHTML).removeEventListener("scroll")
+      }
+
+      //show ten or less messages when opening the chat
+    
       addTen(MessagesForDisplay, 10, item.innerHTML)
 
-      chatScroll.scrollTop = chatScroll.scrollHeight;
+      // chat scroll event
+
+      chatScroll = document.getElementById("log-" + item.innerHTML) 
+
+      const loadMsg = function () {
+          let ParentDiv = document.getElementById("log-" + item.innerHTML)
+
+          MsgsInChat = ParentDiv.children.length - CountNewMessages;//<=== subtracting 1 to get correct #of messages
+          //find array index for the most recent message yet to be printed
+          let cutoffIndex = MessagesForDisplay.length - MsgsInChat;
+          //make a new slice that only includes messages yet to be printed
+          //adding one here as the 'slice' method excludes the last index
+          let msgsToPrint = MessagesForDisplay.slice(0,cutoffIndex +1);
+          
+          console.log(chatScroll.scrollTop)
+          if(chatScroll.scrollTop <= 15) {
+            addTen(msgsToPrint, 10, item.innerHTML)
+          } 
+      }
+
+      chatScroll.addEventListener("scroll", () => {throttle(loadMsg, 50)})
 
     };
   }
 
   // function to send message to backend to be stored into DB
   function onclickFun(item) {
-    
-    chatScroll.addEventListener("scroll", function() {
-     
-      let ParentDiv = document.getElementById("log-" + item.innerHTML)
-
-      MsgsInChat = ParentDiv.children.length - CountNewMessages;//<=== subtracting 1 to get correct #of messages
-      console.log("the number of msgs in chat:---->",MsgsInChat);
-      console.log("length of history of messages:---->",MessagesForDisplay.length)
-      //find array index for the most recent message yet to be printed
-      let cutoffIndex = MessagesForDisplay.length - MsgsInChat;
-      console.log("Scroll event - 1st index for new batch of messages______:",cutoffIndex)
-      //make a new slice that only includes messages yet to be printed
-      //adding one here as the 'slice' method excludes the last index
-      let msgsToPrint = MessagesForDisplay.slice(0,cutoffIndex +1);
-      console.log("the updated array of messages:~~~~~",msgsToPrint)
-
-      if(chatScroll.scrollTop == 0) {
-        addTen(msgsToPrint, 10, item.innerHTML)
-        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", msgsToPrint)
-      }
-      
-    })
     
     if (item.innerHTML === CurrentUser) {
       return;
@@ -631,58 +645,61 @@ function addTen (messages, limit, name){
   //in case user added a message before scrolling to top
   let ParentDiv = document.getElementById("log-" + name)
   MsgsInChat = ((ParentDiv.children.length)-1) - CountNewMessages;//to exclude the messages added just now
-  console.log("the number of msgs in chat section:---->",MsgsInChat);
-  console.log("total number of chat msgs:---->",MessagesForDisplay.length);
   //let availableMsgs = messages.length- MsgsInChat;
   //console.log("the number of msgs available to be added:---->",availableMsgs);
   let msgsToAdd = Math.min(limit - messages.length);
-  console.log("the number of msgs to add:---->",msgsToAdd);
+  
   //let arrayPosition = messages.length-msgsToAdd;
   let arrayPosition = messages.length-1;
-  console.log("array index of first message to prepend:---->",arrayPosition)
-//do nothing if all messages have been printed
+
+  //do nothing if all messages have been printed
   if((arrayPosition == 0 && messages.length > 1)|| arrayPosition < 0 || messages.length == 0 || MessagesForDisplay.length <= MsgsInChat){
-//if(!(arrayPosition == 0 && messages.length >= 1)){
-console.log("addTen function exits here")
-  return
-}else{  
-      console.log("Entering the 'else' section of 'addTen'");
-      //print available messages in chunks of 10 or less
-        for(let m = arrayPosition; m > (arrayPosition - limit); m--){
-          console.log("messages array index:>>>>>>",m)
-          let messageBubble = document.createElement("div");
-          let dateDiv = document.createElement("div");
-          dateDiv.className = "dateDiv";
-          console.log("printing the message details:+++",messages[m])
-            if (messages[m].sender === CurrentUser && messages[m].recipient === name){ 
-              console.log("Printing index 'm' in 'if' 'sender'******************",m)
-              console.log("Who is the recipient?******************",messages[m].recipient, "and the sender: ***", messages[m].sender)
-                messageBubble.className = "sender";
-                messageBubble.innerText = `"You": ${messages[m].chatMessage}`;
-                let bubbleWrapper = document.createElement("div"); 
-                bubbleWrapper.className = "messageWrapper"; 
-                dateDiv.innerHTML = `${ConvertDate(messages[m].creationDate)}`;  
-                messageBubble.appendChild(dateDiv);
-                bubbleWrapper.append(messageBubble);
-                ParentDiv.prepend(bubbleWrapper)
-                //move the chat scroll-bar 30px from top
-                // chatScroll.scrollTop = chatScroll.scrollHeight;
-                if(m==0){return}
-            }  else if (messages[m].recipient === CurrentUser && messages[m].sender === name) {
-              // when current user is recipient add class of recipient
-              console.log("Printing index 'm' in 'else if recipient'******************: ",m)
-              console.log("CurrentUser is the recipient or the sender?****************** ",messages[m].recipient, messages[m].sender)
-                messageBubble.className = "recipient";
-                messageBubble.innerText = `${messages[m].sender}: ${messages[m].chatMessage}`;
-                dateDiv.innerHTML = `${ConvertDate(messages[m].creationDate)}`;
-                messageBubble.appendChild(dateDiv);
-                ParentDiv.prepend(messageBubble);
-                //move the chat scroll-bar 30px from top
-                // chatScroll.scrollTop = chatScroll.scrollHeight;
-                if(m==0){return}
-        }
-        MsgsInChat = MsgsInChat +  msgsToAdd
-}
+    //if(!(arrayPosition == 0 && messages.length >= 1)){
+    return
+  }else{  
+
+    //print available messages in chunks of 10 or less
+    for(let m = arrayPosition; m > (arrayPosition - limit); m--){
+      let messageBubble = document.createElement("div");
+      let dateDiv = document.createElement("div");
+      dateDiv.className = "dateDiv";
+      if (messages[m].sender === CurrentUser && messages[m].recipient === name){ 
+        messageBubble.className = "sender";
+        messageBubble.innerText = `"You": ${messages[m].chatMessage}`;
+        let bubbleWrapper = document.createElement("div"); 
+        bubbleWrapper.className = "messageWrapper"; 
+        dateDiv.innerHTML = `${ConvertDate(messages[m].creationDate)}`;  
+        messageBubble.appendChild(dateDiv);
+        bubbleWrapper.append(messageBubble);
+        ParentDiv.prepend(bubbleWrapper)
+        //move the chat scroll-bar 30px from top
+        ParentDiv.scrollTop = ParentDiv.scrollHeight/8;
+        if(m==0){return}
+      } else if (messages[m].recipient === CurrentUser && messages[m].sender === name) {
+        // when current user is recipient add class of recipient
+        messageBubble.className = "recipient";
+        messageBubble.innerText = `${messages[m].sender}: ${messages[m].chatMessage}`;
+        dateDiv.innerHTML = `${ConvertDate(messages[m].creationDate)}`;
+        messageBubble.appendChild(dateDiv);
+        ParentDiv.prepend(messageBubble);
+        //move the chat scroll-bar 30px from top
+        ParentDiv.scrollTop = ParentDiv.scrollHeight/8;
+        if(m==0){return}
+      }
+      MsgsInChat = MsgsInChat +  msgsToAdd
+    }
+  }
+
 }
 
+function throttle(fn, wait) {
+  if (timerId) {
+      return
+  }
+
+  fn()
+
+  timerId = setTimeout(function () {
+      timerId = undefined
+  }, wait)
 }

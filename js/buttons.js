@@ -65,15 +65,17 @@ document.getElementById('logout').onclick = (e) => {
   Logout()
 };
 
-function ChatReturn() {
-  let chat = document.querySelector(".chat-private");
-  chat.style.visibility = "hidden";
-  let chosenChatbox = Array.from(document.querySelectorAll(".chat-modal"));
-  if (chosenChatbox != null) {
-    chosenChatbox.forEach((element) => {
-      element.style.display = "none";
-    });
-  }
-  // document.querySelector(".messages-content").innerHTML = "";
-}
+
+//// moved to item.onclick event in login.js
+
+// function ChatReturn(name) {
+//   let chat = document.querySelector(".chat-private");
+//   chat.style.visibility = "hidden";
+//   let chosenChatbox = Array.from(document.querySelectorAll(".chat-modal"));
+//   if (chosenChatbox != null) {
+//     chosenChatbox.forEach((element) => {
+//       element.style.display = "none";
+//     });
+//   }
+// }
 
