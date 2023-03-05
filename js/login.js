@@ -529,6 +529,13 @@ async function chatEventHandler() {
       };
   }
 
+
+
+
+
+
+
+
   // websocket activity for chats
   if (window["WebSocket"]) {
     conn = new WebSocket("ws://" + document.location.host + "/ws");
@@ -539,7 +546,7 @@ async function chatEventHandler() {
     conn.onmessage = function (evt) {
       let msg = evt.data;
       console.log(msg)
-      
+
       if (IsJsonString(msg)) {
         msg = JSON.parse(msg);
         console.log("websocket data: " + msg);
@@ -591,6 +598,11 @@ async function chatEventHandler() {
                     newnotif.classList.add("notification");
                   }
                 }
+              } else {
+                // add recipient msg to chat box
+                document
+                  .querySelector("#log-" + msg.Sender)
+                  .appendChild(newMessage);
               }
             }
           });
@@ -600,11 +612,18 @@ async function chatEventHandler() {
       // formatting message
       var messages = evt.data.split("\n");
       console.log(messages, messages.length);
+      // clear userslog before adding new users
+      if (messages[0] == "" && messages.length > 1) {
+        let uLog = document.getElementById("usersLog")
+        uLog.innerText = ""
+      }
+      
       for (var i = 1; i < messages.length; i++) {
         var item = document.createElement("div");
         item.innerHTML = messages[i];
         //if message is a list of chat members, it begins with a space
         if (messages[0] == "") {
+          
           if (i < messages.length) {
             if (messages[i].includes("-online")) {
               messages[i] = messages[i].replace("-online", "");
@@ -621,10 +640,18 @@ async function chatEventHandler() {
           }
         }
       }
+      
+      // Array of online users
 
-      // update offline
       online_users = document.getElementsByClassName("onlineUser")
       online_users = Array.from(online_users)
+
+      //Array of offline users
+
+      offline_users = document.getElementsByClassName("offlineUser")
+      offline_users = Array.from(offline_users)
+
+      // update offline
       if (msg.Label == "offline") {
         
         online_users.forEach(value => {
@@ -633,8 +660,8 @@ async function chatEventHandler() {
           }
         })
       }
-      offline_users = document.getElementsByClassName("offlineUser")
-      offline_users = Array.from(offline_users)
+
+      // update online     
       if (msg.Label == "online") {
         
         offline_users.forEach(value => {

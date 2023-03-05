@@ -68,22 +68,22 @@ func (h *Hub) Run() {
 		case client := <-h.Unregister:
 			h.Clients[client.Username] = client
 			if _, ok := h.Clients[client.Username]; ok {
-				var offline Offline
-				offline.Name = client.Username
+				// var offline Offline
+				// offline.Name = client.Username
 				delete(h.Clients, client.Username)
 				close(client.Send)
 				// update offline users here
-				fmt.Println(h.Clients)
+				// fmt.Println(h.Clients)
 
-				offline.Label = "offline"
-				for _, cl := range h.Clients {
-					w, err := cl.Conn.NextWriter(websocket.TextMessage)
-					if err != nil {
-						return
-					}
-					off, _ := json.Marshal(offline)
-					w.Write(off)
-				}
+				// offline.Label = "offline"
+				// for _, cl := range h.Clients {
+				// 	w, err := cl.Conn.NextWriter(websocket.TextMessage)
+				// 	if err != nil {
+				// 		return
+				// 	}
+				// 	off, _ := json.Marshal(offline)
+				// 	w.Write(off)
+				// }
 			}
 		case message := <-h.Broadcast:
 			var directmsg tools.Message
