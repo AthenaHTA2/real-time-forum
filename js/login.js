@@ -61,6 +61,7 @@ LoginBtn.onclick = (e) => {
         successfulLogin();
         refreshPostsAfterLogin();
         chatEventHandler();
+
         return response.text();
       } else {
         return response.text();
@@ -213,9 +214,6 @@ const successfulLogin = () => {
   document.getElementById("login").style.display = "none";
   document.getElementById("register").style.display = "none";
   document.getElementById("welcomemsg").style.display = "none";
-  // document.getElementById("Offline").style.display = "block";
-  // document.getElementById("Online").style.display = "block";
-  // document.getElementById("Messenger").style.display = "block";
   document.getElementById("current-user").style.display = "block";
   document.getElementById("logout").style.display = "block";
   document.getElementById("postBlock").style.display = "block";
@@ -236,8 +234,6 @@ const successfulLogin = () => {
   postBtn = document.querySelector("#postBlock > button");
   postBtn.style.visibility = "visible";
   document.querySelector(".loggedInUsers").style.display = "block";
-  // document.getElementsByClassName('ShowComments').style.display = "none";
-  // document.getElementsByClassName('commentBlock').style.display = "block";
 
   refreshPostsAfterLogin();
 };
@@ -256,7 +252,6 @@ const unsuccessfullLogin = () => {
 };
 
 const Logout = () => {
-  // document.querySelector(".loggedInUsers").style.visibility = "hidden";
   document.querySelector(".chat-private").style.visibility = "hidden";
   document.getElementById("current-user").style.display = "none";
   document.getElementById("postList").style.display = "block";
@@ -315,7 +310,6 @@ let MsgsInChat;
 async function chatEventHandler() {
 
   var conn;
-  // var log = document.getElementById("log");
 
   var usersLog = document.getElementById("usersLog");
 
@@ -541,14 +535,16 @@ async function chatEventHandler() {
     conn.onclose = function (evt) {
       var item = document.createElement("div");
       item.innerHTML = "<b>Connection closed.</b>";
-      appendLog(item);
     };
     conn.onmessage = function (evt) {
       let msg = evt.data;
+      console.log(msg)
       
       if (IsJsonString(msg)) {
         msg = JSON.parse(msg);
-        console.log(msg);
+        console.log("websocket data: " + msg);
+
+
         let messageWrapper = document.createElement("div");
         messageWrapper.className = "messageWrapper";
         let newMessage = document.createElement("div");
@@ -569,13 +565,13 @@ async function chatEventHandler() {
           newMessage.innerHTML = `${msg.Sender}: ${msg.Content}`;
           dateDiv.innerHTML = `${msg.Date}`;
           newMessage.appendChild(dateDiv);
-          console.log(
-            document.querySelector("#log-" + msg.Sender).children.length
-          );
-          document.querySelector("#log-" + msg.Sender).append(newMessage);
-          console.log(
-            document.querySelector("#log-" + msg.Sender).children.length
-          );
+          // console.log(
+          //   document.querySelector("#log-" + msg.Sender).children.length
+          // );
+          // document.querySelector("#log-" + msg.Sender).append(newMessage);
+          // console.log(
+          //   document.querySelector("#log-" + msg.Sender).children.length
+          // );
 
           
           let allChatbox = Array.from(document.querySelectorAll(".chat-modal"));
@@ -617,6 +613,7 @@ async function chatEventHandler() {
               item.className = "offlineUser";
             }
             item.innerText = messages[i];
+
             //print list of registered users inside 'usersLog' div
             AppendUser(item);
             console.log("-----------------------");
@@ -624,11 +621,33 @@ async function chatEventHandler() {
           }
         }
       }
+
+      // update offline
+      online_users = document.getElementsByClassName("onlineUser")
+      online_users = Array.from(online_users)
+      if (msg.Label == "offline") {
+        
+        online_users.forEach(value => {
+          if (value.innerHTML == msg.Name) {
+            value.className = "offlineUser"
+          }
+        })
+      }
+      offline_users = document.getElementsByClassName("offlineUser")
+      offline_users = Array.from(offline_users)
+      if (msg.Label == "online") {
+        
+        offline_users.forEach(value => {
+          if (value.innerHTML == msg.Name) {
+            value.className = "onlineUser"
+          }
+        })
+      }
+
     };
   } else {
     var item = document.createElement("div");
     item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
-    appendLog(item);
   }
 }
 function IsJsonString(str) {

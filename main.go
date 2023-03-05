@@ -36,7 +36,9 @@ func main() {
 	http.HandleFunc("/comment", tools.Comments)
 	http.HandleFunc("/getPosts", tools.SendLatestPosts)
 	http.HandleFunc("/getComments", tools.SendLatestComments)
-	http.HandleFunc("/logout", tools.Logout)
+	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
+		chat.Logout(w, r, hub)
+	})
 	http.HandleFunc("/messagesAPI", tools.GetMessages)
 
 	//serveWs function is a HTTP handler that upgrades the HTTP connection

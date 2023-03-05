@@ -1,15 +1,11 @@
 package tools
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"rtforum/sqldb"
-	"strings"
 	"time"
-	"unicode/utf8"
 
 	uuid "github.com/satori/go.uuid"
 )
@@ -104,42 +100,61 @@ func DeleteSession(w http.ResponseWriter, cookieValue string) error {
 }
 
 // logout handle
-func Logout(w http.ResponseWriter, r *http.Request) {
-	var cooky Cookie
+// func Logout(w http.ResponseWriter, r *http.Request, hub *Hub) {
+// 	var cooky Cookie
 
-	if r.URL.Path == "/logout" {
+// 	if r.URL.Path == "/logout" {
 
-		cookieVal, err := io.ReadAll(r.Body)
-		fmt.Println("cookieVal before unmarshalled", cookieVal)
-		if err != nil {
-			log.Fatal(err)
-		}
-		cookieStringBefore := string(cookieVal[:])
-		//separate cookie name from cookie value
-		cValue := strings.Split(cookieStringBefore, ":")
-		//get cookie value
-		cookieStringAfter := (cValue[1])
-		//count the number of runes in coookieStringAfter
-		//so that you drop the final '}'
-		numRunes := utf8.RuneCountInString(cookieStringAfter)
-		fmt.Println("the number of runes in cookie: ", numRunes)
-		cookieStringByte := []byte(cookieStringAfter)
-		//to remove the curly bracket at end of cookie value
-		cookieStringAfter = string(cookieStringByte[0 : numRunes-1])
-		fmt.Println("the correct cookie: --->", cookieStringAfter)
-		//populate the Cookie struct field 'Value' with cookie value
-		json.Unmarshal([]byte(cookieStringAfter), &cooky.Value)
+// 		cookieVal, err := io.ReadAll(r.Body)
+// 		fmt.Println("cookieVal before unmarshalled", cookieVal)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 		cookieStringBefore := string(cookieVal[:])
+// 		//separate cookie name from cookie value
+// 		cValue := strings.Split(cookieStringBefore, ":")
+// 		//get cookie value
+// 		cookieStringAfter := (cValue[1])
+// 		//count the number of runes in coookieStringAfter
+// 		//so that you drop the final '}'
+// 		numRunes := utf8.RuneCountInString(cookieStringAfter)
+// 		fmt.Println("the number of runes in cookie: ", numRunes)
+// 		cookieStringByte := []byte(cookieStringAfter)
+// 		//to remove the curly bracket at end of cookie value
+// 		cookieStringAfter = string(cookieStringByte[0 : numRunes-1])
+// 		fmt.Println("the correct cookie: --->", cookieStringAfter)
+// 		//populate the Cookie struct field 'Value' with cookie value
+// 		json.Unmarshal([]byte(cookieStringAfter), &cooky.Value)
 
-		fmt.Println("cookie value before unmarshal: ", cookieStringBefore)
-		fmt.Println("cookie value after unmarshal: ", string(cookieStringAfter))
-		//delete corresponding row in 'Sessions' table
-		//and delete cookie in browser
-		DeleteSession(w, string(cooky.Value))
+// 		fmt.Println("cookie value before unmarshal: ", cookieStringBefore)
+// 		fmt.Println("cookie value after unmarshal: ", string(cookieStringAfter))
+// 		//delete corresponding row in 'Sessions' table
+// 		//and delete cookie in browser
+// 		DeleteSession(w, string(cooky.Value))
 
-		fmt.Println("user logged out")
-		//http.Redirect(w, r, "/", http.StatusFound)
-	}
-}
+// 		fmt.Println("user logged out")
+// 		//http.Redirect(w, r, "/", http.StatusFound)
+
+// 		userName := GetUserByCookie(string(cooky.Value))
+
+// 		var offline Offline
+// 		offline.Name = userName.NickName
+// 		delete(hub.Clients, userName.NickName)
+// 		// update offline users here
+// 		fmt.Println(hub.Clients)
+
+// 		offline.Label = "offline"
+// 		for _, cl := range hub.Clients {
+// 			w, err := cl.Conn.NextWriter(websocket.TextMessage)
+// 			if err != nil {
+// 				return
+// 			}
+// 			off, _ := json.Marshal(offline)
+// 			w.Write(off)
+// 		}
+
+// 	}
+// }
 
 // GetUserByCookie ...
 func GetUserByCookie(cookieValue string) *User {
@@ -153,12 +168,12 @@ func GetUserByCookie(cookieValue string) *User {
 	return u
 }
 
-//function for new user
+// function for new user
 func NewUser() *User {
 	return &User{}
 }
 
-//Find the user by their ID
+// Find the user by their ID
 func FindByUserID(UID int64) *User {
 	u := NewUser()
 	if err := sqldb.DB.QueryRow("SELECT userID, firstName, lastName, nickName, age, gender, email, passwordhash FROM Users WHERE userID = ?", UID).

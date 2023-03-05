@@ -1,5 +1,3 @@
-//This is our functions to open the links for our buttons
-
 //This function opens Login Modal
 const openLogin = () => {
   // closePost();
@@ -24,14 +22,8 @@ const closeBtn = () => {
   document.getElementById("regConfirmed").style.display = "none";
 };
 
-//this function is to make posts not visible where needed
-// const closePost = () => {
-//   document.getElementById("postList").style.display = "none";
-//   document.getElementById("regConfirmed").style.display = "none";
-// };
 
 //this function is for the log out button
-// const logOut = document.querySelector("#logout");
 
 document.getElementById('logout').onclick = (e) => {
   e.preventDefault();
@@ -44,9 +36,7 @@ document.getElementById('logout').onclick = (e) => {
   document.getElementById("addPost").style.display = "none";
   document.getElementById("login").style.display = "block";
   document.getElementById("register").style.display = "block";
-  // document.getElementById("Messenger").style.display = "none";
   document.getElementById("Select User").style.display = "none";
-  // document.getElementById("Online").style.display = "none";
   document.getElementById("chatNav").style.visibility = "visible";
   document.getElementById("welcomemsg").style.display = "flex";
   document.getElementById("profile").style.display = "none";
@@ -65,17 +55,4 @@ document.getElementById('logout').onclick = (e) => {
   Logout()
 };
 
-
-//// moved to item.onclick event in login.js
-
-// function ChatReturn(name) {
-//   let chat = document.querySelector(".chat-private");
-//   chat.style.visibility = "hidden";
-//   let chosenChatbox = Array.from(document.querySelectorAll(".chat-modal"));
-//   if (chosenChatbox != null) {
-//     chosenChatbox.forEach((element) => {
-//       element.style.display = "none";
-//     });
-//   }
-// }
 
